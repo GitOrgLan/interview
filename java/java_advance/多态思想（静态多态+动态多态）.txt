@@ -1,0 +1,130 @@
+
+助攻攻略：
+------------------------------------------------------------------------------------------------------	
+C C++ java 在线笔试程序运行或输出结果题 
+在线编译器 ：http://ideone.com
+
+共同头部 - 快速复制粘贴 
+题目其他部分直接输入到对应部分
+
+C
+#include <stdio.h>
+
+void main() {
+	// your code goes here
+	return 0;
+}
+
+
+C++
+#include <iostream>
+using namespace std;
+
+// 父类定义
+class base
+{
+	public:
+	// 虚函数定义 
+	virtual void fun1(){cout<<"base fun1"<<endl;}
+	// 普通函数定义
+	void fun3(){cout<<"base fun3"<<endl;}
+};
+
+// 子类公有继承 
+class derived:public base
+{
+	public:
+	virtual void fun1(){cout<<"derived fun1"<<endl;}
+	virtual void fun3(){cout<<"derived fun3"<<endl;}
+};
+
+int main()
+{
+	// 引用类型变量声明 
+	base* pb;
+	// 对象声明
+	derived d;
+
+	pb = &d; // 将指针指向某个对象的引用
+	pb->fun1(); //通过指向基类的指针来调用虚函数
+	pb->fun3();
+	
+	return 0;
+}
+
+Java：
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Main
+{
+	public static void main (String[] args) 
+	{
+		// your code goes here
+	}
+}
+
+
+------------------------------------------------------------------------------------------------------	
+
+
+静态多态和动态多态
+------------------------------------------------------------------------------------------------------	
+#include <iostream>
+using namespace std;
+
+class base
+{
+	public:
+	virtual void fun1(){cout<<"base fun1"<<endl;}
+	virtual void fun2(){cout<<"base fun2"<<endl;}
+	void fun3(){cout<<"base fun3"<<endl;}
+	void fun4(){cout<<"base fun4"<<endl;}
+};
+
+class derived:public base
+{
+	public:
+	virtual void fun1(){cout<<"derived fun1"<<endl;}
+	virtual void fun2(int x){cout<<"derived fun2"<<endl;}
+	virtual void fun3(){cout<<"derived fun3"<<endl;}
+	void fun4(){cout<<"derived fun4"<<endl;}
+};
+
+int main()
+{
+	//通过指向基类的指针来调用虚函数
+	derived d;
+	base* pb;
+	pb=&d;
+
+	pb->fun1();
+	pb->fun2();
+	pb->fun3();
+	pb->fun4();
+	
+	//通过指向子类的引用来调用虚函数
+	/*derived d;
+	base &pb = d;
+	
+	pb.fun1();
+	pb.fun2();
+	pb.fun3();
+	pb.fun4();*/	
+	
+	return 0;
+}
+
+derived fun1
+base fun2
+base fun3
+base fun4
+
+
+java 多态 传引用 
+C++ 可以通过 引用和传指针
+------------------------------------------------------------------------------------------------------	
+
+

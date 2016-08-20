@@ -1,0 +1,58 @@
+前端框架和技术
+
+1. JS的跨域问题 怎么解决
+$.getJSON
+ $.ajax
+ $.get 
+
+JQuery 方式 
+client：
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+	$.getJSON("http://crossdomain.com/services.php?callback=?",
+	function(result) {
+		for(var i in result) {
+			alert(i+":"+result[i]);//循环输出a:1,b:2,etc.
+		}
+	});
+</script>
+
+ajax：	
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+	$.ajax({
+		url:"http://crossdomain.com/services.php",
+		dataType:'jsonp',
+		data:'',
+		jsonp:'callback',
+		success:function(result) {
+			for(var i in result) {
+				alert(i+":"+result[i]);//循环输出a:1,b:2,etc.
+			}
+		},
+		timeout:3000
+	});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

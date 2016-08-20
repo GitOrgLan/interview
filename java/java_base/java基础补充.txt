@@ -1,0 +1,53 @@
+﻿异常：
+http://blog.csdn.net/zhaoqianjava/article/details/6854732
+
+Java中的异常处理机制的简单原理和应用。
+	Java对异常进行了分类，不同类型的异常分别用不同的Java类表示，所有异常的根类为java.lang.Throwable，
+		Throwable下面又派生了两个子类：Error和Exception，
+		Error表示应用程序本身无法克服和恢复的一种严重问题，程序只有死的份了，例如，说内存溢出和线程死锁等系统问题。系统解决不了了
+		Exception表示程序还能够克服和恢复的问题，其中又分为系统异常和普通异常，
+	系统异常是软件本身缺陷所导致的问题，也就是软件开发人员考虑不周所导致的问题，软件使用者无法克服和恢复这种问题，但在这种问题下还可以让软件系统继续运行或者让软件死掉，例如，数组脚本越界（ArrayIndexOutOfBoundsException），空指针异常（NullPointerException）、类转换异常（ClassCastException）；
+	普通异常是运行环境的变化或异常所导致的问题，是用户能够克服的问题，例如，网络断线，硬盘空间不够，发生这样的异常后，程序不应该死掉。
+	java为系统异常和普通异常提供了不同的解决方案，编译器强制普通异常必须try..catch处理或用throws声明继续抛给上层调用方法处理，所以普通异常也称为checked异常，而系统异常可以处理也可以不处理，所以，编译器不强制用try..catch处理或用throws声明，所以系统异常也称为unchecked异常。
+	
+	异常的继续结构:基类为Throwable,Error和Exception继续Throwable,RuntimeException和 IOException等继续Exception,具体的RuntimeException继续RuntimeException.
+	
+	Error和RuntimeException及其子类成为未检查异常(unchecked),其它异常成为已检查异常(checked).
+
+最常见到的5个runtime exception：
+	NullPointerException、空指针
+	ArrayIndexOutOfBoundsException、数组越界
+	ClassCastException 类型强转
+	IllegalArgumentException 参数非法
+	WebServiceException
+	BufferOverflowException 缓存溢出
+
+	导致OutOfMemoryError异常的常见原因有以下几种：
+
+		1.内存中加载的数据量过于庞大，如一次从数据库取出过多数据；
+		2.集合类中有对对象的引用，使用完后未清空，使得JVM不能回收；
+		3.代码中存在死循环或循环产生过多重复的对象实体；
+		4.使用的第三方软件中的BUG；
+		5.启动参数内存值设定的过小；
+
+	需要重点排查以下几点：
+		1.检查代码中是否有死循环或递归调用。
+		2.检查是否有大循环重复产生新对象实体。	3.检查对数据库查询中，是否有一次获得全部数据的查询。一般来说，如果一次取十万条记录到内存，就可能引起内存溢出。这个问题比较隐蔽，在上线前，数据库中数据较少，不容易出问题，上线后，数据库中数据多了，一次查询就有可能引起内存溢出。因此对于数据库查询尽量采用分页的方式查询。
+		4.检查List、MAP等集合对象是否有使用完后，未清除的问题。List、MAP等集合对象会始终存有对对象的引用，使得这些对象不能被GC回收。
+		
+抽象类和接口的区别
+	(1)接口可以被多重implements,抽象类只能被单一extends
+	(2)接口只有定义,抽象类可以有定义和实现
+	(3)接口的字段定义默认为:public static final, 抽象类字段默认是”protected”(本包可见)
+	
+多线程:
+http://lavasoft.blog.51cto.com/62575/27069
+http://www.ibm.com/developerworks/cn/java/j-jtp06197.html
+http://blog.51cto.com/zt/125
+集合:
+http://blog.csdn.net/column/details/chenssy-javaimpr.html
+http://blog.csdn.net/zhangerqing/article/details/8122075
+http://www.jfox.info/40-ge-java-ji-he-lei-mian-shi-ti-he-da-an
+虚拟机:
+http://www.aiuxian.com/article/p-2622511.html
+http://www.importnew.com/14630.html

@@ -1,0 +1,81 @@
+题目描述
+在数组中的两个数字，如果前面一个数字大于后面的数字，
+则这两个数字组成一个逆序对。输入一个数组,求出这个数组中的逆序对的总数P。
+并将P对1000000007取模的结果输出。 即输出P%1000000007 
+
+http://www.nowcoder.com/practice/96bd6684e04a44eb80e6a68efc0ec6c5?tpId=13&tqId=11188&rp=2&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
+
+import java.util.Random;
+
+public class Test {
+
+	public static void main(String[] args) {
+		Random random = new Random();
+		int len = random.nextInt(10000);
+		int[] data = new int[len];
+		for (int i = 0; i < len; i++) {
+			data[i] = random.nextInt(30);
+		}
+		Test t = new Test();
+		t.print(data);
+		System.out.println(t.InversePairs(data));
+	}
+
+	public int InversePairs(int[] array) {
+		if (array == null || array.length <= 0) {
+			return 0;
+		}
+		return mergeSort(array, 0, array.length - 1);
+	}
+
+	public int mergeSort(int[] data, int left, int right) {
+		if (left >= right) {
+			return 0;
+		}
+		int mid = (left + right) / 2;
+		int leftCount = mergeSort(data, left, mid) % 1000000007;
+		int rightCount = mergeSort(data, mid + 1, right) % 1000000007;
+
+		int ahead = mid;
+		int last = right;
+		int[] arr = new int[right - left + 1];
+		int tmp = arr.length - 1;
+		int count = 0;
+
+		while (ahead >= left && last >= mid + 1) {
+			if (data[ahead] > data[last]) {
+				arr[tmp--] = data[ahead--];
+				count += last - mid;
+				if (count > 1000000007) {
+					count %= 1000000007;
+				}
+			} else {
+				arr[tmp--] = data[last--];
+			}
+		}
+
+		while (ahead >= left) {
+			arr[tmp--] = data[ahead--];
+		}
+		while (last >= mid + 1) {
+			arr[tmp--] = data[last--];
+		}
+
+		tmp = left;
+		for (int i = 0; i < arr.length; i++) {
+			data[tmp++] = arr[i];
+		}
+		// print(data);
+		return (count + leftCount + rightCount) % 1000000007;
+	}
+
+	public void print(int[] data) {
+		if (data == null || data.length == 0) {
+			return;
+		}
+		for (int i = 0; i < data.length; i++) {
+			System.out.print(data[i] + "\t");
+		}
+		System.out.println();
+	}
+}

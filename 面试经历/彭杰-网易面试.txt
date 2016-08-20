@@ -1,0 +1,89 @@
+-------------------------------------------------2016-04-07 16:00:54
+http://www.nowcoder.com/discuss/4498
+一面 
+
+	自我介绍 
+
+	你对oo的认识 
+
+	session是什么，怎么实现 
+
+		1)Session的实现方式有两种，一个是通过cookie，另一个是通过url重写
+			1. 通过cookie
+				Cookie是保存在客户端的一小段信息，服务器在响应请求时可以将一些数据以“键-值”对的形式通过响应信息保存在客户端。当浏览器再次访问相同的应用时，会将原先的Cookie通过请求信息带到服务器端。
+				(1)当有Session启动时，服务器生成一个唯一值，称为Session ID（好像是通过取进程ID的方式取得的）。
+				(2)然后，服务器开辟一块内存，对应于该Session ID。
+				(3)服务器再将该Session ID写入浏览器的cookie。
+				(4)服务器内有一进程，监视所有Session的活动状况，如果有Session超时或是主动关闭，服务器就释放改内存块。
+				(5)当浏览器连入IIS时并请求的ASP内用到Session时，IIS就读浏览器Cookie中的Session ID。
+				(6)然后，服务检查该Session ID所对应的内存是否有效。
+				(7)如果有效，就读出内存中的值。
+				(8)如果无效，就建立新的Session。
+			2.url重写
+				通过cookie可以很好地实现session，但是如果客户端由于某些原因（比如出于安全考虑）而禁用cookie，在这种情况之下，为了使session能够继续生效，可以采用url重写。
+				它会将SessionID的信息作为请求地址的一部分传到了服务器端
+
+	cookie相关，主要是我session提过去的
+
+	http302，301表示什么 
+
+	filter认识，response是在哪产生的 
+
+	jsp是什么鬼 
+
+	一个字符串考察常量池概念 
+
+	synchronized是什么
+
+	移动端怎么保持session 
+
+	list删除用什么遍历，foreach是怎么实现的 
+
+		1)如何删除
+			for (int i = 0; i < list.size(); i++)
+			删除了某一个元素后，集合里的元素个数减1，后面的元素往前移了1位，导致了被删除元素后面的元素被遗漏了
+
+			for (Integer value : list)
+			Exception in thread “main” java.util.ConcurrentModificationException
+			某个线程在 Collection 上进行迭代时，通常不允许另一个线性修改该 Collection。通常在这些情况下，迭代的结果是不确定的。
+			如果检测到这种行为，一些迭代器实现（包括 JRE 提供的所有通用 collection 实现）可能选择抛出此异常。执行该操作的迭代器称为快速失败 迭代器，因为迭代器很快就完全失败，而不会冒着在将来某个时间任意发生不确定行为的风险。
+
+			使用迭代器或者反向遍历
+
+		2)如何实现
+			对于list编译器会调用Iterable接口的 iterator方法来循环遍历数组的元素，iterator方法中是调用Iterator接口的的 next()和hasNext（）方法来做循环遍历。
+			对于数组，就是转化为对数组中的每一个元素的循环引用
+
+
+	mvc是什么 
+
+	问懂io么 
+
+	观察者模式，好处 
+		http://www.cnblogs.com/mengdd/archive/2013/02/07/2908929.html
+		优点:主题对象在状态上发生变化时，会通知所有观察者对象，让它们能够自动更新自己
+
+ 二面 
+
+	自我介绍 
+
+	hashmap,hashtable,concurrenthashmap区别与应用场景 
+
+	spring两个特性与实现 
+		http://blog.csdn.net/udbnny/article/details/5870076#comments
+
+	spring事物中隔离级别 
+
+	gc 
+
+	一个几百g的字符文件在很小的内存中怎么公平的随机取100个字符
+
+	http301，302，我表示一面玩后忘记查301了。。。
+
+	http协议 
+
+	写一个很简单的sql语句 
+
+	sql连接种类 
+
+	问了下用过什么servlet容器，只是问了下 

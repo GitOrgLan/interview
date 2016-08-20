@@ -1,0 +1,23 @@
+zk分布式锁
+	http://www.jiacheo.org/blog/620
+
+谈谈分布式
+
+redis持久化实现原理
+
+生产者消费者
+
+java多线程锁/解释读锁和写锁
+
+线程通信方式
+
+http长轮询
+	http://blog.csdn.net/mengyafei43/article/details/25195445
+	http://www.cnblogs.com/hoojo/p/longPolling_comet_jquery_iframe_ajax.html
+
+java虚拟机堆何时分配，存放哪些数据
+
+B树/B+树/区别/数据库如何使用B+树建立索引
+
+NIO使用过哪些类和方法
+

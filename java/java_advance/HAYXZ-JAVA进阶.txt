@@ -1,0 +1,220 @@
+HAYXZ-JAVA进阶
+
+【JVM】
+	内存结构
+	内存分配和回收
+
+垃圾回收器的基本原理是什么
+	对于GC 来说，当程序员创建对象时，GC 就开始监控这个对象的地址、大小以及使用情况。
+	通常，GC 采用有向图的方式记录和管理堆(heap)中的所有对象。通过这种方式确定哪些对象是"可达的"，哪些对象是"不可达的"。
+	当GC 确定一些对象为"不可达"时，GC 就有责任回收这些内存空间。	
+	
+【反射和序列化】
+1.反射基本概念
+	Reflection 是Java被视为动态（或准动态）语言的一个关键性质。
+	1.这个机制允许程序在运行时透过Reflection APIs取得任何一个已知名称的class的内部信息，
+		
+	2.包括其modifiers（诸如public, static 等等）、superclass（例如Object）、实现之interfaces（例如Cloneable），也包括fields和methods的所有信息，
+	3.并可于运行时改变fields内容或唤起methods。
+
+2.序列化概念及应用场景
+	一句话：对象进行流化处理和操作，便于网络传输
+	
+	序列化就是一种用来处理对象流的机制，所谓对象流也就是将对象的内容进行流化。
+	可以对流化后的对象进行读写操作，也可将流化后的对象传输于网络之间。
+	序列化是为了解决在对对象流进行读写操作时所引发的问题。
+
+	序列化的实现：
+	(1) 将需要被序列化的类实现Serializable接口，该接口没有需要实现的方法，implements Serializable只是为了标注该对象是可被序列化的，
+	(2) 然后使用一个输出流(如：FileOutputStream)来构造一个 ObjectOutputStream(对象流)对象，
+	(3) 接着，使用ObjectOutputStream对象的writeObject(Object obj)方法就可以将参数为obj的对象写出(即保存其状态)，
+		要恢复的话则用输入流	
+		
+3. Java Reflection API
+	参考链接：
+	http://blog.csdn.net/kaoa000/article/details/8453371
+	
+	http://blog.163.com/neu_lxb/blog/static/179417010201132481041118/
+	
+	
+	3、在JDK中，主要由以下类来实现Java反射机制，这些类都位于java.lang.reflect包中
+		–Class类：代表一个类（这个类很特殊，位于java.lang包下）。
+		–Field 类：代表类的成员变量（成员变量也称为类的属性）。
+		–Method类：代表类的方法。
+		–Constructor 类：代表类的构造方法。
+		–Array类：提供了动态创建数组，以及访问数组的元素的静态方法
+		
+		
+	4、使用反射调用方法的步骤：
+      a）要想使用反射，首先需要获得待处理类或对象所对应的Class对象。
+      b）获取某个类或某个对象所对应的Class对象的常用的3种方式：
+           1）使用Class类的静态方法forName，Class.forName（“java.lang.String”）
+           2）使用类的.class语法：String.class，如这个例子中的Class<?> classType = InvokeTester.class;
+           3）使用对象的getClass（）方法：String s = “aa”；Class<?> clazz=s.getClass();
+      c）通过获取的Class对象，产生一个实例
+      d）获得想要调用方的Method对象，如Method addMethod = classType.getMethod("add", new Class[]{int.class,int.class});
+      e）通过获得的Method对象，在特定实例（对象）上调用方法:Object result = addMethod.invoke(invokeTester, new Object[]{1,2});
+	
+	5、	
+	若想通过类的不带参数的构造方法来生成对象，两种方式：
+	   1）先获得Class对象，然后通过该Class对象的newInstance（）方法直接生成即可：
+	   Class<?> classType=String.class;
+	   Object obj=classType.newInstance();
+
+	   2）先获得Class对象，然后通过该对象获得对应的Constructor对象，再通过该Constructor对象的newInstance（）方法生成：
+	   Class<?> classType = Customer.class;
+	   Constructor cons =classType.getConstructor(new Class[]{});
+	   Object obj = cons.newInstance(new Object[]{})
+
+   若想通过类的带参数的构造方法生成对象，只能使用下面一种方式：
+	   Class<?> classType = Customer.class;
+	   Constructor cons =classType.getConstructor(new Class[]{String.class,int.class});
+	   Object obj = cons.newInstance(new Object[]{“hello”,4});
+	  
+	5、在java.lang.Object类中定义了getClass()方法，因此对于任意一个Java对象，都可以通过此方法获得对象的类型。
+		Class类是Reflection API 中的核心类，它有以下方法
+		–getName()：获得类的完整名字。
+		–getFields()：获得类的public类型的属性。
+		–getDeclaredFields()：获得类的所有属性。
+		–getMethods()：获得类的public类型的方法。
+		–getDeclaredMethods()：获得类的所有方法。 
+
+		- getMethod(String name, Class[] parameterTypes)：获得类的特定方法，name参数指定方法的名字，parameterTypes参数指定方法的参数类型。
+		- getConstructors()：获得类的public类型的构造方法。
+		- getConstructor(Class[] parameterTypes)：获得类的特定构造方法，parameterTypes参数指定构造方法的参数类型。
+		- newInstance()：通过类的不带参数的构造方法创建这个类的一个对象。
+
+	
+	
+
+【多线程编程】
+	http://blog.csdn.net/werm520/article/details/38731095
+
+
+	双检锁   Double Checked Locking 模式 
+	http://blog.csdn.net/wwsoon/article/details/1485886
+
+
+
+	简述synchronized 和java.util.concurrent.locks.Lock 的异同？
+		主要相同点：Lock 能完成synchronized 所实现的所有功能
+		主要不同点：Lock 有比synchronized 更精确的线程语义和更好的性能。synchronized 会自
+		动释放锁，而Lock 一定要求程序员手工释放，并且必须在finally 从句中释放。
+
+
+
+5.	
+ThreadLocale
+	http://blog.csdn.net/zldeng19840111/article/details/6703895
+
+
+
+【网络编程 】
+	
+
+
+【IO特性】 
+
+6.	
+NIO
+	http://www.iteye.com/topic/834447
+	http://www.iteye.com/topic/262231
+	http://weixiaolu.iteye.com/blog/1479656
+	
+	从该网络通讯过程来理解一下何为阻塞 :   
+	在以上过程中若连接还没到来，那么 accept  会阻塞 ,  程序运行到这里不得不挂起， CPU转而执行其他线程。   
+	在以上过程中若数据还没准备好， read 会一样也会阻塞。   
+	阻塞式网络 IO  的特点：多线程处理多个连接。每个线程拥有自己的栈空间并且占用一些 CPU  时间。
+	每个线程遇到外部未准备好的时候，都会阻塞掉。阻塞的结果就是会带来大量的进程上下文切换。且大部分进程上下文切换可能是无意义的。
+	比如假设一个线程监听一个端口，一天只会有几次请求进来，但是该 cpu  不得不为该线程不断做上下文切换尝试，大部分的切换以阻塞告终。  
+
+何为非阻塞？   
+	下面有个隐喻：  
+	一辆从 A  开往 B  的公共汽车上，路上有很多点可能会有人下车。
+	司机不知道哪些点会有哪些人会下车，对于需要下车的人，如何处理更好？   
+	1.  司机开车过程中定时询问每个乘客是否到达目的地，若有人说到了，那么司机停车，乘客下车。 ( 类似阻塞式 )   
+	2.  每个人告诉售票员自己的目的地，然后睡觉，司机只和售票员交互，到了某个点由售票员通知乘客下车。 (  类似非阻塞 )    
+	很显然，每个人要到达某个目的地可以认为是一个线程，司机可以认为是 CPU  。
+	在阻塞式里面，每个线程需要不断的轮询，上下文切换，以达到找到目的地的结果。
+	而在非阻塞方式里，每个乘客 (  线程 )  都在睡觉 (  休眠 )  ，只在真正外部环境准备好了才唤醒，这样的唤醒肯定不会阻塞。 
+
+	seletor 去通知和唤醒阻塞进程 
+
+阻塞IO缺点：
+	一定会发现阻塞I/O存在一些缺点。根据阻塞I/O通信模型，我总结了它的两点缺点：
+	1. 当客户端多时，会创建大量的处理线程。且每个线程都要占用栈空间和一些CPU时间
+	2. 阻塞可能带来频繁的上下文切换，且大部分上下文切换可能是无意义的。
+
+NIO的工作原理：
+	1. 由一个专门的线程来处理所有的 IO 事件，并负责分发。 
+	2. 事件驱动机制：事件到的时候触发，而不是同步的去监视事件。 
+	3. 线程通讯：线程之间通过 wait,notify 等方式通讯。保证每次上下文切换都是有意义的。减少无谓的线程切换。
+
+【多态】	
+7.多态的思想和认识	
+静态（编译期多态）和动态(运行期多态)
+		1. 编译期还是运行时候决定调用哪个  
+			静态多态性 指的是程序在编译时，系统就能决定调用哪个函数
+			动态多态性 运行时 才能知道调用具体哪个实现  
+		2. 重载((重载/模版) 还是重写 （虚函数和重写）
+		3. 一个类 还是多个类间关系 
+	
+	总结：
+	应用形式上：
+	静多态是发散式的，让相同的实现代码应用于不同的场合。
+	动多态是收敛式的，让不同的实现代码应用于相同的场合。
+
+	思维方式上：
+	静多态是泛型式编程风格，它看重的是算法的普适性。
+	动多态是对象式编程风格，它看重的是接口和实现的分离度。
+	
+	宏也可以认为是实现静态多态的一种方式，实现原理就是全文替换
+	
+	动态多态的设计思想：对于相关的对象类型，确定它们之间的一个共同功能集，然后在基类中，把这些共同的功能声明为多个公共的虚函数接口。
+	各个子类重写这些虚函数，以完成具体的功能。
+	客户端的代码（操作函数）通过指向基类的引用或指针来操作这些对象，对虚函数的调用会自动绑定到实际提供的子类对象上去。
+	
+	------------------------------------------------------
+	//动态多态最吸引人之处在于处理异质对象集合的能力
+	
+	面向对象的语言中，多态性是一个主要特性，表现在静态联编和动态联编上面，静态联编也叫做编译时多态，动态联编也称为运行时多态。
+	那什么是联编呢？所谓联编是指计算机程序不同部分产生联系的过程。 
+	
+	静态联编也叫做编译时多态，主要实现形式是通过函数重载和运算符重载来实现的，
+	函数重载就是在一个程序中，函数名相同，但是参数列表不同，包括参数个数或者参数类型，或者两者都不同，这样的方式就是函数重载。
+	返回类型可以不一样
+	效率较高，但是灵活性较差
+	
+	动态联编是靠基类的虚拟函数来实现的，对于成员函数的选择是基于对象的类型，根据不同的对象类型确定调用哪个成员函数，给出不同编译结果。
+	涉及到虚函数的时候用到的就是动态联编。动态联编的特点是灵活性大，但是效率低。
+	动态联编规定，只能通过指向基类的指针或基类对象的引用来调用虚函数，
+	其格式是指向基类的指针->虚函数（参数列表）或者基类对象的引用名.虚函数（参数列表）
+	
+	动态联编要求派生类中的虚函数与基类中对应的虚函数具有相同的名称、相同的参数个数和相同的对应参数类型、
+	返回值或者相同，或者都返回指针或引用，
+	并且派生类虚函数所返回的指针或引用的基类型是基类中虚函数所返回的指针或引用的基类型的子类型
+	
+	注：虚函数 对应 java 中父类的普通函数 
+	
+	通过对象指针进行的普通成员函数的调用，仅仅与指针的类型有关，而与此刻指针正指向什么对象无关。
+	要想实现当指针指向不同对象时执行不同的操作，就必须将基类中相应的成员函数定义为虚函数，进行动态联编。
+	--------------------------------------------------
+	补充：
+	多态实际上就是泛型。
+	所谓泛型就是指我们不为特定的类型进行专门编码，而采用对不同类型进行通用编码的方式，无论是数据结构还是算法。 
+	传统的泛型是指类似以Template function的方式使参数一般化，典型的应用是C++ STL，比如List、Vector以及algorithm。
+	
+	多态是建立在封装和继承基础上面的 
+	反射也是多态的一种实现 晚期绑定 
+	
+	框架容器的主要模式，Inversion of Control Containers(IoC)/Dependency Injection(包括setter injection, construct injection, interface injection等)，其主要好处就是类之间的依赖，通过运行期的查找来进行绑定。那么他的基础是什么呢？还是多态！ 
+	
+	继承是子类使用父类的方法，而多态则是父类使用子类的方法
+	--------------------------------------------------	
+	
+
+
+
+
+
+	

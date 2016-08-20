@@ -1,0 +1,189 @@
+- 阿里实习校招面试 叶霖
++ 一面
+	【侧重基础】
+
+	- java基础 
+
+	equals 与 ==
+
+	Object类的方法
+		1.equals(Object obj)
+		2.finalize()
+		3.getClass
+		4.hashCode()
+		5.notify
+		6.notifyAll();
+		7.wait()
+		8.Clone()
+		9.toString()
+
+	重写equals
+		public boolean equals(Object obj) {
+		return super.equals(obj);
+		}
+
+	- 算法与数据结构
+
+	快速排序 写代码 
+
+		private int partition(int array[], int low, int high) {  
+            int key = array[low];  
+            while (low < high) {  
+                while (low < high && array[high] >= key)  
+                    high--;  
+                array[low] = array[high];  
+                while (low < high && array[low] <= key)  
+                    low++;  
+                array[high] = array[low];  
+            }  
+            array[low] = key;  
+            return low;  
+        }  
+  
+        public int[] sort(int low, int high) {  
+            if (low < high) {  
+                int result = partition(data, low, high);  
+                sort(low, result - 1);  
+                sort(result + 1, high);  
+            }  
+            return data;  
+        }
+
+	数组与链表 
+
+	如何判断链表是否有环（主要思考：程序退出的条件）
+
+		给定一个单链表，只给出头指针h：
+		1、如何判断是否存在环？
+		2、如何知道环的长度？
+		3、如何找出环的连接点在哪里？
+		4、带环链表的长度是多少？
+		 
+		解法：
+		1、对于问题1，使用追赶的方法，设定两个指针slow、fast，从头指针开始，每次分别前进1步、2步。如存在环，则两者相遇；如不存在环，fast遇到NULL退出。
+		2、对于问题2，记录下问题1的碰撞点p，slow、fast从该点开始，再次碰撞所走过的操作数就是环的长度s。
+		3、问题3：有定理：碰撞点p到连接点的距离=头指针到连接点的距离，因此，分别从碰撞点、头指针开始走，相遇的那个点就是连接点。(证明在后面附注)
+		4、问题3中已经求出连接点距离头指针的长度，加上问题2中求出的环的长度，二者之和就是带环单链表的长度
+
+	- java虚拟机结构与内存回收机制
+
+	画内存结构图
+		1. Young（年轻代）
+		 年轻代分三个区。一个Eden区，两个Survivor区。大部分对象在Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区（两个中的一个），当这个Survivor区满时，此区的存活对象将被复制到另外一个Survivor区，当这个Survivor去也满了的时候， 从第一个Survivor区复制过来的并且此时还存活的对象，将被复制年老区(Tenured。需要注意，Survivor的两个区是对称的，没先后关系，所以同一个区中可能同时存在从Eden复制过来 对象，和从前一个Survivor复制过来的对象，而复制到年老区的只有从第一个Survivor去过来的对象。而且，Survivor区总有一个是空的。  
+		2. Tenured（年老代）
+			年老代存放从年轻代存活的对象。一般来说年老代存放的都是生命期较长的对象。  
+		3. Perm（持久代）
+			用于存放静态文件，如今Java类、方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些class，例如Hibernate等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中新增的类。持久代大小通过-XX:MaxPermSize=进行设置。
+
+	Full GC 
+		eden空间不够了就要进行minor collection，old generation空间不够要进行major collection，permanent generation空间不足会引发full GC
+
+		Minor GC：指发生在新生代的垃圾收集动作，因为 Java 对象大多都具备朝生夕灭的特性，所以 Minor GC 非常频繁，一般回收速度也比较快。
+		Major GC/Full GC ：指发生在老年代的 GC，出现了 Major GC，经常会伴随至少一次的 Minor GC
+		Full GC:针对老年代/永久代进行GC,stop the world
+
+	- HTTP请求(http://blog.csdn.net/zhushuai1221/article/details/51008950)
+
+	时序 
+		第一次握手：建立连接时，客户端发送syn包（syn=j）到服务器，并进入SYN_SENT状态，等待服务器确认；SYN：同步序列编号（Synchronize Sequence Numbers）。
+	    第二次握手：服务器收到syn包，必须确认客户的SYN（ack=j+1），同时自己也发送一个SYN包（syn=k），即SYN+ACK包，此时服务器进入SYN_RECV状态；
+	    第三次握手：客户端收到服务器的SYN+ACK包，向服务器发送确认包ACK(ack=k+1），此包发送完毕，客户端和服务器进入ESTABLISHED（TCP连接成功）状态，完成三次握手
+
+
+	TCP为什么是三次握手 而不是二次 四次（第三次握手的目的是什么）
+
+		为什么要三次握手，不是两次
+		为了防止已失效的连接请求报文段突然又传送到了服务端，因而产生错误.
+		“已失效的连接请求报文段”的产生在这样一种情况下：client发出的第一个连接请求报文段并没有丢失，而是在某个网络结点长时间的滞留了，
+		以致延误到连接释放以后的某个时间才到达server。
+		本来这是一个早已失效的报文段。但server收到此失效的连接请求报文段后，就误认为是client再次发出的一个新的连接请求。
+		于是就向client发出确认报文段，同意建立连接。
+		假设不采用“三次握手”，那么只要server发出确认，新的连接就建立了。
+		由于现在client并没有发出建立连接的请求，因此不会理睬server的确认，也不会向server发送数据。
+		但server却以为新的运输连接已经建立，并一直等待client发来数据。这样，server的很多资源就白白浪费掉了。采用“三次握手”的办法可以防止上述现象发生。
+		例如刚才那种情况，client不会向server的确认发出确认。server由于收不到确认，就知道client并没有要求建立连接。”这就很明白了，防止了服务器端的一直等待而浪费资源
+
+		第三次握手：让服务端知道，之间的连接没问题
+
+	- 数据库
+
+	用过哪些
+
+	事务ACID 
+
+	隔离级别
+
+	- 程序同步锁（锁在static方法上和非static方法上的区别）
+
+	- 异常处理机制 （讲异常处理的大体结构即可）
+
+	- 虚拟化技术
+
+	虚拟内存空间（概念）
+
+	- 多线程的一个实际例子 代码实现	
+
+	有一个篮子 A类线程负责装苹果  B类线程负责拿苹果  保证在任何时候篮子里的苹果数目大于100
+	用该实际问题设计类  并写出整个执行过程的代码（也可以写伪代码）
+	http://www.cnblogs.com/happyPawpaw/archive/2013/01/18/2865957.html
+	典型的生产者消费者问题
+
+
++ 二面
+
+	【侧重项目经验、设计能力和解决问题思路、方法】
+
+	- 实际项目中遇到的问题以及怎么解决的
+
+	百度云盘的项目
+
+	+ servlet请求的时序图
+
+		http://blog.csdn.net/yuebinghaoyuan/article/details/7181925
+		1.Web浏览器-->发出http请求-->Web容器-->首次访问的话创建目标Servlet对象-->Servlet
+ 		2.Web容器-->创建请求和响应对象(request和response)-->调用Servlet的service(ServletResquest,ServletRespons)并且将刚才创建的请求对象和响应对象对象传递给Servlet
+	    3.Servlet程序从请求对象中读取请求信息,将响应信息写入到响应对象当中；
+	    4.service方法结束，程序返回到web容器->web容器从相应对象中读取响应信息->将响应星系生成HTTP消息返回给浏览器
+
+	- spring框架以及源码的研究
+
+	相关概念 思路 IOC AOP理论回答的比较清楚
+
+	源码尚未研读 在计划中
+
+	- 设计模式
+
+	用过哪些设计模式
+
+	策略模式的 类图 代码 思路讲清楚
+
+	- 数据库设计
+
+	个人博客的项目中 
+
+	用户 相册 博客等的相关表 字段 1:1 1：n 等的设计（直接设计表结构）
+
+	- 非技术性问题
+
+	+ 最大的挫败感的事情
+
+	+ 相对于项目组其他成员你自身的优势在哪？
+
+	+ 未来的职业规划
+
+	+ 问面试官问题
+
+
++ HR面 	 
+	【闻阿里味儿】
+	最好体现的特质：主动 积极 皮实 自省 承受得住挫折 
+	- 家庭组成 是否独生子
+	- 挫败感事件
+	- 最大的优点
+	- 平时喜欢干什么，兴趣爱好
+	- 如果面试被刷了你会怎么办
+	- 怎样体现你的学习能力
+	- 未来的职业规划
+	- 对杭州了解吗，对阿里公司了解吗
+	- 有无意向的部门
+	- 问面试官问题
