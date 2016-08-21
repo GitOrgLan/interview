@@ -15,11 +15,11 @@
 	如果在编程中，两种情形交替出现，这时，可以考虑使用List这样的通用接口，而不用关心具体的实现，在具体的情形下，它的性能由具体的实现来保证
 
 2. 各种内部排序算法
-各种内部排序的时间和空间复杂度以及稳定性的分析
-http://blog.chinaunix.net/uid-21457204-id-3060260.html
+[各种内部排序的时间和空间复杂度以及稳定性的分析]
+(http://blog.chinaunix.net/uid-21457204-id-3060260.html)
 
-各种排序算法的分析及java实现 
-http://www.cnblogs.com/liuling/p/2013-7-24-01.html
+[各种排序算法的分析及java实现 ]
+(http://www.cnblogs.com/liuling/p/2013-7-24-01.html)
 http://www.cnblogs.com/sevenyuan/archive/2009/12/04/1616897.html
 
 
