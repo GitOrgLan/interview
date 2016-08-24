@@ -8,17 +8,26 @@ http://ylsun1113.iteye.com/blog/828542
 http://www.ibm.com/developerworks/cn/java/j-lo-spring-principle/
 
 
-1.工厂模式，这个很明显，在各种BeanFactory以及ApplicationContext创建中都用到了；
-2.模版模式，这个也很明显，在各种BeanFactory以及ApplicationContext实现中也都用到了；
-3.代理模式，在Aop实现中用到了JDK的动态代理；
-4.策略模式，第一个地方，加载资源文件的方式，使用了不同的方法，比如：ClassPathResourece，FileSystemResource，ServletContextResource，UrlResource但他们都有共同的借口Resource；第二个地方就是在Aop的实现中，采用了两种不同的方式，JDK动态代理和CGLIB代理；
-5.单例模式，这个比如在创建bean的时候。
+	1.1 工厂模式，这个很明显，在各种BeanFactory以及ApplicationContext创建中都用到了；
+	(抽象工厂模式:http://blog.csdn.net/jason0539/article/details/44976775)
+
+	1.2 模版模式，这个也很明显，在各种BeanFactory以及ApplicationContext实现中也都用到了；
+	http://www.cnblogs.com/wangjq/archive/2012/07/09/2582978.html
+
+	1.3 代理模式，在Aop实现中用到了JDK的动态代理；
+	(动态代理模式:http://www.cnblogs.com/tiantianbyconan/archive/2012/11/20/2779095.html)
+
+	1.4 策略模式，第一个地方，加载资源文件的方式，使用了不同的方法，比如：ClassPathResourece，FileSystemResource，ServletContextResource，UrlResource但他们都有共同的借口Resource；第二个地方就是在Aop的实现中，采用了两种不同的方式，JDK动态代理和CGLIB代理；
+	http://www.cnblogs.com/java-my-life/archive/2012/05/10/2491891.html
+
+	1.5 单例模式，这个比如在创建bean的时候。
 
 
 
 2.抽象工厂模式-与-工厂方法模式区别 
 http://blog.csdn.net/superbeck/article/details/4446177
 http://blog.csdn.net/wyxhd2008/article/details/5597975
+http://blog.csdn.net/jason0539/article/details/44976775
 	工厂方法：抽象产品只有一种
 	抽象工厂：抽象产品有多种
 	

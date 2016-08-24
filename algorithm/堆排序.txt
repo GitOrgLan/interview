@@ -17,7 +17,7 @@ public class HeapSortTest {
         }
         print(data5);
         heapSort(data5);
-        System.out.println("ÅÅĞòºóµÄÊı×é£º");
+        System.out.println("æ’åºåçš„æ•°ç»„ï¼š");
         print(data5);
     }
 
@@ -40,21 +40,21 @@ public class HeapSortTest {
 
     public static void createMaxdHeap(int[] data, int lastIndex) {
         for (int i = (lastIndex - 1) / 2; i >= 0; i--) {
-            // ±£´æµ±Ç°ÕıÔÚÅĞ¶ÏµÄ½Úµã
+            // ä¿å­˜å½“å‰æ­£åœ¨åˆ¤æ–­çš„èŠ‚ç‚¹
             int k = i;
-            // Èôµ±Ç°½ÚµãµÄ×Ó½Úµã´æÔÚ
+            // è‹¥å½“å‰èŠ‚ç‚¹çš„å­èŠ‚ç‚¹å­˜åœ¨
             if (2 * k + 1 <= lastIndex) {
-                // biggerIndex×ÜÊÇ¼ÇÂ¼½Ï´ó½ÚµãµÄÖµ,ÏÈ¸³ÖµÎªµ±Ç°ÅĞ¶Ï½ÚµãµÄ×ó×Ó½Úµã
+                // biggerIndexæ€»æ˜¯è®°å½•è¾ƒå¤§èŠ‚ç‚¹çš„å€¼,å…ˆèµ‹å€¼ä¸ºå½“å‰åˆ¤æ–­èŠ‚ç‚¹çš„å·¦å­èŠ‚ç‚¹
                 int biggerIndex = 2 * k + 1;
                 if (biggerIndex < lastIndex) {
-                    // ÈôÓÒ×Ó½Úµã´æÔÚ£¬·ñÔò´ËÊ±biggerIndexÓ¦¸ÃµÈÓÚ lastIndex
+                    // è‹¥å³å­èŠ‚ç‚¹å­˜åœ¨ï¼Œå¦åˆ™æ­¤æ—¶biggerIndexåº”è¯¥ç­‰äº lastIndex
                     if (data[biggerIndex] < data[biggerIndex + 1]) {
-                        // ÈôÓÒ×Ó½ÚµãÖµ±È×ó×Ó½ÚµãÖµ´ó£¬ÔòbiggerIndex¼ÇÂ¼µÄÊÇÓÒ×Ó½ÚµãµÄÖµ
+                        // è‹¥å³å­èŠ‚ç‚¹å€¼æ¯”å·¦å­èŠ‚ç‚¹å€¼å¤§ï¼Œåˆ™biggerIndexè®°å½•çš„æ˜¯å³å­èŠ‚ç‚¹çš„å€¼
                         biggerIndex++;
                     }
                 }
                 if (data[k] < data[biggerIndex]) {
-                    // Èôµ±Ç°½ÚµãÖµ±È×Ó½Úµã×î´óÖµĞ¡£¬Ôò½»»»2ÕßµÃÖµ£¬½»»»ºó½«biggerIndexÖµ¸³Öµ¸øk
+                    // è‹¥å½“å‰èŠ‚ç‚¹å€¼æ¯”å­èŠ‚ç‚¹æœ€å¤§å€¼å°ï¼Œåˆ™äº¤æ¢2è€…å¾—å€¼ï¼Œäº¤æ¢åå°†biggerIndexå€¼èµ‹å€¼ç»™k
                     swap(data, k, biggerIndex);
                    // k = biggerIndex;
                 }
@@ -69,4 +69,30 @@ public class HeapSortTest {
         System.out.println();
     }
 
+}
+
+
+//é€’å½’ç®—æ³•
+public class Test {
+	public int[] heapSort(int[] a, int n) {
+		if(n==0){
+			return a;
+		}
+		
+		for(int i=n-1;i>0;i--){
+			int parent=(i-1)/2;
+			if(a[i]>a[parent]){
+				int tmp=a[i];
+				a[i]=a[parent];
+				a[parent]=tmp;
+			}
+		}
+		
+		int tmp=a[0];
+		a[0]=a[n-1];
+		a[n-1]=tmp;
+		
+		heapSort(a, n-1);
+		return  a;
+	}
 }

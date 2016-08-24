@@ -1,0 +1,47 @@
+package toOffer;
+
+public class Test {
+
+	// KMP Algorithm
+	public int getIndexOf(String s, String m) {
+		if (s == null || m == null || s.length() < m.length()) {
+			return -1;
+		}
+		int up = 0, down = 0;
+		char[] sa = s.toCharArray();
+		char[] ma = m.toCharArray();
+		int[] next = getNextArray(ma);
+		while (up < sa.length && down < ma.length) {
+			if (sa[up] == ma[down]) {//左边的元素匹配
+				up++;
+				down++;
+			} else if (next[down] > 0) {//左边的元素不匹配，但是next值不为0，继续寻找最小前缀
+				down = next[down];
+			} else {
+				up++;
+			}
+		}
+		return down == ma.length ? up - down : -1;
+	}
+
+	public int[] getNextArray(char[] ms) {
+		if (ms.length == 1) {
+			return new int[] { -1 };
+		}
+		int[] next = new int[ms.length];
+		next[0] = -1;
+		next[1] = 0;
+		int pos = 2;
+		int num = 0;
+		while (pos < next.length) {
+			if (ms[pos - 1] == ms[num]) {//如果上一个元素可以匹配，这一次将上一次的next值结果加一
+				next[pos++] = ++num;
+			} else if (num > 0) {//如果上一次的不匹配，根据next值寻找最小前缀
+				num = next[num];
+			} else {
+				next[pos++] = 0;
+			}
+		}
+		return next;
+	}
+}
