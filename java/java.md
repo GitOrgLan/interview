@@ -23,7 +23,7 @@
 	* 几个几个线程互撸的题目
 		* [子线程循环10次，接着主线程循环100，接着又回到子线程循环10次，接着再回到主线程又循环100，如此循环50次](http://blog.csdn.net/nszkadrgg/article/details/8197555)
 - 基本概念
-	* [概念与原理](http://blog.csdn.net/joejames/article/details/46832091)
+	* [Java线程详解(超级详细)](http://www.cnblogs.com/riskyer/p/3263032.html)
 	* [并发编程](http://blog.csdn.net/escaflone/article/details/10418651#)
 	* [BIO,NIO,AIO](http://qindongliang.iteye.com/blog/2018539)
 - concurrent
