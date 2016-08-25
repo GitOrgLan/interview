@@ -1,0 +1,69 @@
+描述出Java集合框架中集合的接口关系
+	Collection—-Set和List
+	Set—-HashSet和SortedSet
+	List—-ArrayList和LinkedList
+	Map—-HashMap、SortedMap和TreeMap
+
+	1.
+	List集合是有序集合，集合中的元素可以重复，访问集合中的元素可以根据元素的索引来访问。
+	Set集合是无序集合，集合中的元素不可以重复，访问集合中的元素只能根据元素本身来访问（也是不能集合里元素不允许重复的原因）。
+	Map集合中保存Key-value对形式的元素，访问时只能根据每项元素的key来访问其value。
+
+	2.
+	List：保证以某种特定插入顺序来维护元素顺序，即保持插入的顺序，另外元素可以重复。
+	ArrayList：是用数组实现的，读取速度快，插入与删除速度慢（因为插入与删除时要移动后面的元素），适合于随机访问。
+	Vector：功能与ArrayList几乎相同，也是以数组实现，添加，删除，读取，设置都是基于线程同步的。
+	LinkedList：双向链表来实现，删除与插入速度快，读取速度较慢，因为它读取时是从头向尾（如果节点在链的前半部分），或尾向头（如果节点在链的后半部分）查找元素。因此适合于元素的插入与删除操作。
+
+	3.
+	对Set的选择：
+	HashSet的性能总比TreeSet好(特别是最常用的添加和查找元素操作)。
+	TreeSet存在的唯一原因是，它可以维持元素的排序状态，所以只有当你需要一个排好序的Set时，才应该使用TreeSet。
+	对于插入操作，LinkedHashSet比HashSet略微慢一点：这是由于维护链表所带来额外开销造成的。不过，因为有了链表，遍历LinkedHashSet会比HashSet更快。
+
+	对Map的选择：
+	Hashtable和HashMap的效率大致相同(通常HashMap更快一点，所以HashMap有意取代Hashtable)。
+	TreeMap通常比HashMap慢，因为要维护排序。
+	HashMap正是为快速查询而设计的。
+	LinkedHashMap比HashMap慢一点，因为它维护散列数据结构的同时还要维护链表。
+
+	4.Comparable接口和Comparator接口
+	在“集合框架”中有两种比较接口：Comparable接口和Comparator接口。
+	像String和Integer等Java内建类实现Comparable接口以提供一定排序方式，但这样只能实现该接口一次。
+	对于那些没有实现Comparable接口的类、或者自定义的类，您可以通过 Comparator接口来定义您自己的比较方式。
+
+	5.当以自己的对象做为HashMap、HashTable、LinkedHashMap、HashSet 、LinkedHashSet 的键时，一定要重写hashCode ()与equals ()方法，因为Object的hashCode()是返回内存地址，且equals()方法也是比较内存地址，所以当要在这些hash集合中查找时，如果是另外new出的新对象是查不到的，除非重写这两个方法。
+
+	重写hashCode()与equals()这两个方法是针对哈希类，至于其它集合，如果要用public boolean contains(Object o)或containsValue(Object value)查找时，只需要实现equals()方法即可，他们都只使用对象的 equals方法进行比对，没有使用 hashCode方法。 
+
+hashmap与hashtable异同
+
+	hashmap
+		线程不安全
+		允许有null的键和值 在HashMap中，null可以作为键，这样的键只有一个；可以有一个或多个键所对应的值为null
+		效率高一点、
+		方法不是Synchronize的要提供外同步
+		有containsvalue和containsKey方法
+		HashMap 是Java1.2 引进的Map interface 的一个实现
+		HashMap是Hashtable的轻量级实现
+
+	hashtable
+		线程安全
+		不允许有null的键和值
+		效率稍低、
+		方法是是Synchronize的
+		有contains方法方法
+		Hashtable 继承于Dictionary 类
+		Hashtable 比HashMap 要旧
+	 
+	Hashtable中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。
+	即是说，在多线程应用程序中，不用专门的操作就安全地可以使用Hashtable了；而对于HashMap，则需要额外的同步机制。
+	但HashMap的同步问题可通过Collections的一个静态方法得到解决：
+	Map Collections.synchronizedMap(Map m)
+	这个方法返回一个同步的Map，这个Map封装了底层的HashMap的所有方法，使得底层的HashMap即使是在多线程的环境中也是安全的。
+
+	可见Hashtable 继承自 Dictiionary 而 HashMap继承自AbstractMap 都实现了Map, Cloneable, Serializable等接口
+
+arrayList和linkedListed 
+	ArrayList：是用数组实现的，读取速度快，插入与删除速度慢（因为插入与删除时要移动后面的元素），适合于随机访问。
+	LinkedList：双向链表来实现，删除与插入速度快，读取速度较慢，因为它读取时是从头向尾（如果节点在链的前半部分），或尾向头（如果节点在链的后半部分）查找元素。因此适合于元素的插入与删除操作。
