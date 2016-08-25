@@ -1,3 +1,35 @@
+#View工作原理
+##ViewRoot和DecorView
+ViewRoot对应ViewRootImpl类，是连接WindowManager和DecorView的纽带，View的三大流程均是通过ViewRoot来完成的。在ActivityThread中，当Activity对象被创建出来后，会将DecorView添加到Window中，同时会创建ViewRootImpl对象，并将ViewRootImpl对象和DecorView建立关联。
+绘制流程都是从`ViewRootImpl.performTraversals()`开始，依次调用performMeasure(),performLayout(),performDraw()。这些方法会调用DecorView的measure()方法，`measure()`又会调用`onMeasure()`完成子View的measure。其余的流程和Measure类似。
+DecorView实际上是一个FrameLayout，View层的事件都要先经过DecorView然后才传递到View。
+
+##MeasureSpec
+MeasureSpec是一个32位int值，高2位代表SpecMode(测量模式)，低30位代表SpecSize(测量大小)。
+SpecMode有三类
+- UNSPECIFIED 父容器不对View做限制，要多大有多大
+- EXACTLY 父容器已经测量出了精确大小，这时候View的最终大小就是SpecSize所指定的值，它对应于match_parent和精确值这两种
+- AT\_MOST 父容器指定了一个SpecSize，View的大小不能大于这个值，具体是什么值要看不同View的具体实现。对应于wrap\_content
+
+对DecorView来说，其MeasureSpec由窗口的尺寸和其自身的LayoutParams来共同决定；而普通View，其MeasureSpec由父容器的MeasureSpec和自身的LayoutParams来决定。
+
+##View的工作流程
+###measure
+如果是View，测量自己就可以了。如果是一个ViewGroup，除了完成自己的测量外，还会遍历去调用所有子元素的measure方法，各个子元素再递归执行这个流程
+
+###layout
+layout的作用是ViewGroup用来确定子元素的位置，当ViewGroup的位置被确定之后，他在onLayout中会遍历所有的子元素并调用其layout方法，在layout方法中onLayout又会被调用。
+layout方法确定View本身位置，onLayout方法确定所有子元素位置。
+
+###draw过程
+View的draw过程有如下几步
+1. background.draw()
+2. onDraw()
+3. dispatchDraw()
+4. onDrawScrollBars()
+**有一个特殊的方法 ： setWillNotDraw，如果一个View不需要绘制任何内容，则可以将这个标记为设置为true。ViewGroup默认开启了这个标志位，所以ViewGroup的OnDraw方法不会进行绘制。**
+
+
 #Handler
 Handler机制相关的类有
 - Handler
@@ -74,10 +106,10 @@ Handler机制相关的类有
               +--------------+
 ```
 
-
-
 #Binder
-
+##使用以及上层原理
+直观来说，Binder是Android中的一个类，他实现了IBinder接口。从IPC角度来说，Binder是Android中的一种跨进程通信方式，Binder还可以理解为一种虚拟的物理设备，它的设备驱动是/dev/nomder。从Android Framework的角度来说，Binder是ServiceManager连接各种Manager和响应ManagerService的桥梁；从Android应用层来说，Binder是客户端和服务端进行通信的媒介，当bindService的时候，服务端会返回一个包含了服务端业务调用的Binder对象，通过这个对象，客户端就可以获取服务端提供的服务或数据，这里的服务包括普通服务和基于AIDL的服务。
+Android开发中，Binder主要用于Service，包括AIDL和Messenger，其中普通Service中的Binder不涉及进程间通信，所以较为简单，无法触及Binder的核心，而Messenger的底层其实是AIDL。
 
 
 
