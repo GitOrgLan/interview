@@ -58,9 +58,25 @@ java多线程间通信
 		pos.write(i);
 		pis.read();
 
-java实现同步
+java实现同步(http://blog.csdn.net/escaflone/article/details/10418651#)
+	普通方式:
 	1、synchronized关键字
 	2、Object类的wait、notify和notifyAll方法
+	高级方式：
+	1、volatile
+	2、atomic包中提供的Java类(java.util.concurrent.atomic)
+	3、Lock(java.util.concurrent.locks)
+	4、信号量:Semaphore
+	5、倒数闸门:CountDownLatch
+	6、循环屏障:CyclicBarrier
+	7、对象交换器:Exchanger
+	8、队列
+		BlockingQueue接口
+		BlockingDeque接口
+	9、集合类
+		ConcurrentMap接口
+		CopyOnWriteArrayList接口
+	10、ThreadLocal类(java.lang.ThreadLocal)
 
 第五题：多线程同步和互斥有何异同，在什么情况下分别使用他们？举例说明。
 	线程同步是指线程之间所具有的一种制约关系，一个线程的执行依赖另一个线程的消息，当它没有得到另一个线程的消息时应等待，直到消息到达时才被唤醒。
