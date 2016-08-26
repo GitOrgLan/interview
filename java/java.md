@@ -8,22 +8,22 @@
 	* [Vector](http://blog.csdn.net/chenssy/article/details/37520981)
 
 ### java多线程 ###
-- [面试题](http://www.importnew.com/12773.html)    
+- [面试题](http://www.importnew.com/12773.html)
+	* [Volatile](http://www.ibm.com/developerworks/cn/java/j-jtp06197.html)    
 	* [Callable接口和Runnable接口](http://uule.iteye.com/blog/1488270)
 	* [CountDownLatch、CyclicBarrier和Semaphore](http://www.cnblogs.com/dolphin0520/p/3920397.html)
-	* [Volatile](http://www.ibm.com/developerworks/cn/java/j-jtp06197.html)
-	* [如何终止java线程](http://blog.csdn.net/anhuidelinger/article/details/11746365)
-	* [ThreadLocal](http://blog.csdn.net/lufeng20/article/details/24314381)
-	* [java实现生产者消费者问题](http://www.cnblogs.com/happyPawpaw/archive/2013/01/18/2865957.html)
-	* [Lock](http://www.cnblogs.com/dolphin0520/p/3923167.html)
 	* [BlockingQueue](http://wsmajunfeng.iteye.com/blog/1629354)
+	* [ThreadLocal](http://blog.csdn.net/lufeng20/article/details/24314381)
+	* [如何终止java线程](http://blog.csdn.net/anhuidelinger/article/details/11746365)
+	* [java实现生产者消费者问题](http://www.cnblogs.com/happyPawpaw/archive/2013/01/18/2865957.html)
 	* [死锁](http://www.cnblogs.com/zhuawang/p/3782814.html)
 		* [哲学家就餐](http://blog.csdn.net/tayanxunhua/article/details/38691005)
 		* [银行家算法](http://blog.sina.com.cn/s/blog_7a4d0df90100zr6x.html)
-	* 几个几个线程互撸的题目
+	* 几个线程互撸的题目
 		* [子线程循环10次，接着主线程循环100，接着又回到子线程循环10次，接着再回到主线程又循环100，如此循环50次](http://blog.csdn.net/nszkadrgg/article/details/8197555)
-- 基本概念
+- 概念讲解
 	* [Java线程详解(超级详细)](http://www.cnblogs.com/riskyer/p/3263032.html)
+	* [Lock](http://www.cnblogs.com/dolphin0520/p/3923167.html)
 	* [并发编程](http://blog.csdn.net/escaflone/article/details/10418651#)
 	* [BIO,NIO,AIO](http://qindongliang.iteye.com/blog/2018539)
 - concurrent
