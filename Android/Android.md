@@ -1,3 +1,11 @@
+#系统启动
+- 开启电源后，引导程序会加载系统内核，各种驱动。有了驱动以后启动Android系统并加载第一个*用户级别*的init进程
+- 加载init.rc配置文件，会启动一个Zygote进程，其他Android进程都是由该进程fork()启动
+- 在app\_process目录下执行App\_main.cpp。在其内部类AppRuntime中，启动`com.android.internal.os.ZygoteInit`类,即从C++代码跳转到Java代码中。
+- 在ZygoteInit类中，配置一个Socket服务端，加载类和资源，启动SystemServer进程
+- 在SystemServer的main方法中，初始化了其他系统服务，并通过IPC加入ServiceManger，初始完成后调用系统服务systemReady()
+- 启动桌面程序Launcher
+
 #View工作原理
 ##ViewRoot和DecorView
 ViewRoot对应ViewRootImpl类，是连接WindowManager和DecorView的纽带，View的三大流程均是通过ViewRoot来完成的。在ActivityThread中，当Activity对象被创建出来后，会将DecorView添加到Window中，同时会创建ViewRootImpl对象，并将ViewRootImpl对象和DecorView建立关联。
@@ -107,11 +115,70 @@ Handler机制相关的类有
 ```
 
 #Binder
+##为什么使用Binder
+- 传输性能 socket是通用接口，传输效率低，开销大，主要用在跨网络的进程间通信和本机上进程间的低速通信。消息队列和管道采用存储-转发方式，即数据先从发送方缓存区拷贝到内核开辟的缓存区中，然后再从内核缓存区拷贝到接收方缓存区，至少有两次拷贝过程。共享内存虽然无需拷贝，但控制复杂，难以使用
+- 安全性 传统的LinuxIPC方式的接收方无法获得对方进程可靠的UID/PID（用户ID/进程ID），从而无法鉴别对方身份。Android为每个安装好的应用程序分配了自己的UID，故进程的UID是鉴别进程身份的重要标志。而Binder基于Client-Server通信模式，传输过程只需一次拷贝，为发送发添加UID/PID身份，既支持实名Binder也支持匿名Binder，安全性高
+
+##Binder通信模型
+Binder在FrameWork的通信主要与以下几个模块有关
+- Server (如各种系统调用，AMS,WMS,PMS)
+- Client
+- ServiceManager 提供Client查找Server的途径
+- Binder driver Binder驱动程序提供设备文件/dev/binder与用户空间交互，Client、Server和Service Manager通过open和ioctl文件操作函数与Binder驱动程序进行通信。Client和Server之间的进程间通信通过Binder驱动程序间接实现
+![模型](http://hi.csdn.net/attachment/201107/19/0_13110996490rZN.gif)
+通信过程：
+1. 首先一个进程向驱动通知他是ServiceManager，驱动同意后分配给这个进程0号引用，其他进程通过0号引用就可以和ServcieManager通信。
+2. 各个Service启动后通过驱动向Service注册，ServiceManager便保存Service名和Service的地址。
+3. Client要与Service通信，首先询问ServiceManager，通过Service名获得Service地址，这样就可以和Service进行通信。
+
+##跨进程原理
+IPC 中最基本的问题在于进程间使用的虚拟地址空间是相互独立的，不能直接访问，所以要相互访问，就要借助 kernel ，就是要让数据用用户空间进入到内核空间，然后再去到另一个进程的用户空间。
+一般的Linux IPC方式通常的做法是：发送方将准备好的数据存放在缓存区中，调用API通过系统调用进入内核中。内核服务程序在内核空间分配内存，将数据从发送方缓存区复制到内核缓存区中。接收方读数据时也要提供一块缓存区，内核将数据从内核缓存区拷贝到接收方提供的缓存区中并唤醒接收线程，完成一次数据发送。
+而Binder采用了新的策略，它把内核空间的地址和用户空间的虚拟地址映射到了同一段物理地址上，所以就只需要把数据从原始用户空间复制到内核空间，把目标进程用户空间和内核空间映射到同一段物理地址，这样第一次复制到内核空间，其实目标的用户空间上也有这段数据了。这就是 binder 比传统 IPC 高效的一个原因。
+
 ##使用以及上层原理
 直观来说，Binder是Android中的一个类，他实现了IBinder接口。从IPC角度来说，Binder是Android中的一种跨进程通信方式，Binder还可以理解为一种虚拟的物理设备，它的设备驱动是/dev/nomder。从Android Framework的角度来说，Binder是ServiceManager连接各种Manager和响应ManagerService的桥梁；从Android应用层来说，Binder是客户端和服务端进行通信的媒介，当bindService的时候，服务端会返回一个包含了服务端业务调用的Binder对象，通过这个对象，客户端就可以获取服务端提供的服务或数据，这里的服务包括普通服务和基于AIDL的服务。
 Android开发中，Binder主要用于Service，包括AIDL和Messenger，其中普通Service中的Binder不涉及进程间通信，所以较为简单，无法触及Binder的核心，而Messenger的底层其实是AIDL。
 
+###IBinder/IInterface/Binder/BinderProxy/Stub
+- IBinder是一个接口，它代表了一种跨进程传输的能力；只要实现了这个接口，就能将这个对象进行跨进程传递；这是驱动底层支持的；在跨进程数据流经驱动的时候，驱动会识别IBinder类型的数据，从而自动完成不同进程Binder本地对象以及Binder代理对象的转换。
+- IInterface中有一个`asBinder`方法，实际上，一般的声明的AIDL接口都会继承IInterface，可以代表远程实体有什么方法
+- Java层的Binder类，代表的其实就是Binder本地对象。BinderProxy类是Binder类的一个内部类，它代表远程进程的Binder对象的本地代理；这两个类都继承自IBinder, 因而都具有跨进程传输的能力；实际上，在跨越进程的时候，Binder驱动会自动完成这两个对象的转换。
+- 在使用AIDL的时候，编译工具会给我们生成一个Stub的静态内部类；这个类继承了Binder, 说明它是一个Binder本地对象，它实现了IInterface接口，表明它具有远程Server承诺给Client的能力；Stub是一个抽象类，具体的IInterface的相关实现需要我们手动完成，这里使用了策略模式。
+
+###AIDL
+使用AIDL生成的类，大体结构如下
+- 继承IInterface并拥有声明的aidl接口的方法
+- stub内部类，实现上述接口，给每一个方法分配一个标志序列号，通过`onTransact()`传入的序列号调用子类实现的方法。一般本地实体都继承自这个类。
+- Proxy类，远程代理类，如果请求的调用在同一进程，则直接返回实现stub的Binder，否则，返回代理类。代理类和Binder有组合的关系，实际上被Client调用时，将参数封装，通过Binder驱动传递到Binder实体的`onTransact()`，再由`onTransact()`进行调用。
+
+###类似
+ActivityMangerService   ActiviyManagerProxy   ActivityMangerNative
+        |                         |                     |
+      Binder                    Proxy                  Stub
+
+
+#Service保活
+[出处](http://blog.csdn.net/marswin89/article/details/50890708)
+1. 将Service设置为前台进程
+
+2. 在service的onstart方法里返回 STATR_STICK
+
+3. 添加Manifest文件属性值为android:persistent=“true”
+
+4. 覆写Service的onDestroy方法
+
+5. 添加广播监听android.intent.action.USER_PRESENT事件以及其他一些可以允许的事件
+
+6. 服务互相绑定
+
+7. 设置闹钟，定时唤醒
+
+8. 账户同步，定时唤醒
+
+9. native层保活
 
 
 
+#其他
 `Toast.makeText().show()`是将Toast加入显示队列
