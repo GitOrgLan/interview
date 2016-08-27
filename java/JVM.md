@@ -1,27 +1,27 @@
 ###JVM的系统结构###
 	JVM主要包括两个子系统和两个组件。   
-		* 两个子系统分别是Class loader子系统和Execution engine(执行引擎) 子系统；  
-		a.Class loader子系统的作用：根据给定的全限定名类名(如 java.lang.Object)来装载class文件的内容到 Runtime data area中的method area(方法区域)。Java程序员可以extends java.lang.ClassLoader类来写自己的Class loader。
-		b.Execution engine子系统的作用：执行classes中的指令。任何JVM specification实现(JDK)的核心都是Execution engine，不同的JDK例如Sun 的JDK 和IBM的JDK好坏主要就取决于他们各自实现的Execution engine的好坏     
-		* 两个组件分别是Runtime data area (运行时数据区域)组件和Native interface(本地接口)组件。  
-		a.Native interface组件：与native libraries交互，是其它编程语言交互的接口。当调用native方法的时候，就进入了一个全新的并且不再受虚拟机限制的世界，所以也很容易出现JVM无法控制的native heap OutOfMemory。
-		b.Runtime Data Area组件：这就是我们常说的JVM的内存了。   
-			它主要分为五个部分—— 
-		   	*  Heap (堆)：一个Java虚拟实例中只存在一个堆空间   
-			* Method Area(方法区域)：被装载的class的信息存储在Method area的内存中。  当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个    class文件内容并把它传输到虚拟机中。  
-			* Java Stack(java的栈)：虚拟机只会直接对Java stack执行两种操作：以帧为单位的压栈或出栈   
-			* Program Counter(程序计数器)：每一个线程都有它自己的PC寄存器，也是该线程启动时创建的。PC寄存器的内容总是指向下一条将被执行指令的地址，这里的地址可以是一个本地指针，也可以是在方法区中相对应于该方法起始指令的偏移量。    
-			* Native method stack(本地方法栈)：保存native方法进入区域的地址
+		- 两个子系统分别是Class loader子系统和Execution engine(执行引擎) 子系统；  
+			* Class loader子系统的作用：根据给定的全限定名类名(如 java.lang.Object)来装载class文件的内容到 Runtime data area中的method area(方法区域)。Java程序员可以extends java.lang.ClassLoader类来写自己的Class loader。
+			* Execution engine子系统的作用：执行classes中的指令。任何JVM specification实现(JDK)的核心都是Execution engine，不同的JDK例如Sun 的JDK 和IBM的JDK好坏主要就取决于他们各自实现的Execution engine的好坏     
+		- 两个组件分别是Runtime data area (运行时数据区域)组件和Native interface(本地接口)组件。  
+			* Native interface组件：与native libraries交互，是其它编程语言交互的接口。当调用native方法的时候，就进入了一个全新的并且不再受虚拟机限制的世界，所以也很容易出现JVM无法控制的native heap OutOfMemory。
+			* Runtime Data Area组件：这就是我们常说的JVM的内存了。   
+			它主要分为五个部分
+			   	*  Heap (堆)：一个Java虚拟实例中只存在一个堆空间   
+				* Method Area(方法区域)：被装载的class的信息存储在Method area的内存中。  当虚拟机装载某个类型时，它使用类装载器定位相应的class文件，然后读入这个    class文件内容并把它传输到虚拟机中。  
+				* Java Stack(java的栈)：虚拟机只会直接对Java stack执行两种操作：以帧为单位的压栈或出栈   
+				* Program Counter(程序计数器)：每一个线程都有它自己的PC寄存器，也是该线程启动时创建的。PC寄存器的内容总是指向下一条将被执行指令的地址，这里的地址可以是一个本地指针，也可以是在方法区中相对应于该方法起始指令的偏移量。    
+				* Native method stack(本地方法栈)：保存native方法进入区域的地址
 		注意：以上五部分只有Heap 和Method Area是被所有线程的共享使用的；而Java stack, Program counter 和Native method stack是以线程为粒度的，每个线程独自拥有自己的部分. 
        
 ###JVM内存回收###
 Sun（现在应该叫oracle）的JVM Generational Collecting(垃圾回收)原理是这样的：把对象分为年青代(Young)、年老代(Tenured)、持久代(Perm)，三类 对不同生命周期的对象使用不同的算法。(基于对对象生命周期分析)
 
-	1. Young（年轻代）
+	- Young（年轻代）
 	年轻代分三个区。一个Eden区，两个Survivor区。大部分对象在Eden区中生成。当Eden区满时，还存活的对象将被复制到Survivor区（两个中的一个），当这个Survivor区满时，此区的存活对象将被复制到另外一个Survivor区，当这个Survivor去也满了的时候，从第一个Survivor区复制过来的并且此时还存活的对象，将被复制年老区(Tenured。需要注意，Survivor的两个区是对称的，没先后关系，所以同一个区中可能同时存在从Eden复制过来 对象，和从前一个Survivor复制过来的对象，而复制到年老区的只有从第一个Survivor去过来的对象。而且，Survivor区总有一个是空的。  
-	2. Tenured（年老代）
+	- Tenured（年老代）
 	年老代存放从年轻代存活的对象。一般来说年老代存放的都是生命期较长的对象。  
-	3. Perm（持久代）
+	- Perm（持久代）
 	用于存放静态文件，如今Java类、方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些class，例如Hibernate等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中新增的类。持久代大小通过-XX:MaxPermSize=进行设置。
 
 	举个例子：当在程序中生成对象时，正常对象会在年轻代中分配空间，如果是过大的对象也可能会直接在年老代生成（据观测在运行某程序时候每次会生成一个十兆的空间用收发消息，这部分内存就会直接在年老代分配）。年轻代在空间被分配完的时候就会发起内存回收，大部分内存会被回收，一部分幸存的内存会被拷贝至Survivor的from区，经过多次回收以后如果from区内存也分配完毕，就会也发生内存回收然后将剩余的对象拷贝至to区。等到to区也满的时候，就会再次发生内存回收然后把幸存的对象拷贝至年老区。  
