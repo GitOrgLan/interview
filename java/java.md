@@ -44,10 +44,14 @@
 - [Java虚拟机 类加载的过程](http://blog.csdn.net/xuefeng0707/article/details/9132339)
 - [Java垃圾回收（GC)](http://www.cnblogs.com/xrq730/p/4836700.html)
 
-# Series 
-##
+### Series ###
+
 - [Java Concurrency in Practice](http://blog.csdn.net/qilixiang012/article/category/2857487)
 - [Java Concurrency](http://tutorials.jenkov.com/java-concurrency/read-write-locks.html)
+
+#个人整理
+##
+- [JVM](https://github.com/GitOrgLan/interview/blob/master/java/JVM.md)
 
 
 
