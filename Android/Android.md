@@ -1,3 +1,4 @@
+[TOC]
 #系统启动
 - 开启电源后，引导程序会加载系统内核，各种驱动。有了驱动以后启动Android系统并加载第一个*用户级别*的init进程
 - 加载init.rc配置文件，会启动一个Zygote进程，其他Android进程都是由该进程fork()启动
@@ -6,10 +7,33 @@
 - 在SystemServer的main方法中，初始化了其他系统服务，并通过IPC加入ServiceManger，初始完成后调用系统服务systemReady()
 - 启动桌面程序Launcher
 
+#Activity启动流程
+1. Activity：startActivity方法的真正实现在Activity中
+2. Instrumentation：用来辅助Activity完成启动Activity的过程
+3. ActivityThread（包含ApplicationThread + ApplicationThreadNative + IApplicationThread）：真正启动Activity的实现都在这里
+
+Activity#startActivity -> Activity#startActivityForResult
+-> Instrumentation#execStartActivity
+-> ActivityManagerNative.getDefault#startActivity(这里通过Binder调用了ActivityManagerService中的方法)
+-> ActivityMangerService#startActivity -> ActivityManagerService#startActivityAsUser
+-> ActivityStackSupervisor#startActivityMayWait -> startActivityLocked -> startActivityUncheckedLocked
+-> ActivityStack#resumeTopActivityLocked -> resumeTopActivityInnerLocked
+-> ActivityStackSupervisor#startSpecificActivityLocked -> realStartActivityLocked
+-> Application#scheduleLaunchActivity -> sendMessage(发送消息给H)
+-> H#handleMessage -> handleLaunchActivity -> performLaunchActivity -> 回调OnCreate方法
+
+performLaunchActivity主要完成
+1. 从ActivityClientRecord中获取待启动的Activity的组件信息
+2. 通过Instrumentation的newActivity方法使用类加载器创建Activity
+3. 尝试创建Application对象
+4. 创建ContextImpl对象并通过Activity的attach方法来完成重要的初始化
+5. 回调Activity的OnCreate
+
+
 #View工作原理
 ##ViewRoot和DecorView
-ViewRoot对应ViewRootImpl类，是连接WindowManager和DecorView的纽带，View的三大流程均是通过ViewRoot来完成的。在ActivityThread中，当Activity对象被创建出来后，会将DecorView添加到Window中，同时会创建ViewRootImpl对象，并将ViewRootImpl对象和DecorView建立关联。
-绘制流程都是从`ViewRootImpl.performTraversals()`开始，依次调用performMeasure(),performLayout(),performDraw()。这些方法会调用DecorView的measure()方法，`measure()`又会调用`onMeasure()`完成子View的measure。其余的流程和Measure类似。
+ViewRoot对应`ViewRootImpl`类，是连接WindowManager和DecorView的纽带，View的三大流程均是通过ViewRoot来完成的。在ActivityThread中，当Activity对象被创建出来后，会将DecorView添加到Window中，同时会创建ViewRootImpl对象，并将ViewRootImpl对象和DecorView建立关联。
+绘制流程都是从`ViewRootImpl.performTraversals()`开始，依次调用`performMeasure()`,`performLayout()`,`performDraw()`。这些方法会调用DecorView的`measure()`方法，`measure()`又会调用`onMeasure()`完成子View的measure。其余的流程和Measure类似。
 DecorView实际上是一个FrameLayout，View层的事件都要先经过DecorView然后才传递到View。
 
 ##MeasureSpec
@@ -153,10 +177,12 @@ Android开发中，Binder主要用于Service，包括AIDL和Messenger，其中�
 - Proxy类，远程代理类，如果请求的调用在同一进程，则直接返回实现stub的Binder，否则，返回代理类。代理类和Binder有组合的关系，实际上被Client调用时，将参数封装，通过Binder驱动传递到Binder实体的`onTransact()`，再由`onTransact()`进行调用。
 
 ###类似
+
+```
 ActivityMangerService   ActiviyManagerProxy   ActivityMangerNative
         |                         |                     |
       Binder                    Proxy                  Stub
-
+```
 
 #Service保活
 [出处](http://blog.csdn.net/marswin89/article/details/50890708)
