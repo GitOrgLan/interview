@@ -175,22 +175,26 @@
 
 ###对象
 >在Java中，创建一个对象包括对象的声明和实例化两步，下面用一个例题来说明对象的内存模型。　　假设有类Rectangle定义如下：
-`public class Rectangle {
+```
+public class Rectangle {
 	double width;
 	double height;
 	public Rectangle(double w,double h){
 		w = width;
 		h = height;
 	}
-}` 
+}
+``` 
 
 - 声明对象时的内存模型
 用Rectanglerect；声明一个对象rect时，将在栈内存为对象的引用变量rect分配内存空间，但Rectangle的值为空，称rect是一个空对象。空对象不能使用，因为它还没有引用任何"实体"。
 - 对象实例化时的内存模型
 当执行rect=newRectangle(3,5)；时，会做两件事：　在堆内存中为类的成员变量width,height分配内存，并将其初始化为各数据类型的默认值；接着进行显式初始化（类定义时的初始化值）；最后调用构造方法，为成员变量赋值。  返回堆内存中对象的引用（相当于首地址）给引用变量rect,以后就可以通过rect来引用堆内存中的对象了。
 一个类通过使用new运算符可以创建多个不同的对象实例，这些对象实例将在堆中被分配不同的内存空间，改变其中一个对象的状态不会影响其他对象的状态。
-`Rectangle r1= new Rectangle(3,5);
-Rectangle r2=r1;`
+```
+Rectangle r1= new Rectangle(3,5);
+Rectangle r2=r1;
+```
 则在堆内存中只创建了一个对象实例，在栈内存中创建了两个对象引用，两个对象引用同时指向一个对象实例。
 
 ###静态变量
@@ -198,13 +202,15 @@ Rectangle r2=r1;`
 static变量有点类似于C中的全局变量的概念；静态表示的是内存的共享，就是它的每一个实例都指向同一个内存地址。
 把static拿来，就是告诉JVM它是静态的，它的引用（含间接引用）都是指向同一个位置，在那个地方，你把它改了，它就不会变成原样，你把它清理了，它就不会回来了。         那静态变量与方法是在什么时候初始化的呢？对于两种不同的类属性，static属性与instance属性，初始化的时机是不同的。
 instance属性在创建实例的时候初始化，static属性在类加载，也就是第一次用到这个类的时候初始化，对于后来的实例的创建，不再次进行初始化。我们常可看到类似以下的例子来说明这个问题：
+```
 class Student{
-static int numberOfStudents=0;
-Student()
-{
-numberOfStudents++;
+	static int numberOfStudents=0;
+	Student()
+	{
+		numberOfStudents++;
+	}
 }
-}
+```
 每一次创建一个新的Student实例时,成员numberOfStudents都会不断的递增,并且所有的Student实例都访问同一个numberOfStudents变量,实际上int numberOfStudents变量在内存中只存储在一个位置上。
 
 ###垃圾回收机制八问
@@ -228,16 +234,21 @@ numberOfStudents++;
 
 - （问题七：如何显示的使对象符合垃圾回收条件？）   
 	-  空引用 ：当对象没有对他可到达引用时，他就符合垃圾回收的条件。也就是说如果没有对他的引用，删除对象的引用就可以达到目的，因此我们可以把引用变量设置为null，来符合垃圾回收的条件。
-	`StringBuffer sb = new StringBuffer("hello");
+	```
+	StringBuffer sb = new StringBuffer("hello");
 	System.out.println(sb);
-	sb=null;`
+	sb=null;
+	```
 	-  重新为引用变量赋值：可以通过设置引用变量引用另一个对象来解除该引用变量与一个对象间的引用关系。
-	`StringBuffer sb1 = new StringBuffer("hello");
+	```
+	StringBuffer sb1 = new StringBuffer("hello");
 	StringBuffer sb2 = new StringBuffer("goodbye");
 	System.out.println(sb1);
-	sb1=sb2;//此时"hello"符合回收条件  `
+	sb1=sb2;//此时"hello"符合回收条件 
+	```
 	-  方法内创建的对象：所创建的局部变量仅在该方法的作用期间内存在。一旦该方法返回，在这个方法内创建的对象就符合垃圾收集条件。有一种明显的例外情况，就是方法的返回对象。
-	`public static void main(String[] args) {
+	```
+	public static void main(String[] args) {
 		Date d = getDate();
 		System.out.println("d = " + d);
 	}
@@ -246,7 +257,8 @@ numberOfStudents++;
 	StringBuffer now = new StringBuffer(d2.toString());
 	System.out.println(now);
 	return d2;
-	}`
+	}
+	```
 	-  隔离引用：这种情况中，被回收的对象仍具有引用，这种情况称作隔离岛。若存在这两个实例，他们互相引用，并且这两个对象的所有其他引用都删除，其他任何线程无法访问这两个对象中的任意一个。也可以符合垃圾回收条件。
 	```
 	public class Island {
