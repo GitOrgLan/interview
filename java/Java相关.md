@@ -1,6 +1,6 @@
 [TOC]
 #数据结构在Java中的实现
-代码基于JDK8
+代码基于JDK8，相比之前的版本有较大改动
 ##ArrayList
 内部实际上是一个Object[]对象，实际上ArrayList就是封装了对数组的操作，ArrayList具有数组的所有特性。
 
@@ -38,6 +38,22 @@
 - 当前位置不为空，并且该位置元素类型为TreeNode(Node的子类，红黑树的节点)，执行`TreeNode.putTreeVal()`，将新节点插入已存在的树中。
 - 最后一种情况，类似之前的版本，遍历该节点下链接的链表，如果有相同key的，替换值，没有的话新建节点插入链表的尾端。这里多了一个相对于之前版本的判断，如果该节点下的链表数目超过了'树化'的阈值，就调用`treeifyBin()`转换成树。
 
+###为什么HashMap初始大小要是2的指数次幂
+**计算数据存放位置的方式是hashcode和数组长度-1做与操作，而如果数组长度是2的次幂，减一的话就是全1，完全是根据hash值的后几位来决定位置，而如果数组长度不是2次幂，那么减一后就会有几位为0，在这几位上的hashcode不论是0还是1运算后都会分配到同一位置，提高了冲突率。**
+
+##HashTable
+除了以下几点差异，几乎和HashMap相同
+- HashMap可以接受为null的key 和 value
+- HashTable是synchronized的，而HashMap不是
+- HashTable直接使用对象的hashCode。而HashMap重新计算hash值。 
+- HashTable中的hash数组初始大小是11，增加的方式是 old*2+1。HashMap中hash数组的默认大小是16，而且一定是2的指数。
+
+
+##ConcurrentHashMap
+1.6使用的是volatile，1.8使用了CAS操作在某些场合下替换Synchronized进行互斥同步。
+
+
+
 #引用
 ##ReferenceQueue
 当一个obj被gc掉之后，其相应的包装reference，即ref对象会被放入queue中。我们可以从queue中获取到相应的对象信息，同时进行额外的处理。比如反向操作，数据清理等。
@@ -49,6 +65,11 @@
 
 
 #一些优化
+##transient
+1. 一旦变量被transient修饰，变量将不再是对象持久化的一部分，该变量内容在序列化后无法获得访问。
+2. transient关键字只能修饰变量，而不能修饰方法和类。注意，本地变量是不能被transient关键字修饰的。变量如果是用户自定义类变量，则该类需要实现Serializable接口。
+3. 被transient关键字修饰的变量不再能被序列化，一个静态变量不管是否被transient修饰，均不能被序列化。
+
 ##分割字符串
 JDK8一下的`String.split()`实现使用的是正则，效率比较低
 使用indexOf + subString()可以提高效率
