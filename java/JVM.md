@@ -248,7 +248,8 @@ numberOfStudents++;
 	return d2;
 	}`
 	-  隔离引用：这种情况中，被回收的对象仍具有引用，这种情况称作隔离岛。若存在这两个实例，他们互相引用，并且这两个对象的所有其他引用都删除，其他任何线程无法访问这两个对象中的任意一个。也可以符合垃圾回收条件。
-	```public class Island {
+	```
+	public class Island {
 		Island i;
 		public static void main(String[] args) {
 			Island i2 = new Island();
@@ -261,7 +262,8 @@ numberOfStudents++;
 			i3=null;
 			i4=null;
 		}
-	}```
+	}
+	```
 - （问题八：垃圾收集前进行清理------finalize()方法）  
 	 java提供了一种机制，使你能够在对象刚要被垃圾回收之前运行一些代码。这段代码位于名为finalize()的方法内，所有类从Object类继承这个方法。由于不能保证垃圾回收器会删除某个对象。因此放在finalize()中的代码无法保证运行。因此建议不要重写finalize();
 
@@ -274,7 +276,8 @@ numberOfStudents++;
 - 尽早释放无用对象的引用。 好的办法是使用临时变量的时候，让引用变量在退出活动域后，自动设置为null，暗示垃圾收集器来收集该对象，防止发生内存泄露。对于仍然有指针指向的实例，jvm就不会回收该资源,因为垃圾回收会将值为null的对象作为垃圾，提高GC回收机制效率；
 	
 - 定义字符串应该尽量使用 String str="hello"; 的形式 ，避免使用String str = new String("hello"); 的形式。因为要使用内容相同的字符串，不必每次都new一个String。例如我们要在构造器中对一个名叫s的String引用变量进行初始化，把它设置为初始值，应当这样做： 
-	```public class Demo {
+	```
+	public class Demo {
 		private String s;
 		public Demo() {
 		s = "Initial Value";
@@ -288,17 +291,22 @@ numberOfStudents++;
 			s = "Initial Value";
 		}
 		...
-	}`
+	}
+	```
 	 而非
-	`s = new String("Initial Value");  
-	s = new String("Initial Value"); ```
+	```
+	s = new String("Initial Value");  
+	s = new String("Initial Value"); 
+	```
 后者每次都会调用构造器，生成新对象，性能低下且内存开销大，并且没有意义，因为String对象不可改变，所以对于内容相同的字符串，只要一个String对象来表示就可以了。也就说，多次调用上面的构造器创建多个对象，他们的String类型属性s都指向同一个对象。    
 
 - 我们的程序里不可避免大量使用字符串处理，避免使用String，应大量使用StringBuffer ，因为String被设计成不可变(immutable)类，所以它的所有对象都是不可变对象，请看下列代码；
-`String s = "Hello";   
+```
+String s = "Hello";   
 s = s + " world!";  
 String s = "Hello";
-s = s + " world!";`
+s = s + " world!";
+```
 在这段代码中，s原先指向一个String对象，内容是 "Hello"，然后我们对s进行了+操作，那么s所指向的那个对象是否发生了改变呢？答案是没有。这时，s不指向原来那个对象了，而指向了另一个 String对象，内容为"Hello world!"，原来那个对象还存在于内存之中，只是s这个引用变量不再指向它了。         通过上面的说明，我们很容易导出另一个结论，如果经常对字符串进行各种各样的修改，或者说，不可预见的修改，那么使用String来代表字符串的话会引起很大的内存开销。因为 String对象建立之后不能再改变，所以对于每一个不同的字符串，都需要一个String对象来表示。这时，应该考虑使用StringBuffer类，它允许修改，而不是每个不同的字符串都要生成一个新的对象。并且，这两种类的对象转换十分容易。
 	
 - 尽量少用静态变量 ，因为静态变量是全局的，GC不会回收的；
