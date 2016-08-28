@@ -54,7 +54,7 @@ Direct Memory并不是虚拟机运行时数据区的一部分，也不是Java虚
 三个问题
 - 哪些内存需要回收
 - 什么时候回收
-- 如何回收
+- 如何回收
 
 ##对象是否该被回收
 ###引用计数法(Reference Counting)
@@ -173,10 +173,109 @@ Direct Memory并不是虚拟机运行时数据区的一部分，也不是Java虚
 *工作过程：*如果一个类加载器收到了类加载的请求，他不会首先自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求时，子类才回去尝试自己加载。
 好处：Java类随着他的类加载器一起具备了一种带有优先级的层级关系。一个`java.lang.Object`类，无论哪一个类加载器要加载这个类，最终都是委派给启动类加载器进行加载，因此这个类在各种加载类环境中都是同一个类。
 
+#虚拟机分派
+Java面向对象的三个基本特征：继承，封装，多态。理解分派调用过程将会揭示多态性特征的一些最基本的体现
+##静态分派
+```Java
+public class StaticDispatch {
+
+	static abstract class Human {
+	}
+
+	static class Man extends Human {
+	}
+
+	static class Woman extends Human {
+	}
+
+	public void sayHello(Human guy) {
+		System.out.println("hello,guy!");
+	}
+
+	public void sayHello(Man guy) {
+		System.out.println("hello,gentleman!");
+	}
+
+	public void sayHello(Woman guy) {
+		System.out.println("hello,lady!");
+	}
+
+	public static void main(String[] args) {
+		Human man = new Man();
+		Human woman = new Woman();
+		StaticDispatch sr = new StaticDispatch();
+		sr.sayHello(man);
+		sr.sayHello(woman);
+	}
+}
+
+result:
+hello,guy
+hello,guy
+```
+如下定义
+
+```
+Human man = new Man()
+```
+上面代码中的Human是静态类型(外观类型)，后面的Man是实际类型。静态类型和实际类型在程序中都可以发生一些变化，区别是静态类型的变化仅仅在使用时发生，变量本省的静态类型不会发生改变，并且最终的静态类型是在编译期克制的。而实际类型的变化结果是在运行期才可确定，编译期在编译程序的时候并不知道一个对象的设计类型是什么。
+
+```
+//实际类型变化
+Human man = new Man();
+man = new Woman();
+//静态类型变化
+sr.sayHello((Man)man);
+sr.sayHello((Woman)man);
+```
+main()里的两次sayHello()方法调用，在方法接受者已经确定是对象sr的前提下，使用哪个重载版本就完全取决于传入参数的数量和数据类型，代码中刻意地定义了两个静态类型相同但是实际类型不同的变量，但是编译器在重载时是通过参数的静态类型而不是实际类型作为判断依据的。并且静态类型是编译器可知的，因此在编译阶段，Javac编译器会根据参数的静态类型决定使用哪个重载版本，所以选择了sayHello(Human)作为调用目标。
+所有依据静态类型来定位方法执行版本的分派动作称为静态分派。静态分派的典型应用是方法重载。静态分派发生在编译阶段，因此静态分派的动作实际上不是虚拟机执行的。
+
+##动态分派
+动态分配和重写有密切关系
+如下代码
+```
+public class DynamicDispatch {
+
+	static abstract class Human {
+		protected abstract void sayHello();
+	}
+
+	static class Man extends Human {
+		@Override
+		protected void sayHello() {
+			System.out.println("man say hello");
+		}
+	}
+
+	static class Woman extends Human {
+		@Override
+		protected void sayHello() {
+			System.out.println("woman say hello");
+		}
+	}
+
+	public static void main(String[] args) {
+		Human man = new Man();
+		Human woman = new Woman();
+		man.sayHello();
+		woman.sayHello();
+		man = new Woman();
+		man.sayHello();
+	}
+}
+result:man say hello
+woman say hello
+woman say hello
+```
+
+动态分派就是通过invokevirtual寻找对象的实际类型，根据运行期实际类型确定方法执行版本的分派过程。
+
+
 #Java内存模型
 Java内存模型的主要目标是定义程序中各个变量的访问规则，即载虚拟机中将变量存储到内存和从内存取出变量这样的底层细节。此处的变量和Java编程中所说的变量有所区别，它包含了实例字段，静态字段，和构成数组对象的元素，但不包括局部变量与方法参数，因为后者(reference本身在Java栈的局部变量表中)是线程私有的，不会被共享。
 
-Java内存模型规定了所有的变量都储存在主内存种，每条线程还有自己的工作内存，线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作必须在工作内存中进行，而不能直接读写主内存中的变量，不同的线程之间也无法访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成。 
+Java内存模型规定了所有的变量都储存在主内存中，每条线程还有自己的工作内存，线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作必须在工作内存中进行，而不能直接读写主内存中的变量，不同的线程之间也无法访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成。 
 
 ##volatile总结
 锁提供了两种主要特性，互斥和可见性。
