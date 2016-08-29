@@ -53,8 +53,29 @@
 1.6使用的是volatile，1.8使用了CAS操作在某些场合下替换Synchronized进行互斥同步。
 
 
+#泛型
+##类型擦除
+在生成的Java字节代码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉。这个过程就称为类型擦除。如在代码中定义的List<Object>和List<String>等类型，在编译之后都会变成List。JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。Java编译器会在编译时尽可能的发现可能出错的地方，但是仍然无法避免在运行时刻出现类型转换异常的情况。
+
+类型擦除的基本过程也比较简单，首先是找到用来替换类型参数的具体类。这个具体类一般是Object。如果指定了类型参数的上界的话，则使用这个上界。把代码中的类型参数都替换成具体的类。同时去掉出现的类型声明，即去掉<>的内容。比如T get()方法声明就变成了Object get()；List<String>就变成了List。接下来就可能需要生成一些桥接方法（bridge method）。这是由于擦除了类型之后的类可能缺少某些必须的方法。比如考虑下面的代码：
+
+```
+class MyString implements Comparable<String> {
+    public int compareTo(String str) {        
+        return 0;    
+    }
+} 
+```
+当类型信息被擦除之后，上述类的声明变成了class MyString implements Comparable。但是这样的话，类MyString就会有编译错误，因为没有实现接口Comparable声明的int compareTo(Object)方法。这个时候就由编译器来动态生成这个方法。
+
 
 #引用
+##四种引用
+- 强引用
+- 软引用
+- 弱引用
+- 虚引用
+
 ##ReferenceQueue
 当一个obj被gc掉之后，其相应的包装reference，即ref对象会被放入queue中。我们可以从queue中获取到相应的对象信息，同时进行额外的处理。比如反向操作，数据清理等。
 具体可以是扩展Reference之后，在实例中持有相应集合的key或Index，当Reference被GC后，就可以获得Reference并且通过key或index删除集合的数据。

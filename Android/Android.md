@@ -100,7 +100,6 @@ Handler机制相关的类有
                 |          |
                 |  Looper  |
                 |          |
-                |          |
                 +---> +----+
                   ^      |
              next |      | enqueue
