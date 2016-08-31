@@ -53,6 +53,74 @@
 1.6使用的是volatile，1.8使用了CAS操作在某些场合下替换Synchronized进行互斥同步。
 
 
+#线程池
+优势
+- 重用线程池中的线程，避免因为线程的创建和销毁所带来的性能开销
+- 能有效控制线程池的最大并发数量，避免大量的线程之间因互相抢占系统资源而导致的阻塞现象
+- 能过对线程进行简单的管理，并提供定时执行以及制定建构循环执行等功能
+
+##ThreadPoolExecutor
+```
+public ThreadPoolExecutor(int corePoolSize,
+						int maximumPoolSize,
+						long keepAliveTime,
+						TimeUnit unit,
+						BlockingQueue<Runnable> workQueue,
+						ThreadFactory threadFactory)
+```
+- corePoolSize 线程池的核显线程数，默认情况下，核心线程会在线程中一直存活，及时他们处于闲置状态。如果将ThreadPoolExecutor的allowCoreThreadTimeOut属性设置为true,那么闲置的核心线程在等待新任务到来时会有超时策略，这个时间间隔由keepAliveTime所指定，当等待时间超过后，核心线程就会被中止
+- maximumPoolSize 线程池所能容纳最大线程数，当活动线程到达这个数值后，后续的新任务将会被阻塞。
+- keepAliveTime 非核心线程的超时时长，超过这个时长，非核心线程就会被回收。
+- unit 时间单位
+- workQueue 线程池中的任务队列，通过线程池的execute方法提交的Runnable对象会存储在这个参数中
+- threadFactory 线程工厂，为线程池提供创建新线程的功能。
+
+执行规则：
+1. 如果线程池中的线程数量未达到核心线程的数量，那么会直接启动一个核心线程来执行任务
+2. 如果线程池中的线程数量已经达到或者超过核心线程的数量，那么任务会被插入到任务队列中等待
+3. 如果任务队列已满，并且线程数量未达到线程池规定的最大值，那么会立即启动一个非核心线程来执行任务
+4. 如果3中的线程数量已经达到最大值，那么就拒绝执行此任务。会调用`RejectedExecutionHandler`的`rejectedExecution`方法来通知调用者
+
+###线程池分类
+1. FixedThreadPool
+固定数量线程池。当线程处于空闲状态时，并不会被回收，除非线程池被关闭了。当所有线程处于活动状态时，新任务都会处于等待状态，直到有线程空闲出来。
+
+2. CachedThreadPool
+线程数量不定的线程池，只有非核心线程，并且最大数量为Integer.MAX_VALUE。空闲线程超时时间为60s，超过就会被回收。比较适合执行大量的耗时较少的任务。
+
+3. ScheduledThreadPool
+核心线程数量是固定的，非核心线程数量没有限制，适合执行定时任务和固定周期的重复任务。
+
+4. SingleThreadExecutor
+只有一个核心线程，确保所有任务都在一个线程中按顺序执行。意义在与统一所有的外界任务到一个线程之中而不需要处理线程同步的问题。
+
+#注解
+@interface用来声明一个注解，其中的每一个方法实际上是声明了一个配置参数。方法的名称就是参数的名称，返回值类型就是参数的类型。可通过default来声明参数的默认值。
+
+##元注解
+###@Target
+表示该注解用于什么地方
+- ElemenetType.CONSTRUCTOR 构造器声明 
+- ElemenetType.FIELD 域声明（包括 enum 实例） 
+- ElemenetType.LOCAL_VARIABLE 局部变量声明 
+- ElemenetType.METHOD 方法声明 
+- ElemenetType.PACKAGE 包声明 
+- ElemenetType.PARAMETER 参数声明 
+- ElemenetType.TYPE 类，接口（包括注解类型）或enum声明
+
+###@Retention
+表示在什么级别保存该注解信息
+- RetentionPolicy.SOURCE 源码中保存，会被编译器丢弃
+- RetentionPolicy.CLASS class文件中可用，会被虚拟机丢弃
+- RetentionPolicy.RUNTIME 在运行期间也会保留注释，可以通过反射机制读取注解信息
+
+###@Documented
+注解将包含在Javadoc中
+
+###@Inherited
+允许子类继承父类中的注解
+
+
 #泛型
 ##类型擦除
 在生成的Java字节代码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数，会被编译器在编译的时候去掉。这个过程就称为类型擦除。如在代码中定义的List<Object>和List<String>等类型，在编译之后都会变成List。JVM看到的只是List，而由泛型附加的类型信息对JVM来说是不可见的。Java编译器会在编译时尽可能的发现可能出错的地方，但是仍然无法避免在运行时刻出现类型转换异常的情况。
