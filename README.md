@@ -22,6 +22,6 @@
 ###厚颜无耻之人
 
 <div align="center">    
-<img src="https://github.com/GitOrgLan/interview/blob/master/img/aliPay.jpg" width = "" height = "" alt="支付宝转账"/>
-<img src="https://github.com/GitOrgLan/interview/blob/master/img/wechatPay.png" width = "" height = "" alt="微信转账"/>  
+<img src="https://github.com/GitOrgLan/interview/blob/master/img/aliPay.jpg" width = "220" height = "256" alt="支付宝转账"/>
+<img src="https://github.com/GitOrgLan/interview/blob/master/img/wechatPay.png" width = "176" height = "256" alt="微信转账"/>  
 </div>  
