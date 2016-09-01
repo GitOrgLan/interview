@@ -13,6 +13,6 @@
 ###联系方式
 
 <div align="center">    
-<img src="https://github.com/langonggong/interview/blob/master/img/qq.png" width = "256" height = "256" alt="QQ"/>
-<img src="https://github.com/langonggong/interview/blob/master/img/wechat.jpg" width = "270" height = "270" alt="wechat"/>  
+<img src="https://github.com/GitOrgLan/interview/blob/master/img/qq.png" width = "256" height = "256" alt="QQ"/>
+<img src="https://github.com/GitOrgLan/interview/blob/master/img/wechat.jpg" width = "270" height = "270" alt="wechat"/>  
 </div>  
