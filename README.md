@@ -10,7 +10,7 @@
 * 分布式
 
 ##
-###欢迎撩拨
+###单身狗，求撩拨
 
 <div align="center">    
 <img src="https://github.com/GitOrgLan/interview/blob/master/img/qq.png" width = "256" height = "256" alt="QQ"/>
