@@ -1,5 +1,23 @@
 [TOC]
 #数据结构在Java中的实现
+
+Collection
+├List
+│├LinkedList
+│├ArrayList
+│└Vector
+│　└Stack
+└Set
+
+Map
+├Hashtable
+│ 	└Properties
+├HashMap
+│	└LinkedHashMap
+├SortedMap
+│ 	└TreeMap
+└WeakHashMap
+
 代码基于JDK8，相比之前的版本有较大改动
 ##ArrayList
 内部实际上是一个Object[]对象，实际上ArrayList就是封装了对数组的操作，ArrayList具有数组的所有特性。
@@ -27,6 +45,9 @@
 ###remove
 根据同上操作获得需要被删除的节点，传入`unlink()`中，改变next prev的指向。
 
+##Vector
+扩容时请求双倍大小，线程安全的类。
+
 ##HashMap
 内部有成员变量，table，类型为`Node &lt;K,V&gt;[]`。Node的成员变量为hash，key，value，next。可以说HashMap是一个链表的数组的包装类。
 
@@ -51,6 +72,12 @@
 
 ##ConcurrentHashMap
 1.6使用的是volatile，1.8使用了CAS操作在某些场合下替换Synchronized进行互斥同步。
+
+##WeakHashMap
+使用了WeakReference对持有弱引用
+###ReferenceQueue
+当一个obj被gc掉之后，其相应的包装reference，即ref对象会被放入queue中。我们可以从queue中获取到相应的对象信息，同时进行额外的处理。比如反向操作，数据清理等。
+具体可以是扩展Reference之后，在实例中持有相应集合的key或Index，当Reference被GC后，就可以获得Reference并且通过key或index删除集合的数据。
 
 
 #线程池
@@ -144,10 +171,6 @@ class MyString implements Comparable<String> {
 - 弱引用
 - 虚引用
 
-##ReferenceQueue
-当一个obj被gc掉之后，其相应的包装reference，即ref对象会被放入queue中。我们可以从queue中获取到相应的对象信息，同时进行额外的处理。比如反向操作，数据清理等。
-具体可以是扩展Reference之后，在实例中持有相应集合的key或Index，当Reference被GC后，就可以获得Reference并且通过key或index删除集合的数据。
-
 #设计模式
 ##策略模式
 一些方法在不同场景中有不同的实现，可以把那些方法空实现或者抽象，在子类根据不同的情况实现。或者是通过组合，每次传入实现策略方法的对象，调用这个对象的实现。
@@ -162,3 +185,15 @@ class MyString implements Comparable<String> {
 ##分割字符串
 JDK8一下的`String.split()`实现使用的是正则，效率比较低
 使用indexOf + subString()可以提高效率
+
+##红黑树性质
+1. 每个节点的颜色不是黑色就是红色
+2. 根节点是黑色的
+3. 每个叶子节点都带有两个黑色节点(null)。如果一个节点只有一个子节点，那么另一个节点是黑色节点(null)
+4. 如果一个节点是红色节点，那么他的两个子节点都是黑的
+5. 任意一个节点到其子节点的所有路径上都黑色节点的数目相同
+
+
+
+##Object类内的方法
+equals()/hashCode()/wait()/notify()/notifyAll()/clone()/toString()/getClass()/finalize()

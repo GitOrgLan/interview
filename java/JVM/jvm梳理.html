@@ -1072,6 +1072,11 @@ body .markdown-body
 </li>
 </ul>
 </li>
+<li><a href="#_30">虚拟机分派</a><ul>
+<li><a href="#_31">静态分派</a></li>
+<li><a href="#_32">动态分派</a></li>
+</ul>
+</li>
 <li><a href="#java_3">Java内存模型</a><ul>
 <li><a href="#volatile">volatile总结</a></li>
 <li><a href="#volatile-">volatile写-读的内存语义</a></li>
@@ -1082,29 +1087,29 @@ body .markdown-body
 </ul>
 </li>
 <li><a href="#java_4">Java与线程</a><ul>
-<li><a href="#_30">线程的实现</a><ul>
-<li><a href="#_31">使用内核线程实现</a></li>
-<li><a href="#_32">使用用户线程实现</a></li>
-<li><a href="#_33">使用用户线程加轻量级进程混合实现</a></li>
+<li><a href="#_33">线程的实现</a><ul>
+<li><a href="#_34">使用内核线程实现</a></li>
+<li><a href="#_35">使用用户线程实现</a></li>
+<li><a href="#_36">使用用户线程加轻量级进程混合实现</a></li>
 </ul>
 </li>
-<li><a href="#_34">状态转换</a></li>
+<li><a href="#_37">状态转换</a></li>
 </ul>
 </li>
-<li><a href="#_35">线程安全</a><ul>
+<li><a href="#_38">线程安全</a><ul>
 <li><a href="#java_5">Java中的线程安全</a></li>
-<li><a href="#_36">线程安全的实现方法</a><ul>
-<li><a href="#_37">互斥同步</a></li>
-<li><a href="#_38">非阻塞同步</a></li>
-<li><a href="#_39">无同步方案</a></li>
+<li><a href="#_39">线程安全的实现方法</a><ul>
+<li><a href="#_40">互斥同步</a></li>
+<li><a href="#_41">非阻塞同步</a></li>
+<li><a href="#_42">无同步方案</a></li>
 </ul>
 </li>
-<li><a href="#_40">锁优化</a><ul>
-<li><a href="#_41">自旋锁与自适应自旋</a></li>
-<li><a href="#_42">锁消除</a></li>
-<li><a href="#_43">锁粗化</a></li>
-<li><a href="#_44">轻量级锁</a></li>
-<li><a href="#_45">偏向锁</a></li>
+<li><a href="#_43">锁优化</a><ul>
+<li><a href="#_44">自旋锁与自适应自旋</a></li>
+<li><a href="#_45">锁消除</a></li>
+<li><a href="#_46">锁粗化</a></li>
+<li><a href="#_47">轻量级锁</a></li>
+<li><a href="#_48">偏向锁</a></li>
 </ul>
 </li>
 </ul>
@@ -1152,7 +1157,7 @@ body .markdown-body
 <p>三个问题<br />
 - 哪些内存需要回收<br />
 - 什么时候回收<br />
-- 如何回收</p>
+- 如何回收</p>
 <h2 id="_10"><a name="user-content-_10" href="#_10" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>对象是否该被回收</h2>
 <h3 id="reference-counting"><a name="user-content-reference-counting" href="#reference-counting" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>引用计数法(Reference Counting)</h3>
 <p>该算法实现简单，效率也很高，但是无法解决对象循环引用的问题。</p>
@@ -1240,11 +1245,116 @@ body .markdown-body
 </li>
 </ul>
 <h2 id="_28"><a name="user-content-_28" href="#_28" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>类加载器</h2>
-<p>类加载器虽然只用于实现类的加载动作，但他在Java程序中起到的作用却远远不选与类加载阶段。对于任意一个类，都需要有加载他的类加载器和这个类本身一同确立骑在Java虚拟机中的唯一性，每一个类加载器，都拥有一个独立的类名称空间。</p>
+<p>类加载器虽然只用于实现类的加载动作，但他在Java程序中起到的作用却远远不限于类加载阶段。对于任意一个类，都需要由加载他的类加载器和这个类本身一同确立其在Java虚拟机中的唯一性，每一个类加载器，都拥有一个独立的类名称空间。</p>
 <h3 id="_29"><strong><em>双亲委派模型</em></strong></h3>
+<p>从JVM的角度来讲，一共只有两种不同的类加载器：一种是启动类加载器(Bootstrap ClassLoader)，这个类加载器由c++实现，时虚拟机自身的一部分。<br />
+另一种就是其他所有类加载器，这些类加载器都由Java语言实现，独立于虚拟机外部，并且全部继承自抽象类<code>java.lang.ClassLoader</code>。<br />
+更细致的分类是<br />
+- 启动类加载器(Bootstrap ClassLoader)</p>
+<ul>
+<li>
+<p>扩展类加载器(Extension ClassLoader)</p>
+</li>
+<li>
+<p>应用程序加载器(Application ClassLoader)</p>
+</li>
+</ul>
+<p><img alt="双亲为委派模型" src="http://img.blog.csdn.net/20140828211837525?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvenE2MDIzMTY0OTg=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" /></p>
+<p>类加载器之间有的这种层次关系，称为双亲委派模型。双亲委派模型要求除了顶层的启动类加载器外，其余的类加载器都应有自己的父类加载器。这里类加载器之间的父子关系一般不会以继承的关系来实现，而是都使用组合关系来复用类加载器的代码。<br />
+<em>工作过程：</em>如果一个类加载器收到了类加载的请求，他不会首先自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求时，子类才回去尝试自己加载。<br />
+好处：Java类随着他的类加载器一起具备了一种带有优先级的层级关系。一个<code>java.lang.Object</code>类，无论哪一个类加载器要加载这个类，最终都是委派给启动类加载器进行加载，因此这个类在各种加载类环境中都是同一个类。</p>
+<h1 id="_30"><a name="user-content-_30" href="#_30" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>虚拟机分派</h1>
+<p>Java面向对象的三个基本特征：继承，封装，多态。理解分派调用过程将会揭示多态性特征的一些最基本的体现</p>
+<h2 id="_31"><a name="user-content-_31" href="#_31" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>静态分派</h2>
+<p><pre><code class="Java">public class StaticDispatch {
+
+    static abstract class Human {
+    }
+
+    static class Man extends Human {
+    }
+
+    static class Woman extends Human {
+    }
+
+    public void sayHello(Human guy) {
+        System.out.println(&quot;hello,guy!&quot;);
+    }
+
+    public void sayHello(Man guy) {
+        System.out.println(&quot;hello,gentleman!&quot;);
+    }
+
+    public void sayHello(Woman guy) {
+        System.out.println(&quot;hello,lady!&quot;);
+    }
+
+    public static void main(String[] args) {
+        Human man = new Man();
+        Human woman = new Woman();
+        StaticDispatch sr = new StaticDispatch();
+        sr.sayHello(man);
+        sr.sayHello(woman);
+    }
+}
+
+result:
+hello,guy
+hello,guy
+</code></pre><br />
+如下定义</p>
+<p><pre><code>Human man = new Man()
+</code></pre><br />
+上面代码中的Human是静态类型(外观类型)，后面的Man是实际类型。静态类型和实际类型在程序中都可以发生一些变化，区别是静态类型的变化仅仅在使用时发生，变量本省的静态类型不会发生改变，并且最终的静态类型是在编译期克制的。而实际类型的变化结果是在运行期才可确定，编译期在编译程序的时候并不知道一个对象的设计类型是什么。</p>
+<p><pre><code>//实际类型变化
+Human man = new Man();
+man = new Woman();
+//静态类型变化
+sr.sayHello((Man)man);
+sr.sayHello((Woman)man);
+</code></pre><br />
+main()里的两次sayHello()方法调用，在方法接受者已经确定是对象sr的前提下，使用哪个重载版本就完全取决于传入参数的数量和数据类型，代码中刻意地定义了两个静态类型相同但是实际类型不同的变量，但是编译器在重载时是通过参数的静态类型而不是实际类型作为判断依据的。并且静态类型是编译器可知的，因此在编译阶段，Javac编译器会根据参数的静态类型决定使用哪个重载版本，所以选择了sayHello(Human)作为调用目标。<br />
+所有依据静态类型来定位方法执行版本的分派动作称为静态分派。静态分派的典型应用是方法重载。静态分派发生在编译阶段，因此静态分派的动作实际上不是虚拟机执行的。</p>
+<h2 id="_32"><a name="user-content-_32" href="#_32" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>动态分派</h2>
+<p>动态分配和重写有密切关系<br />
+如下代码<br />
+<pre><code>public class DynamicDispatch {
+
+    static abstract class Human {
+        protected abstract void sayHello();
+    }
+
+    static class Man extends Human {
+        @Override
+        protected void sayHello() {
+            System.out.println(&quot;man say hello&quot;);
+        }
+    }
+
+    static class Woman extends Human {
+        @Override
+        protected void sayHello() {
+            System.out.println(&quot;woman say hello&quot;);
+        }
+    }
+
+    public static void main(String[] args) {
+        Human man = new Man();
+        Human woman = new Woman();
+        man.sayHello();
+        woman.sayHello();
+        man = new Woman();
+        man.sayHello();
+    }
+}
+result:man say hello
+woman say hello
+woman say hello
+</code></pre></p>
+<p>动态分派就是通过invokevirtual寻找对象的实际类型，根据运行期实际类型确定方法执行版本的分派过程。</p>
 <h1 id="java_3"><a name="user-content-java_3" href="#java_3" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Java内存模型</h1>
 <p>Java内存模型的主要目标是定义程序中各个变量的访问规则，即载虚拟机中将变量存储到内存和从内存取出变量这样的底层细节。此处的变量和Java编程中所说的变量有所区别，它包含了实例字段，静态字段，和构成数组对象的元素，但不包括局部变量与方法参数，因为后者(reference本身在Java栈的局部变量表中)是线程私有的，不会被共享。</p>
-<p>Java内存模型规定了所有的变量都储存在主内存种，每条线程还有自己的工作内存，线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作必须在工作内存中进行，而不能直接读写主内存中的变量，不同的线程之间也无法访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成。 </p>
+<p>Java内存模型规定了所有的变量都储存在主内存中，每条线程还有自己的工作内存，线程的工作内存中保存了被该线程使用到的变量的主内存副本拷贝，线程对变量的所有操作必须在工作内存中进行，而不能直接读写主内存中的变量，不同的线程之间也无法访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成。 </p>
 <h2 id="volatile"><a name="user-content-volatile" href="#volatile" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>volatile总结</h2>
 <p>锁提供了两种主要特性，互斥和可见性。<br />
 - 互斥即一次只允许一个线程持有某个特定的锁，因此可以使用该特性实现对共享数据的访问，一次只有一个线程可以访问该共享数据。<br />
@@ -1272,20 +1382,20 @@ body .markdown-body
 LinkedTransferQueue使用一个内部类类型来定义队列的头队列（Head）和尾节点（tail），而这个内部类PaddedAtomicReference相对于父类AtomicReference只做了一件事情，就将共享变量追加到64字节。我们可以来计算下，一个对象的引用占4个字节，它追加了15个变量共占60个字节，再加上父类的Value变量，一共64个字节。<br />
 如果头结点和尾结点都不足64个字节的话，处理器会将他们都读到同一个高速缓存行之中，在多处理器下每个处理器都会缓存同样的头尾结点，当一个处理器试图修改头结点的时候会将整个缓存行锁定，在缓存一致性的作用下，会使其他处理器都不能访问高速缓存中的尾结点，而队列的出队入队需要不停地修改头尾结点，所以在多处理器的情况下会严重影响效率，将64个字节填满缓存行，避免头尾结点位于同一个缓存行，使得头尾结点在修改时不会相互锁定。</p>
 <h1 id="java_4"><a name="user-content-java_4" href="#java_4" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Java与线程</h1>
-<h2 id="_30"><a name="user-content-_30" href="#_30" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>线程的实现</h2>
+<h2 id="_33"><a name="user-content-_33" href="#_33" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>线程的实现</h2>
 <p>每个已经执行start()且还未结束的Thread类就代表了一个线程。Thread关键方法都是声明成Native的。<br />
 实现线程主要有三种方式<br />
 - 使用内核线程实现<br />
 - 使用用户线程实现<br />
 - 使用用户线程加轻量级进程混合实现</p>
-<h4 id="_31"><a name="user-content-_31" href="#_31" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>使用内核线程实现</h4>
+<h4 id="_34"><a name="user-content-_34" href="#_34" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>使用内核线程实现</h4>
 <p>内核线程就是直接由操作系统内核支持的线程，这种线程由内核来完成切换，内核通过调度器对线程进行调度，并负责将线程的任务映射到各个处理器上。程序一般不会去使用内核线程，而是使用内核线程的一种高级接口，轻量级进程(Light Weight Process)。</p>
-<h4 id="_32"><a name="user-content-_32" href="#_32" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>使用用户线程实现</h4>
+<h4 id="_35"><a name="user-content-_35" href="#_35" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>使用用户线程实现</h4>
 <p>从广义上讲，一个线程不是内核进程就可以认为是用户线程。因此，从这个定义上来讲，轻量级进程就属于用户线程，但轻量级进程的实现始终是基于内核的，许多操作都需要系统调用，效率会受到限制。<br />
 而狭义的用户线程指的是完全建立在用户空间的线程库上。系统内核不能感知线程存在的实现。用户线程的建立同步销毁和调度完全在用户态中完成，不需要内核的帮助。</p>
-<h4 id="_33"><a name="user-content-_33" href="#_33" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>使用用户线程加轻量级进程混合实现</h4>
+<h4 id="_36"><a name="user-content-_36" href="#_36" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>使用用户线程加轻量级进程混合实现</h4>
 <p>用户线程的建立同步销毁和调度操作依然廉价，并且可以支持大规模的用户线程并发。而操作系统提供支持的轻量级进程则作为用户线程和内核线程之间的桥梁，这样可以使用内核提供的线程调度功能以及处理器映射。</p>
-<h2 id="_34"><a name="user-content-_34" href="#_34" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>状态转换</h2>
+<h2 id="_37"><a name="user-content-_37" href="#_37" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>状态转换</h2>
 <p>Java定义了5种线程状态，在任意一个时间点，一个线程有且只有其中的一种状态，如下<br />
 - 新建<br />
 - 运行<br />
@@ -1293,7 +1403,7 @@ LinkedTransferQueue使用一个内部类类型来定义队列的头队列（Head
 - 限期等待<br />
 - 阻塞<br />
 - 结束</p>
-<h1 id="_35"><a name="user-content-_35" href="#_35" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>线程安全</h1>
+<h1 id="_38"><a name="user-content-_38" href="#_38" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>线程安全</h1>
 <h2 id="java_5"><a name="user-content-java_5" href="#java_5" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Java中的线程安全</h2>
 <ul>
 <li>不可变(Immutable)</li>
@@ -1302,26 +1412,26 @@ LinkedTransferQueue使用一个内部类类型来定义队列的头队列（Head
 <li>线程兼容：大部分类属于这种情况，如ArrayList,HashMap等</li>
 <li>线程对立：无论是否采用了同步，都无法在多线程环境中并发使用，如Thread的suspend()和resume()方法，System.setIn(),System.SetOut(),System.runFinalizerOnExit()等</li>
 </ul>
-<h2 id="_36"><a name="user-content-_36" href="#_36" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>线程安全的实现方法</h2>
-<h3 id="_37"><a name="user-content-_37" href="#_37" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>互斥同步</h3>
+<h2 id="_39"><a name="user-content-_39" href="#_39" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>线程安全的实现方法</h2>
+<h3 id="_40"><a name="user-content-_40" href="#_40" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>互斥同步</h3>
 <p>同步是指在多个线程并发访问共享数据时，保证共享数据在同一个时刻只被一个(或者是一些，信号量时)线程使用，而互斥是实现同步的一个手段，临界区(Cirtical Section)，互斥量(Mutex)和信号量(Semaphore)都是主要的互斥实现方式。<br />
 Java中，最基本的互斥同步手段就是synchornized关键字，关键字经过编译后，会在同步块的前后分别行程monitorenter和monitorexit这两个字节码指令。这两个字节码都需要一个reference类型的参数对象来指明要锁定和解锁的对象。如果Java程序的synchornized明确指定了参数对象，那就是这个对象的reference，如果没有明确指定，那就根据synchronized修饰的是实例方法还是类方法，去去对于的对象实例或者<code>Class</code>对象来作为锁对象。<br />
 在执行monitorenter时，要先尝试获取对象的锁，如果这个对象没有被锁定，或者当前线程已经拥有了这个对象的锁，把锁的计数器加1，相应的，在执行monitorexit指令时，会将计数器减1，当计数器为0时，锁就被释放。如果获取对象失败，那么当前线程就阻塞等待，直到对象锁被另一个线程释放为止。</p>
-<h3 id="_38"><a name="user-content-_38" href="#_38" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>非阻塞同步</h3>
+<h3 id="_41"><a name="user-content-_41" href="#_41" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>非阻塞同步</h3>
 <p>基于通途检测的乐观并发策略，通俗地说，就是先进行操作，如果没有其他线程争用共享数据，那操作就成功了，如果共享数据有争用，产生了冲突，那就再采取别的补偿措施，这种乐观的并发策略许多实现都不需要挂起线程，因此成为非阻塞同步。</p>
-<h3 id="_39"><a name="user-content-_39" href="#_39" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>无同步方案</h3>
+<h3 id="_42"><a name="user-content-_42" href="#_42" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>无同步方案</h3>
 <ul>
 <li>可重入代码：特征，不依赖储存在堆上的数据和公共的系统资源，用到的状态量都由参数传入，不调用非可重入的方法等。</li>
 <li>线程本地储存：比如<code>ThreadLocal</code>。每一个线程的Thread对象中都有一个ThreadLoaclMap对象，这个对象储存了以<code>ThreadLocal.threadLocalHashCode</code>为键，以本地线程变量为值的键值对，<code>ThreadLocal</code>对象就是当前线程<code>ThreadLocalMap</code>的访问入口，每一个<code>ThreadLocal</code>对象都包含了一个独一无二的<code>threadLocalHashCode</code>值，使用这个值就可以在键值中找回对应的本地线程变量。</li>
 </ul>
-<h2 id="_40"><a name="user-content-_40" href="#_40" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>锁优化</h2>
-<h3 id="_41"><a name="user-content-_41" href="#_41" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>自旋锁与自适应自旋</h3>
+<h2 id="_43"><a name="user-content-_43" href="#_43" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>锁优化</h2>
+<h3 id="_44"><a name="user-content-_44" href="#_44" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>自旋锁与自适应自旋</h3>
 <p>互斥同步对性能最大的影响是阻塞的实现，挂起线程和恢复线程的操作都需要转入到内核态中完成，这些操作给系统的并发带来了很大的压力。很多时候，共享数据的锁定状态只会持续一段很短的时间，为了这段时间去挂起恢复线程并不值得，所以可以让等待的线程稍等一下，进行一个忙循环(自旋)，结束后就可以获得已经没有处于锁定状态的共享数据。</p>
-<h3 id="_42"><a name="user-content-_42" href="#_42" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>锁消除</h3>
+<h3 id="_45"><a name="user-content-_45" href="#_45" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>锁消除</h3>
 <p>将其他线程无法到方法内的锁消去</p>
-<h3 id="_43"><a name="user-content-_43" href="#_43" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>锁粗化</h3>
+<h3 id="_46"><a name="user-content-_46" href="#_46" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>锁粗化</h3>
 <p>如果一个连续的操作都在对一个对象进行反复的加锁解锁，那么就可以在这个操作的外部进行加锁解锁，这样只需要加锁一次就可以了。</p>
-<h3 id="_44"><a name="user-content-_44" href="#_44" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>轻量级锁</h3>
+<h3 id="_47"><a name="user-content-_47" href="#_47" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>轻量级锁</h3>
 <p>轻量级锁是在没有多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗。具体实现有关对象头和CAS操作</p>
-<h3 id="_45"><a name="user-content-_45" href="#_45" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>偏向锁</h3>
+<h3 id="_48"><a name="user-content-_48" href="#_48" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>偏向锁</h3>
 <p>目的是消除数据在无竞争情况下的同步原语，进一步提高同步性能。</p></article></body></html>
