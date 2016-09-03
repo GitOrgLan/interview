@@ -105,6 +105,8 @@ Direct Memory并不是虚拟机运行时数据区的一部分，也不是Java虚
 
 ###空间分配担保
 在发生Minor GC前，***虚拟机会先检查老年代最大可用的连续空间是否大于新生代所有对象总空间，如果这个条件成立，则可以锁Minor GC是安全的，如果不成立，则虚拟机会查看HandlePromotionFailure设置值是否允许担保失败。如果允许，那么会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试进行一次Minor GC。如果小于，或者HandlePromotionFailure设置为不允许冒险，那这是要改为进行一次Full GC*** JDK6之后的规则变为，***只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小就会进行Minor GC，否则将进行Full GC***。
+###GC时机
+eden区满了 进行minor GC，升到老年代的对象大于老年代剩余空间就会进行Full GC
 
 
 #JVM类加载机制
@@ -336,8 +338,7 @@ LinkedTransferQueue使用一个内部类类型来定义队列的头队列（Head
 Java定义了5种线程状态，在任意一个时间点，一个线程有且只有其中的一种状态，如下
 - 新建
 - 运行
-- 无限期等待
-- 限期等待
+- 无限期等待|限期等待
 - 阻塞
 - 结束
 
@@ -345,7 +346,7 @@ Java定义了5种线程状态，在任意一个时间点，一个线程有且只
 ##Java中的线程安全
 - 不可变(Immutable)
 - 绝对线程安全
-- 相对线程安全：通常意义上的线程安全，如Vector,HashTable,Collections的synchornizedCollection()方法包装的集合。
+- 相对线程安全：通常意义上的线程安全，如Vector,HashTable,Collections的synchronizedCollection()方法包装的集合。
 - 线程兼容：大部分类属于这种情况，如ArrayList,HashMap等
 - 线程对立：无论是否采用了同步，都无法在多线程环境中并发使用，如Thread的suspend()和resume()方法，System.setIn(),System.SetOut(),System.runFinalizerOnExit()等
 

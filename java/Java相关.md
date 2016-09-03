@@ -79,14 +79,38 @@ Map
 当一个obj被gc掉之后，其相应的包装reference，即ref对象会被放入queue中。我们可以从queue中获取到相应的对象信息，同时进行额外的处理。比如反向操作，数据清理等。
 具体可以是扩展Reference之后，在实例中持有相应集合的key或Index，当Reference被GC后，就可以获得Reference并且通过key或index删除集合的数据。
 
+##TreeMap
+实现了SortMap接口，能够把它保存的记录根据键排序，默认是按键值的升序排序， 也可以指定Comparator，当用Iterator遍历TreeMap时，得到的记录是排过序的。
 
-#线程池
+#Set
+##HashSet
+HashSet 内部用一个HashMap对象存储数据，更具体些，只用到了key，value全部为一dummy对象
+
+#多线程
+##Java中的锁
+###Synchronized
+一个关键字，当用它来修饰一个方法或者一个代码块的时候，能够保证在同一时刻最多只有一个线程在执行该段代码。
+####几种锁的作用域
+- 方法锁 通过在方法声明中加入关键字，每个类实例对应一把锁，每个Synchronized方法都必须获得调用该方法的类实例的锁才能执行，否则方法阻塞。这种机制确保了同一时刻对于每个类实例，其所有声明为synchronized的成员函数之至多只有一个处于执行状态，从而有效避免了类成员变量之间的访问冲突。
+- 对象锁 当一个对象中有synchronized method和synchronized block的时候调用此对象的同步方法进入其同步区域时，就必须获得对象锁。(方法锁也是对象锁)。Java的所有对象都包含一个互斥锁，这个锁由JVM自动获取和释放，线程进入synchronized方法时会自动获取该对象的锁，当然如果已有线程获取了这个对象锁，那么该线程会等待，方法抛出异常时，JVM也会自动释放锁(lock不会)。
+- 类锁 对象锁是用来控制实例方法之间的同步，类锁是用来控制静态方法(或静态变量互斥体)之间的同步。
+
+###Lock(ReentrantLock)
+api层面的互斥锁，有一些额外的功能
+- 等待可中断 正在等待锁的线程可以选择放弃等待，改为处理其他事情
+- 公平锁 锁哥线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁
+- 锁可绑定多个条件 调用newCondition()方法就可以多一个条件关联
+
+####Lock.lock()和Lock.lockInterruptibly()
+前一种被通知中断后，会获取锁之后才响应中断。而后一种被中断后，立即返回，不再参与锁的竞争并且取消锁的获取操作。
+
+##线程池
 优势
 - 重用线程池中的线程，避免因为线程的创建和销毁所带来的性能开销
 - 能有效控制线程池的最大并发数量，避免大量的线程之间因互相抢占系统资源而导致的阻塞现象
 - 能过对线程进行简单的管理，并提供定时执行以及制定建构循环执行等功能
 
-##ThreadPoolExecutor
+###ThreadPoolExecutor
 ```
 public ThreadPoolExecutor(int corePoolSize,
 						int maximumPoolSize,
@@ -108,7 +132,7 @@ public ThreadPoolExecutor(int corePoolSize,
 3. 如果任务队列已满，并且线程数量未达到线程池规定的最大值，那么会立即启动一个非核心线程来执行任务
 4. 如果3中的线程数量已经达到最大值，那么就拒绝执行此任务。会调用`RejectedExecutionHandler`的`rejectedExecution`方法来通知调用者
 
-###线程池分类
+####线程池分类
 1. FixedThreadPool
 固定数量线程池。当线程处于空闲状态时，并不会被回收，除非线程池被关闭了。当所有线程处于活动状态时，新任务都会处于等待状态，直到有线程空闲出来。
 
@@ -197,3 +221,8 @@ JDK8一下的`String.split()`实现使用的是正则，效率比较低
 
 ##Object类内的方法
 equals()/hashCode()/wait()/notify()/notifyAll()/clone()/toString()/getClass()/finalize()
+
+##解析XML
+- SAX 基于事件驱动，有解析器和事件处理器两部分。
+- DOM 把整个文件读入内存之后索引查找需要的值
+- PULL 类似SAX，也是基于事件驱动的。
