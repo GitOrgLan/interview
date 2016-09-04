@@ -199,6 +199,8 @@ class MyString implements Comparable<String> {
 ##策略模式
 一些方法在不同场景中有不同的实现，可以把那些方法空实现或者抽象，在子类根据不同的情况实现。或者是通过组合，每次传入实现策略方法的对象，调用这个对象的实现。
 
+##责任链模式
+类似Android触摸传递机制
 
 #一些优化
 ##transient
@@ -226,3 +228,25 @@ equals()/hashCode()/wait()/notify()/notifyAll()/clone()/toString()/getClass()/fi
 - SAX 基于事件驱动，有解析器和事件处理器两部分。
 - DOM 把整个文件读入内存之后索引查找需要的值
 - PULL 类似SAX，也是基于事件驱动的。
+
+#I/O
+##NIO
+```
+ServerSocketChannel sc = ServerSocketChannel.open();  
+sc.configureBlocking(false);  
+ServerSocket ss = serverSocketChannel.socket();  
+ss.bind(new InetSocketAddress(port));  
+selector = Selector.open();  
+serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);  
+
+while (true) {  
+    selector.select();  
+    Set<SelectionKey> selectionKeys = selector.selectedKeys();  
+    Iterator<SelectionKey> iterator = selectionKeys.iterator();  
+    while (iterator.hasNext()) {          
+        SelectionKey selectionKey = iterator.next();  
+        iterator.remove();  
+        handleKey(selectionKey);  
+    }  
+}  
+```
