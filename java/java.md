@@ -40,6 +40,7 @@
 
 ### JVM ###
 
+- [**Java 虚拟机面试题全面解析(屌!)**](https://www.zybuluo.com/Yano/note/321063)
 - [JAVA虚拟机体系结构](http://www.cnblogs.com/java-my-life/archive/2012/08/01/2615221.html) 
 - [Java虚拟机 类加载的过程](http://blog.csdn.net/xuefeng0707/article/details/9132339)
 - [Java垃圾回收（GC)](http://www.cnblogs.com/xrq730/p/4836700.html)
@@ -57,8 +58,10 @@
 - [异常](https://github.com/GitOrgLan/interview/blob/master/java/%E5%BC%82%E5%B8%B8.md)
 - [多线程](https://github.com/GitOrgLan/interview/blob/master/java/%E5%A4%9A%E7%BA%BF%E7%A8%8B.md)
 - [进阶](https://github.com/GitOrgLan/interview/blob/master/java/%E8%BF%9B%E9%98%B6.md)
-- [JVM](https://github.com/GitOrgLan/interview/blob/master/java/JVM.md)
-- [jvm梳理](https://github.com/GitOrgLan/interview/blob/master/java/jvm%E6%A2%B3%E7%90%86.md)
+- jvm
+	- [JVM](https://github.com/GitOrgLan/interview/blob/master/java/JVM.md)
+	- [jvm梳理](https://github.com/GitOrgLan/interview/blob/master/java/jvm%E6%A2%B3%E7%90%86.md)
+	- [GC](https://github.com/GitOrgLan/interview/blob/master/java/GC.md)
 - [设计模式](https://github.com/GitOrgLan/interview/blob/master/java/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md)
 - [其他](https://github.com/GitOrgLan/interview/blob/master/java/%E5%85%B6%E4%BB%96.md)
 
