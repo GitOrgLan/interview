@@ -19,8 +19,8 @@
 [JVM Runtime Data Areas](http://www.tuicool.com/articles/AjeAzq)  
 
 <div align="center">    
-<img src="https://github.com/GitOrgLan/interview/blob/master/img/java/Runtime%20Data.png"  alt="Runtime Data"/>
-<img src="https://github.com/GitOrgLan/interview/blob/master/img/java/Runtime%20Data2.jpg"  alt="Runtime Data"/>  
+<img src="https://github.com/GitOrgLan/interview/blob/master/img/java/Runtime%20Data.png" width = "256" height = "256" alt="Runtime Data"/>
+<img src="https://github.com/GitOrgLan/interview/blob/master/img/java/Runtime%20Data2.jpg" width = "256" height = "256" alt="Runtime Data"/>  
 </div> 
 
 - 堆(Heap):  
