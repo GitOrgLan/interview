@@ -57,9 +57,9 @@
 
 - 如果使用句柄访问方式，Java堆中将会划分出一块内存来作为句柄池，reference中存储的就是对象的句柄地址，而句柄中包含了对象实例数据和类型数据各自的具体地址信息，
 这两种对象的访问方式各有优势，使用句柄访问方式的最大好处就是reference中存储的是稳定的句柄地址，在对象被移动（垃圾收集时移动对象是非常普遍的行为）时只会改变句柄中的实例数据指针，而reference本身不需要被修改。
-![句柄访问方式](http://img.my.csdn.net/uploads/201209/26/1348659242_7055.jpg)
+![句柄访问方式](https://github.com/GitOrgLan/interview/blob/master/img/java/%E5%8F%A5%E6%9F%84%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F.jpg)
 - 使用直接指针访问方式的最大好处就是速度更快，它节省了一次指针定位的时间开销，由于对象的访问在Java中非常频繁，因此这类开销积少成多后也是一项非常可观的执行成本。   
-![指针访问方式](http://img.my.csdn.net/uploads/201209/26/1348658605_5211.jpg)
+![指针访问方式](https://github.com/GitOrgLan/interview/blob/master/img/java/%E6%8C%87%E9%92%88%E8%AE%BF%E9%97%AE%E6%96%B9%E5%BC%8F.jpg)
 
 ###堆和栈的优缺点
 >堆的优势是可以动态分配内存大小，生存期也不必事先告诉编译器，因为它是在运行时动态分配内存的。
