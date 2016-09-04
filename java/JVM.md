@@ -13,7 +13,7 @@
 			* Program Counter(程序计数器)：每一个线程都有它自己的PC寄存器，也是该线程启动时创建的。PC寄存器的内容总是指向下一条将被执行指令的地址，这里的地址可以是一个本地指针，也可以是在方法区中相对应于该方法起始指令的偏移量。    
 			* Native method stack(本地方法栈)：保存native方法进入区域的地址
 - 注意：以上五部分只有Heap 和Method Area是被所有线程的共享使用的；而Java stack, Program counter 和Native method stack是以线程为粒度的，每个线程独自拥有自己的部分. 
-![]()
+![JAVA虚拟机的体系结构](https://github.com/GitOrgLan/interview/blob/master/img/java/JAVA%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png)
 
 ###JVM系统结构
 - 堆(Heap):  
