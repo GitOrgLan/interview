@@ -40,6 +40,7 @@
 
 ### JVM ###
 
+- [***Java 虚拟机面试题全面解析(屌!)***](https://www.zybuluo.com/Yano/note/321063)
 - [JAVA虚拟机体系结构](http://www.cnblogs.com/java-my-life/archive/2012/08/01/2615221.html) 
 - [Java虚拟机 类加载的过程](http://blog.csdn.net/xuefeng0707/article/details/9132339)
 - [Java垃圾回收（GC)](http://www.cnblogs.com/xrq730/p/4836700.html)
