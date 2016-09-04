@@ -15,7 +15,7 @@
 - 注意：以上五部分只有Heap 和Method Area是被所有线程的共享使用的；而Java stack, Program counter 和Native method stack是以线程为粒度的，每个线程独自拥有自己的部分. 
 ![JAVA虚拟机的体系结构](https://github.com/GitOrgLan/interview/blob/master/img/java/JAVA%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png)
 
-###JVM系统结构
+###Runtime Data Areas
 [JVM Runtime Data Areas](http://www.tuicool.com/articles/AjeAzq)  
 
 <div align="center">    
