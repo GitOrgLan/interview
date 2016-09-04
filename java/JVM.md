@@ -18,6 +18,11 @@
 ###JVM系统结构
 [JVM Runtime Data Areas](http://www.tuicool.com/articles/AjeAzq)  
 
+<div align="center">    
+<img src="https://github.com/GitOrgLan/interview/blob/master/img/java/Runtime%20Data.png"  alt="Runtime Data"/>
+<img src="https://github.com/GitOrgLan/interview/blob/master/img/java/Runtime%20Data2.jpg"  alt="Runtime Data"/>  
+</div> 
+
 - 堆(Heap):  
 	jvm中内存占用最大的一块,是所有线程共享的一块内存区域.在jvm启动时创建,存放的是所有对象实例（或数组），所有的对象实例都在这里进行动态分配，当类空间无法再扩张会抛出OutOfMemoryError异常。Java堆是垃圾收集器管理的主要区域，而收集器采用分代收集算法。
 
