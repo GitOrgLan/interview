@@ -1,7 +1,7 @@
-ÌâÄ¿ÃèÊö
-ÔÚÊý×éÖÐµÄÁ½¸öÊý×Ö£¬Èç¹ûÇ°ÃæÒ»¸öÊý×Ö´óÓÚºóÃæµÄÊý×Ö£¬
-ÔòÕâÁ½¸öÊý×Ö×é³ÉÒ»¸öÄæÐò¶Ô¡£ÊäÈëÒ»¸öÊý×é,Çó³öÕâ¸öÊý×éÖÐµÄÄæÐò¶ÔµÄ×ÜÊýP¡£
-²¢½«P¶Ô1000000007È¡Ä£µÄ½á¹ûÊä³ö¡£ ¼´Êä³öP%1000000007 
+é¢˜ç›®æè¿°
+åœ¨æ•°ç»„ä¸­çš„ä¸¤ä¸ªæ•°å­—ï¼Œå¦‚æžœå‰é¢ä¸€ä¸ªæ•°å­—å¤§äºŽåŽé¢çš„æ•°å­—ï¼Œ
+åˆ™è¿™ä¸¤ä¸ªæ•°å­—ç»„æˆä¸€ä¸ªé€†åºå¯¹ã€‚è¾“å…¥ä¸€ä¸ªæ•°ç»„,æ±‚å‡ºè¿™ä¸ªæ•°ç»„ä¸­çš„é€†åºå¯¹çš„æ€»æ•°Pã€‚
+å¹¶å°†På¯¹1000000007å–æ¨¡çš„ç»“æžœè¾“å‡ºã€‚ å³è¾“å‡ºP%1000000007 
 
 http://www.nowcoder.com/practice/96bd6684e04a44eb80e6a68efc0ec6c5?tpId=13&tqId=11188&rp=2&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
 

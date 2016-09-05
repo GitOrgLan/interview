@@ -1,92 +1,98 @@
-http://www.nowcoder.com/practice/6a296eb82cf844ca8539b57c23e6e9bf?tpId=13&tqId=11182&rp=2&ru=/ta/coding-interviews&qru=/ta/coding-interviews/question-ranking
-ÊäÈën¸öÕûÊı£¬ÕÒ³öÆäÖĞ×îĞ¡µÄK¸öÊı¡£ÀıÈçÊäÈë4,5,1,6,2,7,3,8Õâ8¸öÊı×Ö£¬Ôò×îĞ¡µÄ4¸öÊı×ÖÊÇ1,2,3,4,¡£
+package algorithm;
 
 import java.util.Random;
 
-public class HeapSort {
+/**
+ * Created by hzlanxu on 2016/7/6.
+ */
+public class HeapSortTest {
 
-	// ÕÒ³öÊı×éÖĞ×îĞ¡µÄk¸öÖµ
-	public int[] topK(int[] input, int k) {
-		if (input == null || input.length == 0 || k == 0) {
-			return null;
+    public static void main(String[] args) {
+        //int[] data5 = new int[] { 5, 3, 6, 2, 1, 9, 4, 8, 7 };
+        Random r=new Random();
+        int len=r.nextInt(15);
+        int[] data5=new int[len];
+        for(int i=0;i<len;i++){
+            data5[i]=r.nextInt(20);
+        }
+        print(data5);
+        heapSort(data5);
+        System.out.println("æ’åºåçš„æ•°ç»„ï¼š");
+        print(data5);
+    }
+
+    public static void swap(int[] data, int i, int j) {
+        if (i == j) {
+            return;
+        }
+        data[i] = data[i] + data[j];
+        data[j] = data[i] - data[j];
+        data[i] = data[i] - data[j];
+    }
+
+    public static void heapSort(int[] data) {
+        for (int i = 0; i < data.length; i++) {
+            createMaxdHeap(data, data.length - 1 - i);
+            swap(data, 0, data.length - 1 - i);
+            print(data);
+        }
+    }
+
+    public static void createMaxdHeap(int[] data, int lastIndex) {
+        for (int i = (lastIndex - 1) / 2; i >= 0; i--) {
+            // ä¿å­˜å½“å‰æ­£åœ¨åˆ¤æ–­çš„èŠ‚ç‚¹
+            int k = i;
+            // è‹¥å½“å‰èŠ‚ç‚¹çš„å­èŠ‚ç‚¹å­˜åœ¨
+            if (2 * k + 1 <= lastIndex) {
+                // biggerIndexæ€»æ˜¯è®°å½•è¾ƒå¤§èŠ‚ç‚¹çš„å€¼,å…ˆèµ‹å€¼ä¸ºå½“å‰åˆ¤æ–­èŠ‚ç‚¹çš„å·¦å­èŠ‚ç‚¹
+                int biggerIndex = 2 * k + 1;
+                if (biggerIndex < lastIndex) {
+                    // è‹¥å³å­èŠ‚ç‚¹å­˜åœ¨ï¼Œå¦åˆ™æ­¤æ—¶biggerIndexåº”è¯¥ç­‰äº lastIndex
+                    if (data[biggerIndex] < data[biggerIndex + 1]) {
+                        // è‹¥å³å­èŠ‚ç‚¹å€¼æ¯”å·¦å­èŠ‚ç‚¹å€¼å¤§ï¼Œåˆ™biggerIndexè®°å½•çš„æ˜¯å³å­èŠ‚ç‚¹çš„å€¼
+                        biggerIndex++;
+                    }
+                }
+                if (data[k] < data[biggerIndex]) {
+                    // è‹¥å½“å‰èŠ‚ç‚¹å€¼æ¯”å­èŠ‚ç‚¹æœ€å¤§å€¼å°ï¼Œåˆ™äº¤æ¢2è€…å¾—å€¼ï¼Œäº¤æ¢åå°†biggerIndexå€¼èµ‹å€¼ç»™k
+                    swap(data, k, biggerIndex);
+                   // k = biggerIndex;
+                }
+            }
+        }
+    }
+
+    public static void print(int[] data) {
+        for (int i = 0; i < data.length; i++) {
+            System.out.print(data[i] + "\t");
+        }
+        System.out.println();
+    }
+
+}
+
+
+//é€’å½’ç®—æ³•
+public class Test {
+	public int[] heapSort(int[] a, int n) {
+		if(n==0){
+			return a;
 		}
-		if (input.length <= k) {
-			return input;
-		}
-		int[] result = new int[k];
-		for (int i = 0; i < k; i++) {
-			result[i] = input[i];
-		}
-		minHeap(result, k - 1);
-		for (int i = k; i < input.length; i++) {
-			if (input[i] < result[k - 1]) {
-				result[k - 1] = input[i];
-				minHeap(result, k - 1);
+		
+		for(int i=n-1;i>0;i--){
+			int parent=(i-1)/2;
+			if(a[i]>a[parent]){
+				int tmp=a[i];
+				a[i]=a[parent];
+				a[parent]=tmp;
 			}
 		}
-		return result;
-	}
-
-	// Ê¹ÓÃ¶ÑÅÅĞò½«Êı×éÉıĞòÅÅĞò
-	public int[] minHeap(int[] input, int scale) {
-		if (input == null || input.length == 0 || scale == 0) {
-			return null;
-		}
-		print(input);
-		for (int i = scale; i >= 0; i--) {
-			findMax(input, i);
-			swap(input, 0, i);
-			print(input);
-		}
-		return input;
-	}
-
-	// ½«×î´óÖµÒÆµ½¸ù½Úµã£¬¼´Ë÷ÒıÎª0µÄÎ»ÖÃ
-	public void findMax(int[] input, int lastIndex) {
-		if (lastIndex == 0) {
-			return;
-		}
-		int parent = (lastIndex - 1) / 2;
-		for (int i = parent; i >= 0; i--) {
-			int left = 2 * i + 1;
-			int right = 2 * i + 2;
-			if (right <= lastIndex && input[right] > input[i] && input[right] > input[left]) {
-				swap(input, right, i);
-			}
-			if (input[left] > input[i]) {
-				swap(input, left, i);
-			}
-		}
-	}
-
-	public void swap(int[] data, int i, int j) {
-		if (i == j) {
-			return;
-		}
-		int temp = data[i];
-		data[i] = data[j];
-		data[j] = temp;
-	}
-
-	public void print(int[] data) {
-		if (data == null || data.length == 0) {
-			return;
-		}
-		for (int i = 0; i < data.length; i++) {
-			System.out.print(data[i] + "\t");
-		}
-		System.out.println();
-	}
-
-	public static void main(String[] args) {
-		HeapSort sort = new HeapSort();
-		Random random = new Random();
-		int len = random.nextInt(15);
-		int[] data = new int[len];
-		for (int i = 0; i < len; i++) {
-			data[i] = random.nextInt(20);
-		}
-		sort.print(data);
-		sort.print(sort.topK(data, data.length / 2));
+		
+		int tmp=a[0];
+		a[0]=a[n-1];
+		a[n-1]=tmp;
+		
+		heapSort(a, n-1);
+		return  a;
 	}
 }
