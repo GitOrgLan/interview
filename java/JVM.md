@@ -69,6 +69,8 @@
 - 应用程序类加载器（Application ClassLoader）
 	由APPClassLoader实现。负责加载用户类路径（ClassPath）上所指定的类库。
 
+![类加载器](https://github.com/GitOrgLan/interview/blob/master/img/java/%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E6%A0%91%E7%8A%B6%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84%E7%A4%BA%E6%84%8F%E5%9B%BE.jpg)
+
 ###类加载机制
 - 什么是双亲委派模型  
 	双亲委派模型（Parents Delegation Model）要求除了顶层的启动类加载器外，其余加载器都应当有自己的父类加载器。类加载器之间的父子关系，通过组合关系复用。 
