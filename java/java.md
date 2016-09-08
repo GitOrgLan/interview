@@ -29,6 +29,8 @@
 - concurrent
 	* [Java并发工具包详解](http://blog.csdn.net/defonds/article/details/44021605#t7)
 	* [Java并发工具包实例](http://www.cnblogs.com/draem0507/p/3824258.html)
+	* [Java Concurrency in Practice](http://blog.csdn.net/qilixiang012/article/category/2857487)
+	* [Java Concurrency](http://tutorials.jenkov.com/java-concurrency/read-write-locks.html)
 - copyOnWrite
 	* [CopyOnWrite容器](http://blog.csdn.net/maxwell_nc/article/details/49991133)
 
@@ -41,14 +43,11 @@
 ### JVM ###
 
 - [**Java 虚拟机面试题全面解析(屌!)**](https://www.zybuluo.com/Yano/note/321063)
+- [java虚拟机系列](http://www.cnblogs.com/xrq730/category/731395.html)
 - [JAVA虚拟机体系结构](http://www.cnblogs.com/java-my-life/archive/2012/08/01/2615221.html) 
 - [Java虚拟机 类加载的过程](http://blog.csdn.net/xuefeng0707/article/details/9132339)
 - [Java垃圾回收（GC)](http://www.cnblogs.com/xrq730/p/4836700.html)
 
-### Series ###
-
-- [Java Concurrency in Practice](http://blog.csdn.net/qilixiang012/article/category/2857487)
-- [Java Concurrency](http://tutorials.jenkov.com/java-concurrency/read-write-locks.html)
 
 #个人整理
 ##
