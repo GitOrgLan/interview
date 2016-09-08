@@ -92,6 +92,15 @@ Sun（现在应该叫oracle）的JVM Generational Collecting(垃圾回收)原理
 	G1收集器跟踪各个Region里面的垃圾堆积的价值大小，在后台维护一个优先列表，每次根据允许的收集时间，优先回收价值最大的Region（这也是Garbage-First名称的由来）。  
 	这种使用Region划分内存空间以及有优先级的区域回收方式，保证了G1收集器在有限的时间内可以获取尽可能高的收集效率。
 
+>总结:  
+Serial、ParNew、Parallel复制算法  
+Serial Old、Parallel Old标记-整理算法
+CMS标记-清除  
+G1使用Region划分内存空间以及有优先级的区域回收方式  
+Serial、Serial Old单线程的收集器    
+CMS收集器的关注点是尽可能缩短垃圾收集时用户线程的停顿时间  
+Parallel收集器的目标则是打到一个可控制的吞吐量  
+
 - 4种引用状态
 	- 强引用
 	代码中普遍存在的类似"Object obj = new Object()"这类的引用，只要强引用还存在，垃圾收集器永远不会回收掉被引用的对象
