@@ -1,6 +1,5 @@
 [TOC]
 #Java内存区域与溢出异常
-
 溢出异常主要分为StackOverflowError和OutOfMemoryError,StackOverflowError主要发生在Java虚拟栈中，对于无法动态扩展栈深度的虚拟机来说，如果线程请求的栈深度大于JVM所允许的深度，将会抛出这个异常。对于可以扩大虚拟机栈深度的JVM来说，如果扩展时无法申请到足够的空间，则会抛出OutOfMemoryError
 ##运行时数据区域
 Java虚拟机锁管理的内存将会包括以下几个运行时数据区：程序计数器，Java虚拟栈，本地方法栈，方法区，堆(heap)。
