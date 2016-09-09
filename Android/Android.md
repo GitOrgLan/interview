@@ -44,6 +44,25 @@ performLaunchActivity主要完成
 
 ###生命周期
 ![Activity](http://p.blog.csdn.net/images/p_blog_csdn_net/hpoi/EntryImages/20091003/347621596238419942633901667161718750.jpg)
+####Activity之间切换
+启动新Activity时
+```
+ActivityA------->onPause()  
+ActivityB------->onCreate()  
+ActivityB------->onStart()  
+ActivityB------->onResume()  
+ActivityA------->onStop() 
+```
+
+回退Activity或者finish当前Activity
+```
+ActivityB------->onPause()  
+ActivityA------->onRestart()  
+ActivityA------->onStart()  
+ActivityA------->onResume()  
+ActivityB------->onStop()  
+ActivityB------->onDestroy()  
+```
 
 ##Service
 ###Service保活

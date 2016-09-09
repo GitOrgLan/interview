@@ -86,7 +86,7 @@ Map
 ##HashSet
 HashSet 内部用一个HashMap对象存储数据，更具体些，只用到了key，value全部为一dummy对象
 
-#多线程
+#并发
 ##Java中的锁
 ###Synchronized
 一个关键字，当用它来修饰一个方法或者一个代码块的时候，能够保证在同一时刻最多只有一个线程在执行该段代码。
