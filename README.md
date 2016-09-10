@@ -6,7 +6,7 @@
 * [算法](https://github.com/GitOrgLan/interview/blob/master/algorithm/%E7%AE%97%E6%B3%95.md)     
 * [javaee](https://github.com/GitOrgLan/interview/blob/master/javaee/index.md)   
 * [数据库](https://github.com/GitOrgLan/interview/blob/master/DB/%E6%95%B0%E6%8D%AE%E5%BA%93.md)  
-* 计算机网络  
+* [计算机网络](https://github.com/GitOrgLan/interview/blob/master/network/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C.md)  
 * 操作系统  
 * 分布式
 
