@@ -55,26 +55,9 @@ Cookie存储的数据量很受限制,大多数浏览器支持最大容量为4K,�
 	his is yaabc’s blog 
 	/ya(msen|nsen|nsem)/
 
-###简述spring 的事务传播行为和 隔离级别
-[链接](http://blog.csdn.net/it_wangxiangpan/article/details/24180085)
- 
-- spring 的事务传播行为：  
-	Spring在TransactionDefinition接口中规定了7种类型的事务传播行为，它们规定了事务方法和事务方法发生嵌套调用时事务如何进行传播：
-
-	- PROPAGATION_REQUIRED：如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入- 到这个事务中。这是最常见的选择。
-	- PROPAGATION_SUPPORTS：支持当前事务，如果当前没有事务，就以非事务方式执行。
-	- PROPAGATION_MANDATORY：使用当前的事务，如果当前没有事务，就抛出异常。
-	- PROPAGATION_REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起。
-	- PROPAGATION_NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。
-	- PROPAGATION_NEVER：以非事务方式执行，如果当前存在事务，则抛出异常。
-	- PROPAGATION_NESTED：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行	- 与PROPAGATION_REQUIRED类似的操作。
 
 
-- Spring 的隔离级别
-	1. Serializable：最严格的级别，事务串行执行，资源消耗最大；
-	- REPEATABLE READ：保证了一个事务不会修改已经由另一个事务读取但未提交（回滚）的数据。避免了”脏读取”和”不可重复读取”的情况，但是带来了更多的性能损失。
-	- READ COMMITTED:大多数主流数据库的默认事务等级，保证了一个事务不会读到另一个并行事务已修改但未提交的数据，避免了”脏读取”。该级别适用于大多数系统。
-	- Read Uncommitted：保证了读取过程中不会读取到非法数据。
+
 	
 ###struts2 必备包
 commons-fileupload-1.2.1.jar
@@ -83,22 +66,12 @@ ognl-2.6.11.jar
 struts2-core-2.1.6.jar
 xwork-2.1.2.jar
 
-###ibatis 中的#与$的区别
->是否进行类型匹配  
-在Ibatis中我们使用SqlMap进行Sql查询时需要引用参数，在参数引用中遇到的符号#和$之间的区分为，#可以进行与编译，进行类型匹配，而$不进行数据类型匹配  	
-使用#传入参数，sql语句解析是会加上"",比如  select * from table where name = #{name} ,传入的name为小李，那么最后打印出来的就是select * from table where name = ‘小李’  
-如果你要做动态的排序，比如  order by   column，这个时候务必要用${},因为如果你使用了#{},那么打印出来的将会是select * from table order by  'name'  ,这样是没用  
-[链接](http://blog.csdn.net/jimmy609/article/details/43020143)
 
 ###结合spring 源码谈谈其中的设计模式
 
 day1:J2EE  
 >J2EE 是Sun公司提出的多层(multi-diered),分布式(distributed),基于组件(component-base)的企业级应用模型 (enterpriese application model).
 
-###如何理解J2EE的系统架构?
->答：表现层，业务逻辑层，数据层。（MVC）
-优点：移植性，安全性，可用性，可扩展性。J2EE平台的其他主要优点还有：自动负载平衡、可伸缩、容错和具有故障排除等功能。部署在J2EE环境中的组件将自动获得上述特性，而不必增加额外的代码开销。
-缺点：系统和标准相当庞大和复杂，中小型企业用不到那么多的标准
 
 ###关于J2EE应用服务器的容器?
 	答：j2ee的应用服务器：weblogic, webspere, jboss, jrun, resin, enhydra, tomcat等等
@@ -119,54 +92,13 @@ day1:J2EE
 - init()
 - destroy()
 
-###说出Servlet的生命周期，并说出Servlet和CGI的区别？
->Servlet运行在Servlet容器中，其生命周期由容器来管理。Servlet的生命周期通过javax.servlet.Servlet接口中的init()、service()和destroy()方法来表示。
-Servlet的生命周期包含了下面4个阶段：
 
-- 加载和实例化  
-	Servlet容器负责加载和实例化Servlet。当Servlet容器启动时，或者在容器检测到需要这个Servlet来响应第一个请求时，创建Servlet实例。
-- 初始化  
-	在Servlet实例化之后，容器将调用Servlet的init()方法初始化这个对象。  
-	初始化的目的是为了让Servlet对象在处理客户端请求前完成一些初始化的工作，如建立数据库的连接，获取配置信息等。对于每一个Servlet实例，init()方法只被调用一次。  
-	在初始化期间，Servlet实例可以使用容器为它准备的ServletConfig对象从Web应用程序的配置信息（在web.xml中配置）中获取初始化的参数信息。  
-	在初始化期间，如果发生错误，Servlet实例可以抛出ServletException异常或者UnavailableException异常来通知容器。  
-- 请求处理  
-	Servlet容器调用Servlet的service()方法对请求进行处理。要注意的是，在service()方法调用之前，init()方法必须成功执行。  
-	在service()方法中，Servlet实例通过ServletRequest对象得到客户端的相关信息和请求信息，在对请求进行处理后，调用ServletResponse对象的方法设置响应信息。  
-	在service()方法执行期间，如果发生错误，Servlet实例可以抛出ServletException异常或者UnavailableException异常。  
-- 服务终止  
-	当容器检测到一个Servlet实例应该从服务中被移除的时候，容器就会调用实例的destroy()方法，以便让该实例可以释放它所使用的资源，保存数据到持久存储设备中。  
-	当需要释放内存或者容器关闭时，容器就会调用Servlet实例的destroy()方法。在destroy()方法调用之后，容器会释放这个Servlet实例，该实例随后会被Java的垃圾收集器所回收。  
-	如果再次需要这个Servlet处理请求，Servlet容器会创建一个新的Servlet实例。  
-	在整个Servlet的生命周期过程中，创建Servlet实例、调用实例的init()和destroy()方法都只进行一次，当初始化完成后，Servlet容器会将该实例保存在内存中，通过调用它的service()方法，为接收到的请求服务   
 
 ###EJB与JAVA BEAN的区别？
 	EJB与JAVA BEAN是SUN的不同组件规范，EJB是在容器中运行的，分步式的，而JAVA BEAN主要是一种可利用的组件，主要在客户端UI表现上。
 
-###JAVA SERVLET API中forward() 与redirect()的区别
-- 从地址栏显示来说 
-	forward是服务器请求资源,服务器直接访问目标地址的URL,把那个URL的响应内容读取过来,然后把这些内容再发给浏览器.浏览器根本不知道服务器发送的内容从哪里来的,所以它的地址栏还是原来的地址.
-	redirect是服务端根据逻辑,发送一个状态码,告诉浏览器重新去请求那个地址.所以地址栏显示的是新的URL.
-- 从数据共享来说 
-	forward:转发页面和转发到的页面可以共享request里面的数据.
-	redirect:不能共享数据.
-- 从运用地方来说 
-	forward:一般用于用户登陆的时候,根据角色转发到相应的模块.
-	redirect:一般用于用户注销登陆时返回主页面和跳转到其它的网站等.
-- 从效率来说 
-	forward:高.
-	redirect:低
 
-一句话，转发是服务器行为，重定向是客户端行为
-
-- 转发过程：  
-	客户浏览器发送http请求---->web服务器接受此请求-->调用内部的一个方法在容器内部完成请求处理和转发动作---->将目标资源 发送给客户；  
-	在这里，转发的路径必须是同一个web容器下的url，其不能转向到其他的web路径上去，中间传递的是自己的容器内的request。在客 户浏览器路径栏显示的仍然是其第一次访问的路径，也就是说客户是感觉不到服务器做了转发的。转发行为是浏览器只做了一次访问请求。 
-
-- 重定向过程：  
-	客户浏览器发送http请求---->web服务器接受后发送302状态码响应及对应新的location给客户浏览器--》客户浏览器发现 是302响应，则自动再发送一个新的http请求，请求url是新的location地址----》服务器根据此请求寻找资源并发送给客户。  
-	在这里 location可以重定向到任意URL，既然是浏览器重新发出了请求，则就没有什么request传递的概念了。在客户浏览器路径栏显示的是其重定向的 路径，客户可以观察到地址的变化的。
-	重定向行为是浏览器做了至少两次的访问请求的。   
+  
 
 ###JAVA解析XML的方式？
 	SAX、DOM、JDOM 、DOM4J 
@@ -195,403 +127,16 @@ Servlet的生命周期包含了下面4个阶段：
 ###三大框架的原理及其优缺点
 	S:18个拦截器 
 
-###描述一下Spring中实现DI（Dependency Injection）的几种方式
-- 方式一：接口注入，在实际中得到了普遍应用，即使在IOC的概念尚未确立时，这样的方法也已经频繁出现在我们的代码中。注解
-- 方式二：Type2 IoC: Setter injection对象创建之后，将被依赖对象通过set方法设置进去
-- 方式三：Type3 IoC: Constructor injection对象创建时，被依赖对象以构造方法参数的方式注入Spring的方式
 
-###简述你对IoC（Inversion of Control）的理解
->一个类需要用到某个接口的方法，我们需要将类A和接口B的实现关联起来，最简单的方法是类A中创建一个对于接口B的实现C的实例，但这种方法显然两者的依赖（Dependency）太大了。
-而IoC的方法是只在类A中定义好用于关联接口B的实现的方法，将类A，接口B和接口B的实现C放入IoC的 容器（Container）中，通过一定的配置由容器（Container）来实现类A与接口B的实现C的关联。
+###如何理解J2EE的系统架构?
+>答：表现层，业务逻辑层，数据层。（MVC）
+优点：移植性，安全性，可用性，可扩展性。J2EE平台的其他主要优点还有：自动负载平衡、可伸缩、容错和具有故障排除等功能。部署在J2EE环境中的组件将自动获得上述特性，而不必增加额外的代码开销。
+缺点：系统和标准相当庞大和复杂，中小型企业用不到那么多的标准
 
-###Spring对多种ORM框架提供了很好的支持，简单描述在Spring中使用Hibernate的方法。
->在context中定义DataSource，创建SessionFactoy，设置参数；DAO类继承HibernateDaoSupport，实现具体接口，从中获得HibernateTemplate进行具体操作。
-在使用中如果遇到OpenSessionInView的问题，可以添加OpenSessionInViewFilter或OpenSessionInViewInterceptor
-
-###spring事务
-	spring提供了几个关于事务处理的类：
-	Datasouce
-	transactionManager
-	userDao要注入
-	Datasouce
-	Proxy代理
-	Target:userDao：代理对象(目标对象)
-	transactionAttributes(那些方法需要事务处理)
-	transactionManager(事务处理服务)
-
-	TransactionDefinition //事务属性定义
-	TranscationStatus //代表了当前的事务，可以提交，回滚
-	PlatformTransactionManager这个是spring提供的用于管理事务的基础接口，其下有一个实现的抽象类AbstractPlatformTransactionManager,我们使用的事务管理类例如DataSourceTransactionManager等都是这个类的子类。
-	一般事务定义步骤：
-	TransactionDefinition td = new TransactionDefinition();
-	TransactionStatus ts = transactionManager.getTransaction(td);
-	try
-	{ //do sth
-	transactionManager.commit(ts);
-	}
-	catch(Exception e){transactionManager.rollback(ts);}
-
-	spring提供的事务管理可以分为两类：编程式的和声明式的。
-	编程式的，比较灵活，但是代码量大，存在重复的代码比较多；程式主要使用transactionTemplate
-	声明式的比编程式的更灵活。容器管理了
-
-###如何在Spring的applicationContext.xml里面使用JNDI而不是datasource? JndiObjectFactoryBean
-	可以使用”org.springframework.jndi.JndiObjectFactoryBean”来实现。   
-	示例如下：  
-	<bean id=”dataSource”>
- 	<property name=”jndiName”>
- 	<value>java:comp/env/jdbc/appfuse</value>
- 	</property>
- 	</bean>
-
-###Spring里面如何配置数据库驱动？DriverManagerDataSource
-	使用org.springframework.jdbc.datasource.DriverManagerDataSource”数据源来配置数据库驱动。示例如下：
-	<bean id=”dataSource”>
-	<property name=”driverClassName”>
-	<value>org.hsqldb.jdbcDriver</value>
-	</property>
-	<property name=”url”>
-	<value>jdbc:hsqldb:db/appfuse</value>
-	</property>
-	<property name=”username”><value>sa</value></property>
-	<property name=”password”><value></value></property>
-	</bean>
-
-###Spring里面applicationContext.xml文件能不能改成其他文件名？可以配置
-	ContextLoaderListener是一个ServletContextListener, 它在你的web应用启动的时候初始化。缺省情况下， 它会在WEB-INF/applicationContext.xml文件找Spring的配置。 你可以通过定义一个<context-param>元素名字为”contextConfigLocation”来改变Spring配置文件的位置。示例如下：
-	<listener>
-	<listener-class>org.springframework.web.context.ContextLoaderListener
-	<context-param>
-	<param-name>contextConfigLocation</param-name>
-	<param-value>/WEB-INF/xyz.xml</param-value>
-	</context-param>
-	</listener-class>
-	</listener>
-
-###Spring里面如何定义hibernate mapping？ applicationContext.xml  ”mappingResources”
-	添加hibernate mapping 文件到web/WEB-INF目录下的applicationContext.xml文件里面。示例如下：
-	<property name=”mappingResources”>
-	<list>
-	<value>org/appfuse/model/User.hbm.xml</value>
-	</list>
-	</property>
-
-###解释一下Dependency injection(DI,依赖注入)和IOC(Inversion of control,控制反转)?
-	参考答案：依赖注入DI是一个程序设计模式和架构模型， 一些时候也称作控制反转，尽管在技术上来讲，依赖注入是一个IOC的特殊实现，依赖注入是指一个对象应用另外一个对象来提供一个特殊的能力，
-	例如：把一个数据库连接以参数的形式传到一个对象的结构方法里面而不是在那个对象内部自行创建一个连接。
-	控制反转和依赖注入的基本思想就是把类的依赖从类内部转化到外部以减少依赖
-	应用控制反转，对象在被创建的时候，由一个调控系统内所有对象的外界实体，将其所依赖的对象的引用，传递给它。
-	也可以说，依赖被注入到对象中。所以，控制反转是，关于一个对象如何获取他所依赖的对象的引用，这个责任的反转。
-	总结就是：对象间依赖关系交由容器统一调控和处理了
-
-###spring中的BeanFactory与ApplicationContext的作用和区别？
-作用：
-- BeanFactory负责读取bean配置文档，管理bean的加载，实例化，维护bean之间的依赖关系，负责bean的声明周期。
-- ApplicationContext除了提供上述BeanFactory所能提供的功能之外，还提供了更完整的框架功能：
-	- 国际化支持
-	- 资源访问：Resource rs = ctx. getResource(”classpath:config.properties”), “file:c:/config.properties”
-	- 事件传递：通过实现ApplicationContextAware接口
-
-- 常用的获取ApplicationContext的方法：
-	FileSystemXmlApplicationContext：从文件系统或者url指定的xml配置文件创建，参数为配置文件名或文件名数组  
-	ClassPathXmlApplicationContext：从classpath的xml配置文件创建，可以从jar包中读取配置文件  
-	WebApplicationContextUtils：从web应用的根目录读取配置文件，需要先在web.xml中配置，可以配置监听器或者servlet来实现  
-	通过如下方法取出applicationContext实例:  
-	ApplicationContext ac=WebApplicationContextUtils.getWebApplicationContext(this.getServletContext);  
-
-###spring+hibernate的配置文件中的主要类有那些?如何配置?
-	dataSource
-	sessionFactory:hibernate.cfg.xml
-	transactionManager
-	userDao (extends HibernateDaoSupport)
-	sessionFactory
-	facade
-	proxy
-	sessionFactory
-	transactionManager
-	facade
- 
-###spring的jdbc与传统的jdbc有什么区别，其核心类有那些?
-	Spring的jdbc:节省代码，不管连接(Connection)，不管事务、不管异常、不管关闭(con.close() ps.close )
-	TransactionTemplate(transactionManager):进行事务处理
-	JdbcTemplate(dataSource):增、删、改、查 大量sql代码重复
-
-###spring的配置的主要标签是什么?有什么作用?
-```
-	<beans>
-	 <bean id=”” class=”” init=”” destroy=”” singleton=””>
-	 <property name=””>
-	 <value></value>
-	 </property>
-	 <property name=””>
-	 <ref local></ref>
-	 </property>
-	 </bean>
-	 </beans>
-```
-
-###如何在spring中实现国际化?
-	在applicationContext.xml加载一个bean
-	<bean id=”messageSource” class=”org.springframework.context.support.ResourceBundleMessageSource”>
-	<property name=”basename”>
-	<value>message</value>
-	</property>
-	</bean>
-	在src目录下建多个properties文件Ø
-	对于非英文的要用native2asciiØ -encoding gb2312 源  目转化文件相关内容
-	其命名格式是message_语言_国家。Ø
-	页面中的中显示提示信息，键名取键值。Ø
-	当给定国家，系统会自动加载对应的国家的properties信息。Ø
-	通过applictionContext.getMessage(“键名”,”参数”,”区域”)取出相关的信息。Ø
-
-###Spring如何实现事件处理?
-	事件
-	Extends ApplicationEvent
-	监听器
-	Implements ApplicationListener
-	事件源
-	Implements ApplicationContextAware
-	在applicationContext.xml中配置事件源、监听器
-	先得到事件源，调用事件源的方法，通知监听器。
-
-###aop中的关键名词有些那些，相互关系是什么?
-	拦截器: 代理
-	装备(advice)
-	目标对象
-	关切点:条件
-	连接点:方法、属性
-
-###Spring和Struts的区别？
-	strusts：是一种基于MVC模式的一个web层的框架。
-	Spring:提供了通用的服务，ioc/di aop,关心的不仅仅web层，应当j2ee整体的一个服务，容器，可以很容易融合不同的技术和开发框架struts hibernate ibatis ejb remote springJDBC springMVC
-
-###struts+spring面试题
-1. struts
-	 Action是不是线程安全的？如果不是，有什么方式可以保证Action的线程安全？如果是，说明原因
-- MVC，分析一下struts是如何实现MVC的
-- struts中的几个关键对象的作用(说说几个关键对象的作用)
-- spring
-	说说AOP和IOC的概念以及在spring中是如何应用的
-- Hibernate有哪几种查询数据的方式
-- load()和get()的区别
-
-	回答：
-
-- Struts1 Action是单例模式并且必须是线程安全的，因为仅有Action的一个实例来处理所有的请求。单例策略限制了Struts1 Action能作的事和性能，并且要在开发时特别小心。Action资源必须是线程安全的或同步的。
-	Struts2 Action对象为每一个请求产生一个实例，因此没有线程安全问题。（实际上，servlet容器给每个请求产生许多可丢弃的对象，并且不会导致性能和垃圾回收问题）
-- struts是用一组类,servlet 和jsp规范实现mvc的
-- ActionFrom ActionServlet Action struts-config.xml
-- spring的核心就是IOC,通过指定对象的创建办法,描述对象与服务之间的关系,而不生成对象
-- 3种,hql 条件查询() 原生sql
-- load()方法认为该数据一定存在,可以放心的使用代理来延时加载 ,如果使用过程中发现了问题,就抛出异常;get()方法一定要获取到真实的数据,否则返回null
-
-##Struts，Spring，Hibernate面试题总结
-
-###Hibernate工作原理及为什么要用？
-原理：
-1. 读取并解析配置文件
-- 读取并解析映射信息，创建SessionFactory
-- 打开Sesssion
-- 创建事务Transation
-- 持久化操作
-- 提交事务
-- 关闭Session
-- 关闭SesstionFactory
-
-###为什么要用：
-- 对JDBC访问数据库的代码做了封装，大大简化了数据访问层繁琐的重复性代码。
-- Hibernate是一个基于JDBC的主流持久化框架，是一个优秀的ORM实现。他很大程度的简化DAO层的编码工作
-- hibernate使用Java反射机制，而不是字节码增强程序来实现透明性。
-- hibernate的性能非常好，因为它是个轻量级框架。映射的灵活性很出色。它支持各种关系数据库，从一对一到多对多的各种复杂关系。
-
-###Hibernate是如何延迟加载?
-- Hibernate2延迟加载实现：a)实体对象缓存  b)集合（Collection）缓存
-- Hibernate3 提供了属性的延迟加载功能
-当Hibernate在查询数据的时候，数据并没有存在与内存中，当程序真正对数据的操作时，对象才存在与内存中，就实现了延迟加载，他节省了服务器的内存开销，从而提高了服务器的性能。  
-Hibernate中怎样实现类之间的关系?(如：一对多、多对多的关系)  
-类与类之间的关系主要体现在表与表之间的关系进行操作，它们都市对对象进行操作，我们程序中把所有的表与类都映射在一起，它们通过配置文件中的many-to-one、one-to-many、many-to-many  
-
-###说下Hibernate的缓存机制
-- 内部缓存存在Hibernate中又叫一级缓存，属于应用事物级缓存
-- 二级缓存：
-	- 应用及缓存
-	- 分布式缓存  
-	 	条件：数据不会被第三方修改、数据大小在可接受范围、数据更新频率低、同一数据被系统频繁使用、非关键数据
-	- 第三方缓存的实现
-
-###Hibernate的查询方式
-- Sql、Criteria,object comptosition
-- Hql：
-	- 属性查询
-	- 参数查询、命名参数查询
-	- 关联查询
-	- 分页查询
-	- 统计函数
-
-###如何优化Hibernate？
-* 使用双向一对多关联，不使用单向一对多
-* 灵活使用单向一对多关联
-* 不用一对一，用多对一取代
-* 配置对象缓存，不使用集合缓存
-* 一对多集合使用Bag,多对多集合使用Set
-* 继承类使用显式多态
-* 表字段要少，表关联不要怕多，有二级缓存撑腰
-
-###Struts工作机制？为什么要使用Struts？
- 工作机制：
- Struts2工作流程：
-
-1. 客户端提交一个HttpServletRequest请求（action或JSP页面）。
-- 请求被提交到一系列Filter过滤器，如ActionCleanUp和FilterDispatcher等。
-- FilterDispatcher是Struts2控制器的核心，它通常是过滤器链中的最后一个过滤器。
-- 请求被发送到FilterDispatcher后，FilterDispatcher询问ActionMapper时候需要调用某个action来处理这个Request。
-- 如果ActionMapper决定需要调用某个action，FilterDispatcher则把请求交给ActionProxy进行处理。
-- ActionProxy通过Configuration Manager询问框架的配置文件struts.xml，找到调用的action类。
-- ActionProxy创建一个ActionInvocation实例，通过代理模式调用Action。
-- action执行完毕后，返回一个result字符串，此时再按相反的顺序通过Intercepter拦截器。
-- 最后ActionInvocation实例，负责根据struts.xml中配置result元素，找到与之相对应的result，决定进一步输出。
 
 ###为什么要用：
 >JSP、Servlet、JavaBean技术的出现给我们构建强大的企业应用系统提供了可能。但用这些技术构建的系统非常的繁乱，所以在此之上，我们需要一个规则、一个把这些技术组织起来的规则，这就是框架，Struts便应运而生。
 基于Struts开发的应用由3类组件构成：控制器组件、模型组件、视图组件
-
-###Struts的validate框架是如何验证的？
-	 在struts配置文件中配置具体的错误提示，再在FormBean中的validate()方法具体调用。
-
-###说下Struts的设计模式
-- MVC模式:  
-	web应用程序启动时就会加载并初始化ActionServler。用户提交表单时，一个配置好的ActionForm对象被创建，并被填入表单相应的数据，ActionServler根据Struts-config.xml 文件配置好的设置决定是否需要表单验证，如果需要就调用ActionForm的Validate（）验证后选择将请求发送到哪个Action，如果 Action不存在，ActionServlet会先创建这个对象，然后调用Action的execute（）方法。Execute（）从 ActionForm对象中获取数据，完成业务逻辑，返回一个ActionForward对象，ActionServlet再把客户请求转发给 ActionForward对象指定的jsp组件，ActionForward对象指定的jsp生成动态的网页，返回给客户。
-
-- 单例模式
-- Factory(工厂模式)：
-	定义一个基类===》实现基类方法（子类通过不同的方法）===》定义一个工厂类（生成子类实例）
-	===》开发人员调用基类方法
-
-- Proxy(代理模式)
-
-###spring工作机制及为什么要用?
-1. spring mvc请所有的请求都提交给DispatcherServlet,它会委托应用系统的其他模块负责负责对请求进行真正的处理工作。
-- DispatcherServlet查询一个或多个HandlerMapping,找到处理请求的Controller.
-- DispatcherServlet请请求提交到目标Controller
-- Controller进行业务逻辑处理后，会返回一个ModelAndView
-- Dispathcher查询一个或多个ViewResolver视图解析器,找到ModelAndView对象指定的视图对象
-- 视图对象负责渲染返回给客户端。
-
-###为什么用：
-- AOP 
-	让开发人员可以创建非行为性的关注点，称为横切关注点，并将它们插入到应用程序代码中。  
-	使用 AOP 后，公共服务   （比 如日志、持久性、事务等）就可以分解成方面并应用到域对象上，同时不会增加域对象的对象模型的复杂性。  
-
-- IOC 
-	允许创建一个可以构造对象的应用环境，然后向这些对象传递它们的协作对象。  
-	正如单词 倒置 所表明的，IOC 就像反过来的 JNDI。没有使用一堆抽象工厂、服务定位器、单元素（singleton）和直接构造（straight construction），每一个对象都是用其协作对象构造的。因此是由容器管理协作对象（collaborator）。  
-
->Spring即使一个AOP框架，也是一IOC容器。 Spring 最好的地方是它有助于您替换对象。有了 Spring，只要用 JavaBean 属性和配置文件加入依赖性（协作对象）。然后可以很容易地在需要时替换具有类似接口的协作对象。
-
-###一些Spring和Hibernate的面试题(附答案)
-- 简述你对IoC（Inversion of Control）的理解，描述一下Spring中实现DI（Dependency Injection）的几种方式。
-	IoC将创建的职责从应用程序代码搬到了框架中。Spring对Setter注入和构造方法注入提供支持。（详见http://martinfowler.com/articles/injection.html，以及http: //www.redsaga.com/spring_ref/2.0/html/beans.html#beans-factory- collaborators）
-
-- Spring的Bean有多种作用域，包括：
-	- singleton、
-		当一个bean的作用域设置为singleton，那么Spring IOC容器中只会存在一个共享的bean实例，并且所有对bean的请求，只要id与该bean定义相匹配，则只会返回bean的同一实例。换言之，当把一个bean定义设置为singleton作用域时，Spring IOC容器只会创建该bean定义的唯一实例。这个单一实例会被存储到单例缓存（singleton cache）中，并且所有针对该bean的后续请求和引用都将返回被缓存的对象实例，这里要注意的是singleton作用域和GOF设计模式中的单例是完全不同的，单例设计模式表示一个ClassLoader中只有一个class存在，而这里的singleton则表示一个容器对应一个bean，也就是说当一个bean被标识为singleton时候，spring的IOC容器中只会存在一个该bean。
-	- prototype
-		prototype作用域部署的bean，每一次请求（将其注入到另一个bean中，或者以程序的方式调用容器的getBean()方法）都会产生一个新的bean实例，相当于一个new的操作
-	- request
-		request表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP request内有效，
-	- session、
-		session作用域表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP session内有效，
-	- global session、
-	- application、
-	- 自定义 Scope
-		在spring 2.0中作用域是可以任意扩展的，你可以自定义作用域，甚至你也可以重新定义已有的作用域（但是你不能覆盖singleton和 prototype），spring的作用域由接口org.springframework.beans.factory.config.Scope来定义，自定义自己的作用域只要实现该接口即可，
-
-###Bean的初始化
-在配置文档中通过指定init-method 属性来完成
-实现 org.springframwork.beans.factory.InitializingBean接口
-
-###Bean的调用
-- 使用BeanWrapper
-- 使用BeanFactory
-- 使用ApplicationConttext	
-
-###Bean的销毁
-- 使用配置文件中的 destory-method 属性
-- 实现 org.springframwork.bean.factory.DisposebleBean接口	
-		
-###简单描述Spring framework与Struts的不同之处，整合Spring与Struts有哪些方法，哪种最好，为什么？
-Spring是完整的一站式框架，而Struts仅是MVC框架，且着重于MVC中的C。
-Spring有三种方式整合Struts：
-- 使用 Spring 的 ActionSupport 类整合 Struts；
-- 使用 Spring 的 DelegatingRequestProcessor 覆盖 Struts 的 RequestProcessor；
-	将 Struts Action 管理委托给 Spring 框架，动作委托最好。（详见使用Spring 更好地处理Struts 动作）
-- Spring 2.0新增一种方式：AutowiringRequestProcessor。
-		
-###Hibernate中的update()和saveOrUpdate()的区别
-saveOrUpdate()方法可以实现update()的功能，但会多些步骤，具体如下：
-- 如果对象在该session中已经被持久化，不进行操作；
-- 对象的标识符属性(identifier property)在数据库中不存在或者是个暂时的值，调用save()方法保存它；
-- 如果session中的另一个对象有相同的标识符抛出一个异常；
-- 以上皆不符合则调用update()更新之。
-		
-###Spring对多种ORM框架提供了很好的支持，简单描述在Spring中使用Hibernate的方法，并结合事务管理。
-	在context中定义DataSource，
-	创建SessionFactoy，设置参数；
-	DAO类继承HibernateDaoSupport，实现具体接口，从中获得HibernateTemplate进行具体操作。
-	在使用中如果遇到OpenSessionInView的问题，可以添加OpenSessionInViewFilter或OpenSessionInViewInterceptor。（详见Spring framework 2.0 Reference的12.2节Hibernate）
-	声明式事务需声明事务管理器，
-
-###Spring框架有哪几部分组成？
->Spring框架有七个模块组成组成，这7个模块(或组件)均可以单独存在，也可以与其它一个或多个模块联合使用，主要功能表现如下：
-
-- Spring核心容器（Core）：
-	提供Spring框架的基本功能。核心容器的主要组件是BeanFactory，她是工厂模式的实现。BeanFactory使用控制反转（Ioc）模式将应用程序的配置和依赖性规范与实际的应用代码程序分开。
-
-- Spring AOP：
-	通过配置管理特性，Spring AOP模块直接面向方面的编程功能集成到了Spring框架中，所以可以很容易的使Spring框架管理的任何对象支持 AOP。Spring AOP模块为基于Spring的应用程序中的对象提供了事务管理服务。通过使用Spring AOP，不用依赖于EJB组件，就可以将声明性事务管理集成到应用程序中。
-
-- Spring ORM：
-	Spring框架集成了若干ORM框架,从而提供了ORM的对象关系工具,其中包括 JDO、Hibernate、iBatis和TopLink。所有这些都遵从Spring的通用事务和DAO异常层结构。
-
-- Spring DAO：
-	JDBC DAO抽象层提供了有意义的异常层次的结构，可用该结构来管理异常处理和不同数据供应商抛出的异常错误信息。异常层次结构简化了错误处理，并且大大的降低了需要编写的异常代码数量（例如，打开和关系连接）。Spring DAO的面向JDBC的异常遵从通用的DAO异常层结构。
-
-- Spring WEB：
-	Web上下文模块建立在上下文模块（Context）的基础之上，为基于Web服务的应用程序提供了上下文的服务。所以Spring框架支持 Jakarta Struts的集成。Web模块还简化了处理多部分请求及将请求参数绑定到域对象的工作。
-
-- Spring上下文（Context）：
-	Spring上下文是一个配置文件，向Spring框架提供上下文信息。Spring上下文包括企业服务，例如 JNDI、EJB、电子邮件、国际化校验和调度功能。
-
-- SpringMVC：
-	Spring的MVC框架是一个全功能的构建Web应用程序的MVC实现。通过策略接口，MVC框架变成为高度可配置的，MVC容纳的大量视图技术，包括JSP、Velocity、Tiles、iText和Pol
-
-###使用Spring有什么好处
-- Spring能通过接口而不是类促进好的编程习惯，减少编程代价到几乎为零。
-- Spring被设计为让使用它创建的应用尽可能少的依赖于他的APIs。在Spring应用中的大多数业务对象没有依赖于Spring。
-- 使用Spring构建的应用程序易于单元测试。
-- 独立于各种应用服务器，可以真正实现Write Once,Run Anywhere的承诺
-- 非侵入式设计，代码污染极低，开发者可自由选用Spring框架的部分或全部
-- Spring能有效地组织你的中间层对象,无论你是否选择使用了EJB。如果你仅仅使用了Struts或其他的包含了J2EE特有APIs的framework，你会发现Spring关注了遗留下的问题，。
-- Spring能消除在许多工程上对Singleton的过多使用。根据我的经验，这是一个主要的问题，它减少了系统的可测试性和面向对象特性。
-- Spring能消除使用各种各样格式的属性定制文件的需要,在整个应用和工程中，可通过一种 一致的方法来进行配置。曾经感到迷惑，一个特定类要查找迷幻般的属性关键字或系统属性,为此不得不读Javadoc乃至源编码吗？有了Spring，你可 很简单地看到类的JavaBean属性。倒置控制的使用(在下面讨论)帮助完成这种简化。
-- Spring能使EJB的使用成为一个实现选择,而不是应用架构的必然选择。你能选择用POJOs或local EJBs来实现业务接口，却不会影响调用代码。
-- Spring帮助你解决许多问题而无需使用EJB。Spring能提供一种EJB的替换物，它们适于许多web应用。例如,Spring能使用AOP提供声明性事务而不通过使用EJB容器，如果你仅仅需要与单个的数据库打交道，甚至不需要JTA实现。
-- Spring为数据存取提供了一致的框架,不论是使用JDBC或O/R mapping产品（如Hibernate）。
-- Spring确实使你能通过最简单可行的解决办法解决你的问题。这些特性是有很大价值的。
-- 
-	 总结起来，Spring有如下优点：
-- Spring的DI机制降低了业务对象替换的复杂性
-
-	1. 降低了组件之间的耦合性 ，实现了软件各层之间的解耦 分层开发
-	- 可以使用容易提供的众多服务，如事务管理，消息服务等
-	- 容器提供单例模式支持
-	- 容器提供了AOP技术，利用它很容易实现如权限拦截，运行期监控等功能
-	- 容器提供了众多的辅助类，能加快应用的开发
-	- spring对于主流的应用框架提供了集成支持，如hibernate，JPA，Struts等
-	- spring属于低侵入式设计，代码的污染极低
-	- 独立于各种应用服务器
-	- spring的DI机制降低了业务对象替换的复杂性
-	- Spring的高度开放性，并不强制应用完全依赖于Spring，开发者可以自由选择spring的部分或全部
 
 ###解释下面关于J2EE框架技术的名词
 - JNDI:
@@ -622,73 +167,16 @@ Web Service所使用的是Internet上统一、开放的标准，如HTTP、XML、
 	- WebService使用了XML对数据封装，会造成大量的数据要在网络中传输。
 	- WebService规范没有规定任何与实现相关的细节，包括对象模型、编程语言，这一点，它不如CORBA。
 
-###JSP中动态INCLUDE与静态INCLUDE的区别？
->动态INCLUDE用jsp:include动作实现
-<jsp:include page=”included.jsp” flush=”true”/>
-它总是会检查所含文件中的变化，适合用于包含动态页面，并且可以带参数
-静态INCLUDE用include伪码实现,定不会检查所含文件的变化，适用于包含静态页面
-<%@ include file=”included.htm” %>
 
-###四种会话跟踪技术？
-- page 
-	是代表与一个页面相关的对象和属性。一个页面由一个编译好的Java servlet 类.这既包括servlet 又包括被编译成servlet 的JSP页面
-- request
-	代表与Web客户机发出的一个请求相关的对象和属性。一个请求可能跨越多个页面，涉及多个Web组件。比如forward指令就可以使请求跨越多个页面。
-- session 
-	是是代表与用于某个Web客户机的一个用户体验相关的对象和属性。一个 Web会话可以也经常会跨越多个客户机请求。一次会话（session）通常持续于用户打开浏览器后的一系列访问中。
-- application 
-	是代表与整个Web应用程序相关的对象和属性。这实质上是跨越整个 Web应用程序，包括多个页面、请求和会话的一个全局作用域
 
-###JSP和Servlet有哪些相同点和不同点，他们之间的联系是什么？
->Jsp和servlet相同的地方在于jsp和servlet本质上都是一个.java类。
-Jsp表面看起来不是一个java文件，但是在jsp的生命周期中它首先生成一个servlet源程序，进而再编译执行。
-Servlet和JSP最主要的不同点在于，Servlet的应用逻辑是在Java文件中，并且完全从表示层中的HTML里分离开来。而JSP的情况是Java和HTML可以组合成一个扩展名为.jsp的文件。
-JSP侧重于视图，Servlet主要用于控制逻辑
-
-###页面间对象传递的方法？
-	使用request,session,application,cookie可以实现页面间对象传递。
-	涉及到的方法：set/getAttribute设置获取属性方法。方法对于request，sesion，application都适用。对cookie来说request.getCookies()方法和response. addCookie(Cookie cookie);
 
 ###DWR框架简介   
 - DWR框架是一个可以允许你去创建AJAX WEB站点的JAVA开源库。它可以让你在浏览器的JavaScript代码中调用Web服务器的Java代码，就像Java代码在浏览器中一样。DWR工作原理是通过动态把Java类生成JavaScript，让使用者感觉调用就像发生在浏览器端。   
 - DWR的使用场合   
 当我们的业务需要在页面不提交的情况下访问服务器端并实现页面数据局部刷新时，我们就可以使用DWR。
 
-###hibernate一级缓存是什么，二级缓存是什么，延迟加载是什么。
-[链接](http://www.open-open.com/lib/view/open1413527015465.html)
-- 首先要明白缓存是干什么的，缓存就是要将一些经常使用的数据缓存到内存或者各种储存介质中，当再次使用时可以不用去数据库中查询，减少与数据库的交互，提高性能。
 
-	- 一级缓存是针对session级别的，当这个session关闭后这个缓存就不存在了。多次加载同一个持久化对象，只有第一次向数据库发送SQL语句加载，之后的加载都是基于缓存的
-	- 二级缓存是SessionFactory级别的，二级缓存我们通常使用其他的一些开源组件，比如hibernate经常使用的就是ECache，这个缓存在整个应用服务器中都会有效的。但是在一般的应用程序中，sessionfactory会以单例的形式存在，所以在整个应用程序的生命周期里，sessionfactory会一直存在。既二级缓存也一直存在直到关闭应用程序。
-	 
-区别：两者的作用范围不同。
 
-- 什么样的数据适合存放到第二级缓存中？
-	- 很少被修改的数据
-	- 不是很重要的数据，允许出现偶尔并发的数据
-	- 不会被并发访问的数据
-	- 参考数据,指的是供应用参考的常量数据，它的实例数目有限，它的实例会被许多其他类的实例引用，实例极少或者从来不会被修改。
-
-- 不适合存放到第二级缓存的数据？
-	- 经常被修改的数据
-	- 财务数据，绝对不允许出现并发
-	- 与其他应用共享的数据。
-	- 常用的缓存插件 Hibernater二级缓存是一个插件，下面是几种常用的缓存插件：
-	
-- Ehcache：可作为进程范围的缓存，存放数据的物理介质可以是内存或硬盘，对Hibernate的查询缓存提供了支持。
-- OSCache：可作为进程范围的缓存，存放数据的物理介质可以是内存或硬盘，提供了丰富的缓存数据过期策略，对Hibernate的查询缓存提供了支持。
-- SwarmCache：可作为群集范围内的缓存，但不支持Hibernate的查询缓存。
-- JBossCache：可作为群集范围内的缓存，支持事务型并发访问策略，对Hibernate的查询缓存提供了支持。
-
-###struts默认提供了那些拦截器
-- 理解Struts2拦截器
-	- Struts2拦截器是在访问某个Action或Action的某个方法，字段之前或之后实施拦截，并且Struts2拦截器是可插拔的，拦截器是ＡＯＰ的一种实现．
-	- 拦截器栈（Interceptor Stack）。Struts2拦截器栈就是将拦截器按一定的顺序联结成一条链。在访问被拦截的方法或字段时，Struts2拦截器链中的拦截器就会按其之前定义的顺序被调用。
-- 实现Struts2拦截器原理
-	Struts2拦截器的实现原理相对简单，当请求struts2的action时，Struts 2会查找配置文件，并根据其配置实例化相对的    拦截器对象，然后串成一个列表，最后一个一个地调用列表中的拦截器
-
-	[链接1](http://www.open-open.com/lib/view/open1349622646010.html)  
-	[链接2](http://www.open-open.com/lib/view/open1342570764135.html)
 
 ###java web 过滤器跟拦截器的区别和使用
 	[链接](http://zhidao.baidu.com/link?url=scCMDfkX5wRA13uCX2KC5v_94K7pbYNDf4S5NYJloNOAPWMtLZcMPpwkp2Y5H5dpIR5CqPec5_qY5Q1mUoVdOpZyVTRKVU3COl9ab1wFpeC)  

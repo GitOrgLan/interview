@@ -1,14 +1,5 @@
 http://ifeve.com/spring-interview-questions-and-answers/
 
-目录
-	Spring 概述
-	依赖注入
-	Spring beans
-	Spring注解
-	Spring数据访问
-	Spring面向切面编程（AOP）
-	Spring MVC
-
 Spring 概述
 
 	1. 什么是spring?
@@ -41,6 +32,58 @@ Spring 概述
 	Web-Struts module
 	Web-Portlet module
 
+###Spring框架有哪几部分组成？
+>Spring框架有七个模块组成组成，这7个模块(或组件)均可以单独存在，也可以与其它一个或多个模块联合使用，主要功能表现如下：
+
+- Spring核心容器（Core）：
+	提供Spring框架的基本功能。核心容器的主要组件是BeanFactory，她是工厂模式的实现。BeanFactory使用控制反转（Ioc）模式将应用程序的配置和依赖性规范与实际的应用代码程序分开。
+
+- Spring AOP：
+	通过配置管理特性，Spring AOP模块直接面向方面的编程功能集成到了Spring框架中，所以可以很容易的使Spring框架管理的任何对象支持 AOP。Spring AOP模块为基于Spring的应用程序中的对象提供了事务管理服务。通过使用Spring AOP，不用依赖于EJB组件，就可以将声明性事务管理集成到应用程序中。
+
+- Spring ORM：
+	Spring框架集成了若干ORM框架,从而提供了ORM的对象关系工具,其中包括 JDO、Hibernate、iBatis和TopLink。所有这些都遵从Spring的通用事务和DAO异常层结构。
+
+- Spring DAO：
+	JDBC DAO抽象层提供了有意义的异常层次的结构，可用该结构来管理异常处理和不同数据供应商抛出的异常错误信息。异常层次结构简化了错误处理，并且大大的降低了需要编写的异常代码数量（例如，打开和关系连接）。Spring DAO的面向JDBC的异常遵从通用的DAO异常层结构。
+
+- Spring WEB：
+	Web上下文模块建立在上下文模块（Context）的基础之上，为基于Web服务的应用程序提供了上下文的服务。所以Spring框架支持 Jakarta Struts的集成。Web模块还简化了处理多部分请求及将请求参数绑定到域对象的工作。
+
+- Spring上下文（Context）：
+	Spring上下文是一个配置文件，向Spring框架提供上下文信息。Spring上下文包括企业服务，例如 JNDI、EJB、电子邮件、国际化校验和调度功能。
+
+- SpringMVC：
+	Spring的MVC框架是一个全功能的构建Web应用程序的MVC实现。通过策略接口，MVC框架变成为高度可配置的，MVC容纳的大量视图技术，包括JSP、Velocity、Tiles、iText和Pol
+
+###使用Spring有什么好处
+- Spring能通过接口而不是类促进好的编程习惯，减少编程代价到几乎为零。
+- Spring被设计为让使用它创建的应用尽可能少的依赖于他的APIs。在Spring应用中的大多数业务对象没有依赖于Spring。
+- 使用Spring构建的应用程序易于单元测试。
+- 独立于各种应用服务器，可以真正实现Write Once,Run Anywhere的承诺
+- 非侵入式设计，代码污染极低，开发者可自由选用Spring框架的部分或全部
+- Spring能有效地组织你的中间层对象,无论你是否选择使用了EJB。如果你仅仅使用了Struts或其他的包含了J2EE特有APIs的framework，你会发现Spring关注了遗留下的问题，。
+- Spring能消除在许多工程上对Singleton的过多使用。根据我的经验，这是一个主要的问题，它减少了系统的可测试性和面向对象特性。
+- Spring能消除使用各种各样格式的属性定制文件的需要,在整个应用和工程中，可通过一种 一致的方法来进行配置。曾经感到迷惑，一个特定类要查找迷幻般的属性关键字或系统属性,为此不得不读Javadoc乃至源编码吗？有了Spring，你可 很简单地看到类的JavaBean属性。倒置控制的使用(在下面讨论)帮助完成这种简化。
+- Spring能使EJB的使用成为一个实现选择,而不是应用架构的必然选择。你能选择用POJOs或local EJBs来实现业务接口，却不会影响调用代码。
+- Spring帮助你解决许多问题而无需使用EJB。Spring能提供一种EJB的替换物，它们适于许多web应用。例如,Spring能使用AOP提供声明性事务而不通过使用EJB容器，如果你仅仅需要与单个的数据库打交道，甚至不需要JTA实现。
+- Spring为数据存取提供了一致的框架,不论是使用JDBC或O/R mapping产品（如Hibernate）。
+- Spring确实使你能通过最简单可行的解决办法解决你的问题。这些特性是有很大价值的。
+- 
+	 总结起来，Spring有如下优点：
+- Spring的DI机制降低了业务对象替换的复杂性
+
+	1. 降低了组件之间的耦合性 ，实现了软件各层之间的解耦 分层开发
+	- 可以使用容易提供的众多服务，如事务管理，消息服务等
+	- 容器提供单例模式支持
+	- 容器提供了AOP技术，利用它很容易实现如权限拦截，运行期监控等功能
+	- 容器提供了众多的辅助类，能加快应用的开发
+	- spring对于主流的应用框架提供了集成支持，如hibernate，JPA，Struts等
+	- spring属于低侵入式设计，代码的污染极低
+	- 独立于各种应用服务器
+	- spring的DI机制降低了业务对象替换的复杂性
+	- Spring的高度开放性，并不强制应用完全依赖于Spring，开发者可以自由选择spring的部分或全部
+
 	4. 核心容器（应用上下文) 模块。
 	这是基本的Spring模块，提供spring 框架的基础功能，BeanFactory 是 任何以spring为基础的应用的核心。Spring 框架建立在此模块之上，它使Spring成为一个容器。
 
@@ -72,6 +115,25 @@ Spring 概述
 	14.  IOC的优点是什么？
 	IOC 或 依赖注入把应用的代码量降到最低。它使应用容易测试，单元测试不再需要单例和JNDI查找机制。最小的代价和最小的侵入性使松散耦合得以实现。IOC容器支持加载服务时的饿汉式初始化和懒加载。
 
+###为什么用：
+- AOP 
+	让开发人员可以创建非行为性的关注点，称为横切关注点，并将它们插入到应用程序代码中。  
+	使用 AOP 后，公共服务   （比 如日志、持久性、事务等）就可以分解成方面并应用到域对象上，同时不会增加域对象的对象模型的复杂性。  
+
+- IOC 
+	允许创建一个可以构造对象的应用环境，然后向这些对象传递它们的协作对象。  
+	正如单词 倒置 所表明的，IOC 就像反过来的 JNDI。没有使用一堆抽象工厂、服务定位器、单元素（singleton）和直接构造（straight construction），每一个对象都是用其协作对象构造的。因此是由容器管理协作对象（collaborator）。  
+
+>Spring即使一个AOP框架，也是一IOC容器。 Spring 最好的地方是它有助于您替换对象。有了 Spring，只要用 JavaBean 属性和配置文件加入依赖性（协作对象）。然后可以很容易地在需要时替换具有类似接口的协作对象。
+
+###解释一下Dependency injection(DI,依赖注入)和IOC(Inversion of control,控制反转)?
+	参考答案：依赖注入DI是一个程序设计模式和架构模型， 一些时候也称作控制反转，尽管在技术上来讲，依赖注入是一个IOC的特殊实现，依赖注入是指一个对象应用另外一个对象来提供一个特殊的能力，
+	例如：把一个数据库连接以参数的形式传到一个对象的结构方法里面而不是在那个对象内部自行创建一个连接。
+	控制反转和依赖注入的基本思想就是把类的依赖从类内部转化到外部以减少依赖
+	应用控制反转，对象在被创建的时候，由一个调控系统内所有对象的外界实体，将其所依赖的对象的引用，传递给它。
+	也可以说，依赖被注入到对象中。所以，控制反转是，关于一个对象如何获取他所依赖的对象的引用，这个责任的反转。
+	总结就是：对象间依赖关系交由容器统一调控和处理了
+
 	15. ApplicationContext通常的实现是什么?
 	FileSystemXmlApplicationContext ：此容器从一个XML文件中加载beans的定义，XML Bean 配置文件的全路径名必须提供给它的构造函数。
 	ClassPathXmlApplicationContext：此容器也从一个XML文件中加载beans的定义，这里，你需要正确设置classpath因为这个容器将在classpath里找bean配置。
@@ -86,6 +148,62 @@ Spring 概述
 	Spring AOP。
 	Spring 的XML 配置文件。
 	使用以上功能的客户端程序。
+
+
+###spring工作机制及为什么要用?
+1. spring mvc请所有的请求都提交给DispatcherServlet,它会委托应用系统的其他模块负责负责对请求进行真正的处理工作。
+- DispatcherServlet查询一个或多个HandlerMapping,找到处理请求的Controller.
+- DispatcherServlet请请求提交到目标Controller
+- Controller进行业务逻辑处理后，会返回一个ModelAndView
+- Dispathcher查询一个或多个ViewResolver视图解析器,找到ModelAndView对象指定的视图对象
+- 视图对象负责渲染返回给客户端。
+
+###简述spring 的事务传播行为和 隔离级别
+[链接](http://blog.csdn.net/it_wangxiangpan/article/details/24180085)
+ 
+- spring 的事务传播行为：  
+	Spring在TransactionDefinition接口中规定了7种类型的事务传播行为，它们规定了事务方法和事务方法发生嵌套调用时事务如何进行传播：
+
+	- PROPAGATION_REQUIRED：如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入- 到这个事务中。这是最常见的选择。
+	- PROPAGATION_SUPPORTS：支持当前事务，如果当前没有事务，就以非事务方式执行。
+	- PROPAGATION_MANDATORY：使用当前的事务，如果当前没有事务，就抛出异常。
+	- PROPAGATION_REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起。
+	- PROPAGATION_NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。
+	- PROPAGATION_NEVER：以非事务方式执行，如果当前存在事务，则抛出异常。
+	- PROPAGATION_NESTED：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行	- 与PROPAGATION_REQUIRED类似的操作。
+
+###spring事务
+	spring提供了几个关于事务处理的类：
+	Datasouce
+	transactionManager
+	userDao要注入
+	Datasouce
+	Proxy代理
+	Target:userDao：代理对象(目标对象)
+	transactionAttributes(那些方法需要事务处理)
+	transactionManager(事务处理服务)
+
+	TransactionDefinition //事务属性定义
+	TranscationStatus //代表了当前的事务，可以提交，回滚
+	PlatformTransactionManager这个是spring提供的用于管理事务的基础接口，其下有一个实现的抽象类AbstractPlatformTransactionManager,我们使用的事务管理类例如DataSourceTransactionManager等都是这个类的子类。
+	一般事务定义步骤：
+	TransactionDefinition td = new TransactionDefinition();
+	TransactionStatus ts = transactionManager.getTransaction(td);
+	try
+	{ //do sth
+	transactionManager.commit(ts);
+	}
+	catch(Exception e){transactionManager.rollback(ts);}
+
+	spring提供的事务管理可以分为两类：编程式的和声明式的。
+	编程式的，比较灵活，但是代码量大，存在重复的代码比较多；程式主要使用transactionTemplate
+	声明式的比编程式的更灵活。容器管理了
+
+- Spring 的隔离级别
+	1. Serializable：最严格的级别，事务串行执行，资源消耗最大；
+	- REPEATABLE READ：保证了一个事务不会修改已经由另一个事务读取但未提交（回滚）的数据。避免了”脏读取”和”不可重复读取”的情况，但是带来了更多的性能损失。
+	- READ COMMITTED:大多数主流数据库的默认事务等级，保证了一个事务不会读到另一个并行事务已修改但未提交的数据，避免了”脏读取”。该级别适用于大多数系统。
+	- Read Uncommitted：保证了读取过程中不会读取到非法数据。
 	
 依赖注入
 
@@ -96,8 +214,18 @@ Spring 概述
 	构造器依赖注入：构造器依赖注入通过容器触发一个类的构造器来实现的，该类有一系列参数，每个参数代表一个对其他类的依赖。
 	Setter方法注入：Setter方法注入是容器通过调用无参构造器或无参static工厂 方法实例化bean之后，调用该bean的setter方法，即实现了基于setter的依赖注入。
 
+
+###描述一下Spring中实现DI（Dependency Injection）的几种方式
+- 方式一：接口注入，在实际中得到了普遍应用，即使在IOC的概念尚未确立时，这样的方法也已经频繁出现在我们的代码中。注解
+- 方式二：Type2 IoC: Setter injection对象创建之后，将被依赖对象通过set方法设置进去
+- 方式三：Type3 IoC: Constructor injection对象创建时，被依赖对象以构造方法参数的方式注入Spring的方式
+
 	20. 哪种依赖注入方式你建议使用，构造器注入，还是 Setter方法注入？
 	你两种依赖方式都可以使用，构造器注入和Setter方法注入。最好的解决方案是用构造器参数实现强制依赖，setter方法实现可选依赖。
+
+###简述你对IoC（Inversion of Control）的理解
+>一个类需要用到某个接口的方法，我们需要将类A和接口B的实现关联起来，最简单的方法是类A中创建一个对于接口B的实现C的实例，但这种方法显然两者的依赖（Dependency）太大了。
+而IoC的方法是只在类A中定义好用于关联接口B的实现的方法，将类A，接口B和接口B的实现C放入IoC的 容器（Container）中，通过一定的配置由容器（Container）来实现类A与接口B的实现C的关联。
 
 Spring Beans
 
@@ -119,10 +247,14 @@ Spring Beans
 
 	25. 解释Spring支持的几种bean的作用域。
 	Spring框架支持以下五种bean的作用域：
-	singleton : bean在每个Spring ioc 容器中只有一个实例。
-	prototype：一个bean的定义可以有多个实例。
-	request：每次http请求都会创建一个bean，该作用域仅在基于web的Spring ApplicationContext情形下有效。
-	session：在一个HTTP Session中，一个bean定义对应一个实例。该作用域仅在基于web的Spring ApplicationContext情形下有效。
+	singleton : 
+		当一个bean的作用域设置为singleton，那么Spring IOC容器中只会存在一个共享的bean实例，并且所有对bean的请求，只要id与该bean定义相匹配，则只会返回bean的同一实例。换言之，当把一个bean定义设置为singleton作用域时，Spring IOC容器只会创建该bean定义的唯一实例。这个单一实例会被存储到单例缓存（singleton cache）中，并且所有针对该bean的后续请求和引用都将返回被缓存的对象实例，这里要注意的是singleton作用域和GOF设计模式中的单例是完全不同的，单例设计模式表示一个ClassLoader中只有一个class存在，而这里的singleton则表示一个容器对应一个bean，也就是说当一个bean被标识为singleton时候，spring的IOC容器中只会存在一个该bean。
+	prototype：
+		prototype作用域部署的bean，每一次请求（将其注入到另一个bean中，或者以程序的方式调用容器的getBean()方法）都会产生一个新的bean实例，相当于一个new的操作
+	request：
+		request表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP request内有效
+	session：
+		session作用域表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP session内有效。
 	global-session：在一个全局的HTTP Session中，一个bean定义对应一个实例。该作用域仅在基于web的Spring ApplicationContext情形下有效。
 	缺省的Spring bean 的作用域是Singleton.
 
@@ -174,6 +306,34 @@ Spring Beans
 
 	35. 你可以在Spring中注入一个null 和一个空字符串吗？
 	可以。
+
+
+###Bean的初始化
+在配置文档中通过指定init-method 属性来完成
+实现 org.springframwork.beans.factory.InitializingBean接口
+
+###Bean的调用
+- 使用BeanWrapper
+- 使用BeanFactory
+- 使用ApplicationConttext	
+
+###Bean的销毁
+- 使用配置文件中的 destory-method 属性
+- 实现 org.springframwork.bean.factory.DisposebleBean接口
+
+###spring的配置的主要标签是什么?有什么作用?
+```
+<beans>
+<bean id=”” class=”” init=”” destroy=”” singleton=””>
+<property name=””>
+<value></value>
+</property>
+<property name=””>
+<ref local></ref>
+</property>
+</bean>
+</beans>
+```
 	
 Spring注解
 
@@ -222,11 +382,33 @@ Spring数据访问
 	JDO (Java Data Objects)
 	OJB
 
+###Spring里面如何配置数据库驱动？DriverManagerDataSource
+	使用org.springframework.jdbc.datasource.DriverManagerDataSource”数据源来配置数据库驱动。示例如下：
+	<bean id=”dataSource”>
+	<property name=”driverClassName”>
+	<value>org.hsqldb.jdbcDriver</value>
+	</property>
+	<property name=”url”>
+	<value>jdbc:hsqldb:db/appfuse</value>
+	</property>
+	<property name=”username”><value>sa</value></property>
+	<property name=”password”><value></value></property>
+	</bean>
+
+###spring的jdbc与传统的jdbc有什么区别，其核心类有那些?
+	Spring的jdbc:节省代码，不管连接(Connection)，不管事务、不管异常、不管关闭(con.close() ps.close )
+	TransactionTemplate(transactionManager):进行事务处理
+	JdbcTemplate(dataSource):增、删、改、查 大量sql代码重复
 	47.如何通过HibernateDaoSupport将Spring和Hibernate结合起来？
 	用Spring的 SessionFactory 调用 LocalSessionFactory。集成过程分三步：
 	配置the Hibernate SessionFactory。
 	继承HibernateDaoSupport实现一个DAO。
 	在AOP支持的事务中装配。
+
+
+###Spring对多种ORM框架提供了很好的支持，简单描述在Spring中使用Hibernate的方法。
+>在context中定义DataSource，创建SessionFactoy，设置参数；DAO类继承HibernateDaoSupport，实现具体接口，从中获得HibernateTemplate进行具体操作。
+在使用中如果遇到OpenSessionInView的问题，可以添加OpenSessionInViewFilter或OpenSessionInViewInterceptor
 
 	48. Spring支持的事务管理类型
 	Spring支持两种类型的事务管理：
@@ -318,3 +500,67 @@ Spring 的MVC
 		a. 国际化支持
 		b. 资源访问：Resource rs = ctx. getResource(”classpath:config.properties”), “file:c:/config.properties”
 		c. 事件传递：通过实现ApplicationContextAware接口
+
+
+###如何在Spring的applicationContext.xml里面使用JNDI而不是datasource? JndiObjectFactoryBean
+	可以使用”org.springframework.jndi.JndiObjectFactoryBean”来实现。   
+	示例如下：  
+	<bean id=”dataSource”>
+ 	<property name=”jndiName”>
+ 	<value>java:comp/env/jdbc/appfuse</value>
+ 	</property>
+ 	</bean>
+
+###Spring里面applicationContext.xml文件能不能改成其他文件名？可以配置
+	ContextLoaderListener是一个ServletContextListener, 它在你的web应用启动的时候初始化。缺省情况下， 它会在WEB-INF/applicationContext.xml文件找Spring的配置。 你可以通过定义一个<context-param>元素名字为”contextConfigLocation”来改变Spring配置文件的位置。示例如下：
+	<listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener
+	<context-param>
+	<param-name>contextConfigLocation</param-name>
+	<param-value>/WEB-INF/xyz.xml</param-value>
+	</context-param>
+	</listener-class>
+	</listener>
+
+
+
+###Spring如何实现事件处理?
+	事件
+	Extends ApplicationEvent
+	监听器
+	Implements ApplicationListener
+	事件源
+	Implements ApplicationContextAware
+	在applicationContext.xml中配置事件源、监听器
+	先得到事件源，调用事件源的方法，通知监听器。
+
+
+
+###spring中的BeanFactory与ApplicationContext的作用和区别？
+作用：
+- BeanFactory负责读取bean配置文档，管理bean的加载，实例化，维护bean之间的依赖关系，负责bean的声明周期。
+- ApplicationContext除了提供上述BeanFactory所能提供的功能之外，还提供了更完整的框架功能：
+	- 国际化支持
+	- 资源访问：Resource rs = ctx. getResource(”classpath:config.properties”), “file:c:/config.properties”
+	- 事件传递：通过实现ApplicationContextAware接口
+
+- 常用的获取ApplicationContext的方法：
+	FileSystemXmlApplicationContext：从文件系统或者url指定的xml配置文件创建，参数为配置文件名或文件名数组  
+	ClassPathXmlApplicationContext：从classpath的xml配置文件创建，可以从jar包中读取配置文件  
+	WebApplicationContextUtils：从web应用的根目录读取配置文件，需要先在web.xml中配置，可以配置监听器或者servlet来实现  
+	通过如下方法取出applicationContext实例:  
+	ApplicationContext ac=WebApplicationContextUtils.getWebApplicationContext(this.getServletContext); 
+
+###如何在spring中实现国际化?
+	在applicationContext.xml加载一个bean
+	<bean id=”messageSource” class=”org.springframework.context.support.ResourceBundleMessageSource”>
+	<property name=”basename”>
+	<value>message</value>
+	</property>
+	</bean>
+	在src目录下建多个properties文件Ø
+	对于非英文的要用native2asciiØ -encoding gb2312 源  目转化文件相关内容
+	其命名格式是message_语言_国家。Ø
+	页面中的中显示提示信息，键名取键值。Ø
+	当给定国家，系统会自动加载对应的国家的properties信息。Ø
+	通过applictionContext.getMessage(“键名”,”参数”,”区域”)取出相关的信息。Ø
