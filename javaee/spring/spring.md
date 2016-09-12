@@ -1,21 +1,28 @@
-http://ifeve.com/spring-interview-questions-and-answers/
+[链接](http://ifeve.com/spring-interview-questions-and-answers/)
 
-Spring 概述
+##Spring 概述
 
-	1. 什么是spring?
-	Spring 是个java企业级应用的开源开发框架。Spring主要用来开发Java应用，但是有些扩展是针对构建J2EE平台的web应用。Spring 框架目标是简化Java企业级应用开发，并通过POJO为基础的编程模型促进良好的编程习惯。
+###什么是spring?
+>Spring 是个java企业级应用的开源开发框架。Spring主要用来开发Java应用，但是有些扩展是针对构建J2EE平台的web应用。Spring 框架目标是简化Java企业级应用开发，并通过POJO为基础的编程模型促进良好的编程习惯。
 
 
-	2. 使用Spring框架的好处是什么？
-	轻量：Spring 是轻量的，基本的版本大约2MB。
-	控制反转：Spring通过控制反转实现了松散耦合，对象们给出它们的依赖，而不是创建或查找依赖的对象们。
-	面向切面的编程(AOP)：Spring支持面向切面的编程，并且把应用业务逻辑和系统服务分开。
-	容器：Spring 包含并管理应用中对象的生命周期和配置。
-	MVC框架：Spring的WEB框架是个精心设计的框架，是Web框架的一个很好的替代品。
-	事务管理：Spring 提供一个持续的事务管理接口，可以扩展到上至本地事务下至全局事务（JTA）。
-	异常处理：Spring 提供方便的API把具体技术相关的异常（比如由JDBC，Hibernate or JDO抛出的）转化为一致的unchecked 异常。
+###使用Spring框架的好处是什么？
+- 轻量：  
+	Spring 是轻量的，基本的版本大约2MB。
+- 控制反转：  
+	Spring通过控制反转实现了松散耦合，对象们给出它们的依赖，而不是创建或查找依赖的对象们。
+- 面向切面的编程(AOP)：  
+	Spring支持面向切面的编程，并且把应用业务逻辑和系统服务分开。
+- 容器：  
+	Spring 包含并管理应用中对象的生命周期和配置。
+- MVC框架：  
+	Spring的WEB框架是个精心设计的框架，是Web框架的一个很好的替代品。
+- 事务管理：  
+	Spring 提供一个持续的事务管理接口，可以扩展到上至本地事务下至全局事务（JTA）。
+- 异常处理：  
+	Spring 提供方便的API把具体技术相关的异常（比如由JDBC，Hibernate or JDO抛出的）转化为一致的unchecked 异常。
 
-	3.  Spring由哪些模块组成?
+###Spring由哪些模块组成?
 	以下是Spring 框架的基本模块：
 
 	Core module
@@ -35,90 +42,39 @@ Spring 概述
 ###Spring框架有哪几部分组成？
 >Spring框架有七个模块组成组成，这7个模块(或组件)均可以单独存在，也可以与其它一个或多个模块联合使用，主要功能表现如下：
 
-- Spring核心容器（Core）：
-	提供Spring框架的基本功能。核心容器的主要组件是BeanFactory，她是工厂模式的实现。BeanFactory使用控制反转（Ioc）模式将应用程序的配置和依赖性规范与实际的应用代码程序分开。
+- Spring核心容器（Core）：  
+	提供Spring框架的基本功能。核心容器的主要组件是BeanFactory，她是工厂模式的实现。    BeanFactory使用控制反转（Ioc）模式将应用程序的配置和依赖性规范与实际的应用代码程序分开。
 
-- Spring AOP：
-	通过配置管理特性，Spring AOP模块直接面向方面的编程功能集成到了Spring框架中，所以可以很容易的使Spring框架管理的任何对象支持 AOP。Spring AOP模块为基于Spring的应用程序中的对象提供了事务管理服务。通过使用Spring AOP，不用依赖于EJB组件，就可以将声明性事务管理集成到应用程序中。
+- Spring AOP：  
+	通过配置管理特性，Spring AOP模块直接面向方面的编程功能集成到了Spring框架中，所以可以很容易的使Spring框架管理的任何对象支持 AOP。  
+	Spring AOP模块为基于Spring的应用程序中的对象提供了事务管理服务。通过使用Spring AOP，不用依赖于EJB组件，就可以将声明性事务管理集成到应用程序中。
 
-- Spring ORM：
-	Spring框架集成了若干ORM框架,从而提供了ORM的对象关系工具,其中包括 JDO、Hibernate、iBatis和TopLink。所有这些都遵从Spring的通用事务和DAO异常层结构。
+- Spring ORM：  
+	Spring框架集成了若干ORM框架,从而提供了ORM的对象关系工具,其中包括 JDO、Hibernate、iBatis和TopLink。  
+	所有这些都遵从Spring的通用事务和DAO异常层结构。
 
-- Spring DAO：
-	JDBC DAO抽象层提供了有意义的异常层次的结构，可用该结构来管理异常处理和不同数据供应商抛出的异常错误信息。异常层次结构简化了错误处理，并且大大的降低了需要编写的异常代码数量（例如，打开和关系连接）。Spring DAO的面向JDBC的异常遵从通用的DAO异常层结构。
+- Spring DAO：  
+	JDBC DAO抽象层提供了有意义的异常层次的结构，可用该结构来管理异常处理和不同数据供应商抛出的异常错误信息。  
+	异常层次结构简化了错误处理，并且大大的降低了需要编写的异常代码数量（例如，打开和关系连接）。  
+	Spring DAO的面向JDBC的异常遵从通用的DAO异常层结构。
 
 - Spring WEB：
-	Web上下文模块建立在上下文模块（Context）的基础之上，为基于Web服务的应用程序提供了上下文的服务。所以Spring框架支持 Jakarta Struts的集成。Web模块还简化了处理多部分请求及将请求参数绑定到域对象的工作。
+	Web上下文模块建立在上下文模块（Context）的基础之上，为基于Web服务的应用程序提供了上下文的服务。  
+	所以Spring框架支持 Jakarta Struts的集成。  
+	Web模块还简化了处理多部分请求及将请求参数绑定到域对象的工作。  
 
 - Spring上下文（Context）：
 	Spring上下文是一个配置文件，向Spring框架提供上下文信息。Spring上下文包括企业服务，例如 JNDI、EJB、电子邮件、国际化校验和调度功能。
 
 - SpringMVC：
-	Spring的MVC框架是一个全功能的构建Web应用程序的MVC实现。通过策略接口，MVC框架变成为高度可配置的，MVC容纳的大量视图技术，包括JSP、Velocity、Tiles、iText和Pol
+	Spring的MVC框架是一个全功能的构建Web应用程序的MVC实现。  
+	通过策略接口，MVC框架变成为高度可配置的，MVC容纳的大量视图技术，包括JSP、Velocity、Tiles、iText和Pol  
 
-###使用Spring有什么好处
-- Spring能通过接口而不是类促进好的编程习惯，减少编程代价到几乎为零。
-- Spring被设计为让使用它创建的应用尽可能少的依赖于他的APIs。在Spring应用中的大多数业务对象没有依赖于Spring。
-- 使用Spring构建的应用程序易于单元测试。
-- 独立于各种应用服务器，可以真正实现Write Once,Run Anywhere的承诺
-- 非侵入式设计，代码污染极低，开发者可自由选用Spring框架的部分或全部
-- Spring能有效地组织你的中间层对象,无论你是否选择使用了EJB。如果你仅仅使用了Struts或其他的包含了J2EE特有APIs的framework，你会发现Spring关注了遗留下的问题，。
-- Spring能消除在许多工程上对Singleton的过多使用。根据我的经验，这是一个主要的问题，它减少了系统的可测试性和面向对象特性。
-- Spring能消除使用各种各样格式的属性定制文件的需要,在整个应用和工程中，可通过一种 一致的方法来进行配置。曾经感到迷惑，一个特定类要查找迷幻般的属性关键字或系统属性,为此不得不读Javadoc乃至源编码吗？有了Spring，你可 很简单地看到类的JavaBean属性。倒置控制的使用(在下面讨论)帮助完成这种简化。
-- Spring能使EJB的使用成为一个实现选择,而不是应用架构的必然选择。你能选择用POJOs或local EJBs来实现业务接口，却不会影响调用代码。
-- Spring帮助你解决许多问题而无需使用EJB。Spring能提供一种EJB的替换物，它们适于许多web应用。例如,Spring能使用AOP提供声明性事务而不通过使用EJB容器，如果你仅仅需要与单个的数据库打交道，甚至不需要JTA实现。
-- Spring为数据存取提供了一致的框架,不论是使用JDBC或O/R mapping产品（如Hibernate）。
-- Spring确实使你能通过最简单可行的解决办法解决你的问题。这些特性是有很大价值的。
-- 
-	 总结起来，Spring有如下优点：
-- Spring的DI机制降低了业务对象替换的复杂性
-
-	1. 降低了组件之间的耦合性 ，实现了软件各层之间的解耦 分层开发
-	- 可以使用容易提供的众多服务，如事务管理，消息服务等
-	- 容器提供单例模式支持
-	- 容器提供了AOP技术，利用它很容易实现如权限拦截，运行期监控等功能
-	- 容器提供了众多的辅助类，能加快应用的开发
-	- spring对于主流的应用框架提供了集成支持，如hibernate，JPA，Struts等
-	- spring属于低侵入式设计，代码的污染极低
-	- 独立于各种应用服务器
-	- spring的DI机制降低了业务对象替换的复杂性
-	- Spring的高度开放性，并不强制应用完全依赖于Spring，开发者可以自由选择spring的部分或全部
-
-	4. 核心容器（应用上下文) 模块。
-	这是基本的Spring模块，提供spring 框架的基础功能，BeanFactory 是 任何以spring为基础的应用的核心。Spring 框架建立在此模块之上，它使Spring成为一个容器。
-
-	5. BeanFactory – BeanFactory 实现举例。
-	Bean 工厂是工厂模式的一个实现，提供了控制反转功能，用来把应用的配置和依赖从正真的应用代码中分离。
-	最常用的BeanFactory 实现是XmlBeanFactory 类。
-
-	6. XMLBeanFactory 
-	最常用的就是org.springframework.beans.factory.xml.XmlBeanFactory ，它根据XML文件中的定义加载beans。该容器从XML 文件读取配置元数据并用它去创建一个完全配置的系统或应用。
-
-	7. 解释AOP模块
-	AOP模块用于发给我们的Spring应用做面向切面的开发， 很多支持由AOP联盟提供，这样就确保了Spring和其他AOP框架的共通性。这个模块将元数据编程引入Spring。
-
-	8. 解释JDBC抽象和DAO模块。
-	通过使用JDBC抽象和DAO模块，保证数据库代码的简洁，并能避免数据库资源错误关闭导致的问题，它在各种不同的数据库的错误信息之上，提供了一个统一的异常访问层。它还利用Spring的AOP 模块给Spring应用中的对象提供事务管理服务。
-
-	9. 解释对象/关系映射集成模块。
-	Spring 通过提供ORM模块，支持我们在直接JDBC之上使用一个对象/关系映射映射(ORM)工具，Spring 支持集成主流的ORM框架，如Hiberate,JDO和 iBATIS SQL Maps。Spring的事务管理同样支持以上所有ORM框架及JDBC。
-
-	10.  解释WEB 模块。
-	Spring的WEB模块是构建在application context 模块基础之上，提供一个适合web应用的上下文。这个模块也包括支持多种面向web的任务，如透明地处理多个文件上传请求和程序级请求参数的绑定到你的业务对象。它也有对Jakarta Struts的支持。
-
-	12.  Spring配置文件
-	Spring配置文件是个XML 文件，这个文件包含了类信息，描述了如何配置它们，以及如何相互调用。
-
-	13.  什么是Spring IOC 容器？
-	Spring IOC 负责创建对象，管理对象（通过依赖注入（DI），装配对象，配置对象，并且管理这些对象的整个生命周期。
-
-	14.  IOC的优点是什么？
-	IOC 或 依赖注入把应用的代码量降到最低。它使应用容易测试，单元测试不再需要单例和JNDI查找机制。最小的代价和最小的侵入性使松散耦合得以实现。IOC容器支持加载服务时的饿汉式初始化和懒加载。
 
 ###为什么用：
 - AOP 
 	让开发人员可以创建非行为性的关注点，称为横切关注点，并将它们插入到应用程序代码中。  
-	使用 AOP 后，公共服务   （比 如日志、持久性、事务等）就可以分解成方面并应用到域对象上，同时不会增加域对象的对象模型的复杂性。  
+	使用 AOP 后，公共服务（比 如日志、持久性、事务等）就可以分解成方面并应用到域对象上，同时不会增加域对象的对象模型的复杂性。  
 
 - IOC 
 	允许创建一个可以构造对象的应用环境，然后向这些对象传递它们的协作对象。  
@@ -127,31 +83,33 @@ Spring 概述
 >Spring即使一个AOP框架，也是一IOC容器。 Spring 最好的地方是它有助于您替换对象。有了 Spring，只要用 JavaBean 属性和配置文件加入依赖性（协作对象）。然后可以很容易地在需要时替换具有类似接口的协作对象。
 
 ###解释一下Dependency injection(DI,依赖注入)和IOC(Inversion of control,控制反转)?
-	参考答案：依赖注入DI是一个程序设计模式和架构模型， 一些时候也称作控制反转，尽管在技术上来讲，依赖注入是一个IOC的特殊实现，依赖注入是指一个对象应用另外一个对象来提供一个特殊的能力，
-	例如：把一个数据库连接以参数的形式传到一个对象的结构方法里面而不是在那个对象内部自行创建一个连接。
-	控制反转和依赖注入的基本思想就是把类的依赖从类内部转化到外部以减少依赖
-	应用控制反转，对象在被创建的时候，由一个调控系统内所有对象的外界实体，将其所依赖的对象的引用，传递给它。
-	也可以说，依赖被注入到对象中。所以，控制反转是，关于一个对象如何获取他所依赖的对象的引用，这个责任的反转。
-	总结就是：对象间依赖关系交由容器统一调控和处理了
+>参考答案：依赖注入DI是一个程序设计模式和架构模型， 一些时候也称作控制反转，尽管在技术上来讲，依赖注入是一个IOC的特殊实现，依赖注入是指一个对象应用另外一个对象来提供一个特殊的能力，
+例如：把一个数据库连接以参数的形式传到一个对象的结构方法里面而不是在那个对象内部自行创建一个连接。   
+控制反转和依赖注入的基本思想就是把类的依赖从类内部转化到外部以减少依赖应用控制反转，对象在被创建的时候，由一个调控系统内所有对象的外界实体，将其所依赖的对象的引用，传递给它。  
+也可以说，依赖被注入到对象中。所以，控制反转是，关于一个对象如何获取他所依赖的对象的引用，这个责任的反转。  
+总结就是：对象间依赖关系交由容器统一调控和处理了  
 
-	15. ApplicationContext通常的实现是什么?
-	FileSystemXmlApplicationContext ：此容器从一个XML文件中加载beans的定义，XML Bean 配置文件的全路径名必须提供给它的构造函数。
-	ClassPathXmlApplicationContext：此容器也从一个XML文件中加载beans的定义，这里，你需要正确设置classpath因为这个容器将在classpath里找bean配置。
-	WebXmlApplicationContext：此容器加载一个XML文件，此文件定义了一个WEB应用的所有bean。
+###ApplicationContext通常的实现是什么?
+>FileSystemXmlApplicationContext ：此容器从一个XML文件中加载beans的定义，XML Bean 配置文件的全路径名必须提供给它的构造函数。
+ClassPathXmlApplicationContext：此容器也从一个XML文件中加载beans的定义，这里，你需要正确设置classpath因为这个容器将在classpath里找bean配置。
+WebXmlApplicationContext：此容器加载一个XML文件，此文件定义了一个WEB应用的所有bean。
 
-	16. Bean 工厂和 Application contexts  有什么区别？
-	Application contexts提供一种方法处理文本消息，一个通常的做法是加载文件资源（比如镜像），它们可以向注册为监听器的bean发布事件。另外，在容器或容器内的对象上执行的那些不得不由bean工厂以程序化方式处理的操作，可以在Application contexts中以声明的方式处理。Application contexts实现了MessageSource接口，该接口的实现以可插拔的方式提供获取本地化消息的方法。
+###Bean 工厂和 Application contexts  有什么区别？
+>Application contexts提供一种方法处理文本消息，一个通常的做法是加载文件资源（比如镜像），它们可以向注册为监听器的bean发布事件。  
+>另外，在容器或容器内的对象上执行的那些不得不由bean工厂以程序化方式处理的操作，可以在Application contexts中以声明的方式处理。  
+>Application contexts实现了MessageSource接口，该接口的实现以可插拔的方式提供获取本地化消息的方法。
 
-	17. 一个Spring的应用看起来象什么？
-	一个定义了一些功能的接口。
-	这实现包括属性，它的Setter ， getter 方法和函数等。
-	Spring AOP。
-	Spring 的XML 配置文件。
-	使用以上功能的客户端程序。
+###一个Spring的应用看起来象什么？
+>一个定义了一些功能的接口。  
+这实现包括属性，它的Setter ， getter 方法和函数等。  
+Spring AOP。  
+Spring 的XML 配置文件。  
+使用以上功能的客户端程序。  
 
 
 ###spring工作机制及为什么要用?
-1. spring mvc请所有的请求都提交给DispatcherServlet,它会委托应用系统的其他模块负责负责对请求进行真正的处理工作。
+spring mvc请所有的请求都提交给DispatcherServlet,它会委托应用系统的其他模块负责负责对请求进行真正的处理工作。
+
 - DispatcherServlet查询一个或多个HandlerMapping,找到处理请求的Controller.
 - DispatcherServlet请请求提交到目标Controller
 - Controller进行业务逻辑处理后，会返回一个ModelAndView
@@ -164,13 +122,27 @@ Spring 概述
 - spring 的事务传播行为：  
 	Spring在TransactionDefinition接口中规定了7种类型的事务传播行为，它们规定了事务方法和事务方法发生嵌套调用时事务如何进行传播：
 
-	- PROPAGATION_REQUIRED：如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入- 到这个事务中。这是最常见的选择。
-	- PROPAGATION_SUPPORTS：支持当前事务，如果当前没有事务，就以非事务方式执行。
-	- PROPAGATION_MANDATORY：使用当前的事务，如果当前没有事务，就抛出异常。
-	- PROPAGATION_REQUIRES_NEW：新建事务，如果当前存在事务，把当前事务挂起。
-	- PROPAGATION_NOT_SUPPORTED：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。
-	- PROPAGATION_NEVER：以非事务方式执行，如果当前存在事务，则抛出异常。
-	- PROPAGATION_NESTED：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行	- 与PROPAGATION_REQUIRED类似的操作。
+	1. PROPAGATION_REQUIRED：  
+		如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入- 到这个事务中。这是最常见的选择。
+	- PROPAGATION_SUPPORTS：  
+		支持当前事务，如果当前没有事务，就以非事务方式执行。
+	- PROPAGATION_MANDATORY：  
+		使用当前的事务，如果当前没有事务，就抛出异常。
+	- PROPAGATION_REQUIRES_NEW：  
+		新建事务，如果当前存在事务，把当前事务挂起。
+	- PROPAGATION_NOT_SUPPORTED：  
+		以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。
+	- PROPAGATION_NEVER：  
+		以非事务方式执行，如果当前存在事务，则抛出异常。
+	- PROPAGATION_NESTED：  
+		如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。
+
+- Spring 的隔离级别
+	1. Serializable：最严格的级别，事务串行执行，资源消耗最大；
+	- REPEATABLE READ：保证了一个事务不会修改已经由另一个事务读取但未提交（回滚）的数据。避免了”脏读取”和”不可重复读取”的情况，但是带来了更多的性能损失。
+	- READ COMMITTED:大多数主流数据库的默认事务等级，保证了一个事务不会读到另一个并行事务已修改但未提交的数据，避免了”脏读取”。该级别适用于大多数系统。
+	- Read Uncommitted：保证了读取过程中不会读取到非法数据。
+	
 
 ###spring事务
 	spring提供了几个关于事务处理的类：
@@ -199,12 +171,6 @@ Spring 概述
 	编程式的，比较灵活，但是代码量大，存在重复的代码比较多；程式主要使用transactionTemplate
 	声明式的比编程式的更灵活。容器管理了
 
-- Spring 的隔离级别
-	1. Serializable：最严格的级别，事务串行执行，资源消耗最大；
-	- REPEATABLE READ：保证了一个事务不会修改已经由另一个事务读取但未提交（回滚）的数据。避免了”脏读取”和”不可重复读取”的情况，但是带来了更多的性能损失。
-	- READ COMMITTED:大多数主流数据库的默认事务等级，保证了一个事务不会读到另一个并行事务已修改但未提交的数据，避免了”脏读取”。该级别适用于大多数系统。
-	- Read Uncommitted：保证了读取过程中不会读取到非法数据。
-	
 依赖注入
 
 	18. 什么是Spring的依赖注入？
