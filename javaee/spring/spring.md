@@ -23,21 +23,21 @@
 	Spring 提供方便的API把具体技术相关的异常（比如由JDBC，Hibernate or JDO抛出的）转化为一致的unchecked 异常。
 
 ###Spring由哪些模块组成?
-	以下是Spring 框架的基本模块：
+以下是Spring 框架的基本模块：
 
-	Core module
-	Bean module
-	Context module
-	Expression Language module
-	JDBC module
-	ORM module
-	OXM module
-	Java Messaging Service(JMS) module
-	Transaction module
-	Web module
-	Web-Servlet module
-	Web-Struts module
-	Web-Portlet module
+1. Core module
+- Bean module
+- Context module
+- Expression Language module
+- JDBC module
+- ORM module
+- OXM module
+- Java Messaging Service(JMS) module
+- Transaction module
+- Web module
+- Web-Servlet module
+- Web-Struts module
+- Web-Portlet module
 
 ###Spring框架有哪几部分组成？
 >Spring框架有七个模块组成组成，这7个模块(或组件)均可以单独存在，也可以与其它一个或多个模块联合使用，主要功能表现如下：
@@ -83,11 +83,23 @@
 >Spring即使一个AOP框架，也是一IOC容器。 Spring 最好的地方是它有助于您替换对象。有了 Spring，只要用 JavaBean 属性和配置文件加入依赖性（协作对象）。然后可以很容易地在需要时替换具有类似接口的协作对象。
 
 ###解释一下Dependency injection(DI,依赖注入)和IOC(Inversion of control,控制反转)?
->参考答案：依赖注入DI是一个程序设计模式和架构模型， 一些时候也称作控制反转，尽管在技术上来讲，依赖注入是一个IOC的特殊实现，依赖注入是指一个对象应用另外一个对象来提供一个特殊的能力，
-例如：把一个数据库连接以参数的形式传到一个对象的结构方法里面而不是在那个对象内部自行创建一个连接。   
-控制反转和依赖注入的基本思想就是把类的依赖从类内部转化到外部以减少依赖应用控制反转，对象在被创建的时候，由一个调控系统内所有对象的外界实体，将其所依赖的对象的引用，传递给它。  
-也可以说，依赖被注入到对象中。所以，控制反转是，关于一个对象如何获取他所依赖的对象的引用，这个责任的反转。  
-总结就是：对象间依赖关系交由容器统一调控和处理了  
+>依赖注入DI是一个程序设计模式和架构模型， 一些时候也称作控制反转，尽管在技术上来讲，依赖注入是一个IOC的特殊实现，依赖注入是指一个对象应用另外一个对象来提供一个特殊的能力  
+例如：把一个数据库连接以参数的形式传到一个对象的结构方法里面而不是在那个对象内部自行创建一个连接。     
+控制反转和依赖注入的基本思想就是把类的依赖从类内部转化到外部以减少依赖应用控制反转，对象在被创建的时候，由一个调控系统内所有对象的外界实体，将其所依赖的对象的引用，传递给它。    
+也可以说，依赖被注入到对象中。所以，控制反转是，关于一个对象如何获取他所依赖的对象的引用，这个责任的反转。    
+总结就是：对象间依赖关系交由容器统一调控和处理了    
+
+###描述一下Spring中实现DI（Dependency Injection）的几种方式
+- 方式一：接口注入，在实际中得到了普遍应用，即使在IOC的概念尚未确立时，这样的方法也已经频繁出现在我们的代码中。注解
+- 方式二：Type2 IoC: Setter injection对象创建之后，将被依赖对象通过set方法设置进去
+- 方式三：Type3 IoC: Constructor injection对象创建时，被依赖对象以构造方法参数的方式注入Spring的方式
+
+###哪种依赖注入方式你建议使用，构造器注入，还是 Setter方法注入？
+>你两种依赖方式都可以使用，构造器注入和Setter方法注入。最好的解决方案是用构造器参数实现强制依赖，setter方法实现可选依赖。
+
+###简述你对IoC（Inversion of Control）的理解
+>一个类需要用到某个接口的方法，我们需要将类A和接口B的实现关联起来，最简单的方法是类A中创建一个对于接口B的实现C的实例，但这种方法显然两者的依赖（Dependency）太大了。  
+而IoC的方法是只在类A中定义好用于关联接口B的实现的方法，将类A，接口B和接口B的实现C放入IoC的 容器（Container）中，通过一定的配置由容器（Container）来实现类A与接口B的实现C的关联。
 
 ###ApplicationContext通常的实现是什么?
 >FileSystemXmlApplicationContext ：此容器从一个XML文件中加载beans的定义，XML Bean 配置文件的全路径名必须提供给它的构造函数。
@@ -142,137 +154,98 @@ spring mvc请所有的请求都提交给DispatcherServlet,它会委托应用系�
 	- REPEATABLE READ：保证了一个事务不会修改已经由另一个事务读取但未提交（回滚）的数据。避免了”脏读取”和”不可重复读取”的情况，但是带来了更多的性能损失。
 	- READ COMMITTED:大多数主流数据库的默认事务等级，保证了一个事务不会读到另一个并行事务已修改但未提交的数据，避免了”脏读取”。该级别适用于大多数系统。
 	- Read Uncommitted：保证了读取过程中不会读取到非法数据。
-	
-
-###spring事务
-	spring提供了几个关于事务处理的类：
-	Datasouce
-	transactionManager
-	userDao要注入
-	Datasouce
-	Proxy代理
-	Target:userDao：代理对象(目标对象)
-	transactionAttributes(那些方法需要事务处理)
-	transactionManager(事务处理服务)
-
-	TransactionDefinition //事务属性定义
-	TranscationStatus //代表了当前的事务，可以提交，回滚
-	PlatformTransactionManager这个是spring提供的用于管理事务的基础接口，其下有一个实现的抽象类AbstractPlatformTransactionManager,我们使用的事务管理类例如DataSourceTransactionManager等都是这个类的子类。
-	一般事务定义步骤：
-	TransactionDefinition td = new TransactionDefinition();
-	TransactionStatus ts = transactionManager.getTransaction(td);
-	try
-	{ //do sth
-	transactionManager.commit(ts);
-	}
-	catch(Exception e){transactionManager.rollback(ts);}
-
-	spring提供的事务管理可以分为两类：编程式的和声明式的。
-	编程式的，比较灵活，但是代码量大，存在重复的代码比较多；程式主要使用transactionTemplate
-	声明式的比编程式的更灵活。容器管理了
-
-依赖注入
-
-	18. 什么是Spring的依赖注入？
-	依赖注入，是IOC的一个方面，是个通常的概念，它有多种解释。这概念是说你不用创建对象，而只需要描述它如何被创建。你不在代码里直接组装你的组件和服务，但是要在配置文件里描述哪些组件需要哪些服务，之后一个容器（IOC容器）负责把他们组装起来。
-
-	19.  有哪些不同类型的IOC（依赖注入）方式？
-	构造器依赖注入：构造器依赖注入通过容器触发一个类的构造器来实现的，该类有一系列参数，每个参数代表一个对其他类的依赖。
-	Setter方法注入：Setter方法注入是容器通过调用无参构造器或无参static工厂 方法实例化bean之后，调用该bean的setter方法，即实现了基于setter的依赖注入。
 
 
-###描述一下Spring中实现DI（Dependency Injection）的几种方式
-- 方式一：接口注入，在实际中得到了普遍应用，即使在IOC的概念尚未确立时，这样的方法也已经频繁出现在我们的代码中。注解
-- 方式二：Type2 IoC: Setter injection对象创建之后，将被依赖对象通过set方法设置进去
-- 方式三：Type3 IoC: Constructor injection对象创建时，被依赖对象以构造方法参数的方式注入Spring的方式
+##Spring Beans
 
-	20. 哪种依赖注入方式你建议使用，构造器注入，还是 Setter方法注入？
-	你两种依赖方式都可以使用，构造器注入和Setter方法注入。最好的解决方案是用构造器参数实现强制依赖，setter方法实现可选依赖。
+###什么是Spring beans?
+>Spring beans 是那些形成Spring应用的主干的java对象,它们被Spring IOC容器初始化，装配，和管理。这些beans通过容器中配置的元数据创建。比如，以XML文件中<bean/> 的形式定义。    
+Spring 框架定义的beans都是单件beans。在bean tag中有个属性”singleton”，如果它被赋为TRUE，bean 就是单件，否则就是一个 prototype bean。默认是TRUE，所以所有在Spring框架中的beans 缺省都是单件。    
 
-###简述你对IoC（Inversion of Control）的理解
->一个类需要用到某个接口的方法，我们需要将类A和接口B的实现关联起来，最简单的方法是类A中创建一个对于接口B的实现C的实例，但这种方法显然两者的依赖（Dependency）太大了。
-而IoC的方法是只在类A中定义好用于关联接口B的实现的方法，将类A，接口B和接口B的实现C放入IoC的 容器（Container）中，通过一定的配置由容器（Container）来实现类A与接口B的实现C的关联。
+### 一个 Spring Bean 定义 包含什么？
+>一个Spring Bean 的定义包含容器必知的所有配置元数据，包括如何创建一个bean，它的生命周期详情及它的依赖。
 
-Spring Beans
+###如何给Spring 容器提供配置元数据?
+这里有三种重要的方法给Spring 容器提供配置元数据。
 
-	21.什么是Spring beans?
-	Spring beans 是那些形成Spring应用的主干的java对象。它们被Spring IOC容器初始化，装配，和管理。这些beans通过容器中配置的元数据创建。比如，以XML文件中<bean/> 的形式定义。
-	Spring 框架定义的beans都是单件beans。在bean tag中有个属性”singleton”，如果它被赋为TRUE，bean 就是单件，否则就是一个 prototype bean。默认是TRUE，所以所有在Spring框架中的beans 缺省都是单件。
+- XML配置文件。
+- 基于注解的配置。
+- 基于java的配置。
 
-	22. 一个 Spring Bean 定义 包含什么？
-	一个Spring Bean 的定义包含容器必知的所有配置元数据，包括如何创建一个bean，它的生命周期详情及它的依赖。
+###你怎样定义类的作用域? 
+>当定义一个<bean> 在Spring里，我们还能给这个bean声明一个作用域。  
+它可以通过bean 定义中的scope属性来定义。如，当Spring要在需要的时候每次生产一个新的bean实例，bean的scope属性被指定为prototype。  
+另一方面，一个bean每次使用的时候必须返回同一个实例，这个bean的scope 属性 必须设为 singleton。  
 
-	23. 如何给Spring 容器提供配置元数据?
-	这里有三种重要的方法给Spring 容器提供配置元数据。
-	XML配置文件。
-	基于注解的配置。
-	基于java的配置。
+###解释Spring支持的几种bean的作用域。
+Spring框架支持以下五种bean的作用域：
 
-	24. 你怎样定义类的作用域? 
-	当定义一个<bean> 在Spring里，我们还能给这个bean声明一个作用域。它可以通过bean 定义中的scope属性来定义。如，当Spring要在需要的时候每次生产一个新的bean实例，bean的scope属性被指定为prototype。另一方面，一个bean每次使用的时候必须返回同一个实例，这个bean的scope 属性 必须设为 singleton。
+- singleton : 
+	当一个bean的作用域设置为singleton，那么Spring IOC容器中只会存在一个共享的bean实例，并且所有对bean的请求，只要id与该bean定义相匹配，则只会返回bean的同一实例。  
+	换言之，当把一个bean定义设置为singleton作用域时，Spring IOC容器只会创建该bean定义的唯一实例。这个单一实例会被存储到单例缓存（singleton cache）中，并且所有针对该bean的后续请求和引用都将返回被缓存的对象实例，这里要注意的是singleton作用域和GOF设计模式中的单例是完全不同的，单例设计模式表示一个ClassLoader中只有一个class存在，而这里的singleton则表示一个容器对应一个bean，也就是说当一个bean被标识为singleton时候，spring的IOC容器中只会存在一个该bean。  
+- prototype：  
+	prototype作用域部署的bean，每一次请求（将其注入到另一个bean中，或者以程序的方式调用容器的getBean()方法）都会产生一个新的bean实例，相当于一个new的操作  
+- request：  
+	request表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HttpRequest内有效  
+- session：  
+	session作用域表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP session内有效。  
+- global-session：
+	在一个全局的HTTP Session中，一个bean定义对应一个实例。该作用域仅在基于web的Spring ApplicationContext情形下有效。  
 
-	25. 解释Spring支持的几种bean的作用域。
-	Spring框架支持以下五种bean的作用域：
-	singleton : 
-		当一个bean的作用域设置为singleton，那么Spring IOC容器中只会存在一个共享的bean实例，并且所有对bean的请求，只要id与该bean定义相匹配，则只会返回bean的同一实例。换言之，当把一个bean定义设置为singleton作用域时，Spring IOC容器只会创建该bean定义的唯一实例。这个单一实例会被存储到单例缓存（singleton cache）中，并且所有针对该bean的后续请求和引用都将返回被缓存的对象实例，这里要注意的是singleton作用域和GOF设计模式中的单例是完全不同的，单例设计模式表示一个ClassLoader中只有一个class存在，而这里的singleton则表示一个容器对应一个bean，也就是说当一个bean被标识为singleton时候，spring的IOC容器中只会存在一个该bean。
-	prototype：
-		prototype作用域部署的bean，每一次请求（将其注入到另一个bean中，或者以程序的方式调用容器的getBean()方法）都会产生一个新的bean实例，相当于一个new的操作
-	request：
-		request表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP request内有效
-	session：
-		session作用域表示该针对每一次HTTP请求都会产生一个新的bean，同时该bean仅在当前HTTP session内有效。
-	global-session：在一个全局的HTTP Session中，一个bean定义对应一个实例。该作用域仅在基于web的Spring ApplicationContext情形下有效。
-	缺省的Spring bean 的作用域是Singleton.
+缺省的Spring bean 的作用域是Singleton.
 
-	26. Spring框架中的单例bean是线程安全的吗?
-	不，Spring框架中的单例bean不是线程安全的。
+###Spring框架中的单例bean是线程安全的吗?
+>不，Spring框架中的单例bean不是线程安全的。
 
-	27. 解释Spring框架中bean的生命周期。
-	Spring容器 从XML 文件中读取bean的定义，并实例化bean。
-	Spring根据bean的定义填充所有的属性。
-	如果bean实现了BeanNameAware 接口，Spring 传递bean 的ID 到 setBeanName方法。
-	如果Bean 实现了 BeanFactoryAware 接口， Spring传递beanfactory 给setBeanFactory 方法。
-	如果有任何与bean相关联的BeanPostProcessors，Spring会在postProcesserBeforeInitialization()方法内调用它们。
-	如果bean实现IntializingBean了，调用它的afterPropertySet方法，如果bean声明了初始化方法，调用此初始化方法。
-	如果有BeanPostProcessors 和bean 关联，这些bean的postProcessAfterInitialization() 方法将被调用。
-	如果bean实现了 DisposableBean，它将调用destroy()方法。
+###解释Spring框架中bean的生命周期。  
+>Spring容器 从XML 文件中读取bean的定义，并实例化bean。  
+Spring根据bean的定义填充所有的属性。  
+如果bean实现了BeanNameAware接口，Spring传递bean的ID到setBeanName方法。  
+如果Bean 实现了 BeanFactoryAware 接口，Spring传递beanfactory 给setBeanFactory 方法。  
+如果有任何与bean相关联的BeanPostProcessors，Spring会postProcesserBeforeInitialization()方法内调用它们。  
+如果bean实现IntializingBean了，调用它的afterPropertySet方法，如果bean声明了初始化方法，调用此初始化方法。  
+如果有BeanPostProcessors 和bean 关联，这些bean的postProcessAfterInitialization() 方法将被调用。  
+如果bean实现了 DisposableBean，它将调用destroy()方法。
 
-	28.  哪些是重要的bean生命周期方法？ 你能重载它们吗？
-	有两个重要的bean 生命周期方法，第一个是setup ， 它是在容器加载bean的时候被调用。第二个方法是 teardown  它是在容器卸载类的时候被调用。
-	The bean 标签有两个重要的属性（init-method和destroy-method）。用它们你可以自己定制初始化和注销方法。它们也有相应的注解（@PostConstruct和@PreDestroy）。
+###哪些是重要的bean生命周期方法？ 你能重载它们吗？
+>有两个重要的bean 生命周期方法，第一个是setup ， 它是在容器加载bean的时候被调用。第二个方法是 teardown  它是在容器卸载类的时候被调用。  
+The bean 标签有两个重要的属性（init-method和destroy-method）。用它们你可以自己定制初始化和注销方法。它们也有相应的注解（@PostConstruct和@PreDestroy）。  
 
-	29. 什么是Spring的内部bean？
-	当一个bean仅被用作另一个bean的属性时，它能被声明为一个内部bean，为了定义inner bean，在Spring 的 基于XML的 配置元数据中，可以在 <property/>或 <constructor-arg/> 元素内使用<bean/> 元素，内部bean通常是匿名的，它们的Scope一般是prototype。
+###什么是Spring的内部bean？
+>当一个bean仅被用作另一个bean的属性时，它能被声明为一个内部bean，为了定义inner bean，在Spring 的 基于XML的 配置元数据中，可以在 <property/>或 <constructor-arg/> 元素内使用<bean/> 元素，内部bean通常是匿名的，它们的Scope一般是prototype。
 
-	30. 在 Spring中如何注入一个java集合？
-	Spring提供以下几种集合的配置元素：
-	<list>类型用于注入一列值，允许有相同的值。
-	<set> 类型用于注入一组值，不允许有相同的值。
-	<map> 类型用于注入一组键值对，键和值都可以为任意类型。
-	<props>类型用于注入一组键值对，键和值都只能为String类型。
+###在Spring中如何注入一个java集合？
+Spring提供以下几种集合的配置元素：
 
-	31. 什么是bean装配? 
-	装配，或bean 装配是指在Spring 容器中把bean组装到一起，前提是容器需要知道bean的依赖关系，如何通过依赖注入来把它们装配到一起。
+- <list>类型用于注入一列值，允许有相同的值。
+- <set> 类型用于注入一组值，不允许有相同的值。
+- <map> 类型用于注入一组键值对，键和值都可以为任意类型。
+- <props>类型用于注入一组键值对，键和值都只能为String类型。
 
-	32. 什么是bean的自动装配？
-	Spring 容器能够自动装配相互合作的bean，这意味着容器不需要<constructor-arg>和<property>配置，能通过Bean工厂自动处理bean之间的协作。
+###什么是bean装配? 
+>装配，或bean 装配是指在Spring 容器中把bean组装到一起，前提是容器需要知道bean的依赖关系，如何通过依赖注入来把它们装配到一起。
 
-	33. 解释不同方式的自动装配 。
-	有五种自动装配的方式，可以用来指导Spring容器用自动装配方式来进行依赖注入。
-	no：默认的方式是不进行自动装配，通过显式设置ref 属性来进行装配。
-	byName：通过参数名 自动装配，Spring容器在配置文件中发现bean的autowire属性被设置成byname，之后容器试图匹配、装配和该bean的属性具有相同名字的bean。	byType:：通过参数类型自动装配，Spring容器在配置文件中发现bean的autowire属性被设置成byType，之后容器试图匹配、装配和该bean的属性具有相同类型的bean。如果有多个bean符合条件，则抛出错误。
-	constructor：这个方式类似于byType， 但是要提供给构造器参数，如果没有确定的带参数的构造器参数类型，将会抛出异常。
-	autodetect：首先尝试使用constructor来自动装配，如果无法工作，则使用byType方式。
+###什么是bean的自动装配？
+>Spring 容器能够自动装配相互合作的bean，这意味着容器不需要<constructor-arg>和<property>配置，能通过Bean工厂自动处理bean之间的协作。
 
-	34.自动装配有哪些局限性 ?
-	自动装配的局限性是：
-	重写： 你仍需用 <constructor-arg>和 <property> 配置来定义依赖，意味着总要重写自动装配。
-	基本数据类型：你不能自动装配简单的属性，如基本数据类型，String字符串，和类。
-	模糊特性：自动装配不如显式装配精确，如果有可能，建议使用显式装配。
+###解释不同方式的自动装配。
+有五种自动装配的方式，可以用来指导Spring容器用自动装配方式来进行依赖注入。
 
-	35. 你可以在Spring中注入一个null 和一个空字符串吗？
-	可以。
+- no：默认的方式是不进行自动装配，通过显式设置ref属性来进行装配。
+- byName：通过参数名自动装配，Spring容器在配置文件中发现bean的autowire属性被设置成byname，之后容器试图匹配、装配和该bean的属性具有相同名字的bean。	
+- byType:：通过参数类型自动装配，Spring容器在配置文件中发现bean的autowire属性被设置成byType，之后容器试图匹配、装配和该bean的属性具有相同类型的bean。如果有多个bean符合条件，则抛出错误。
+- constructor：这个方式类似于byType， 但是要提供给构造器参数，如果没有确定的带参数的构造器参数类型，将会抛出异常。
+- autodetect：首先尝试使用constructor来自动装配，如果无法工作，则使用byType方式。
 
+###自动装配有哪些局限性 ?
+自动装配的局限性是：
+
+- 重写： 你仍需用 <constructor-arg>和 <property> 配置来定义依赖，意味着总要重写自动装配。
+- 基本数据类型：你不能自动装配简单的属性，如基本数据类型，String字符串，和类。
+- 模糊特性：自动装配不如显式装配精确，如果有可能，建议使用显式装配。
+
+###你可以在Spring中注入一个null 和一个空字符串吗？
+可以
 
 ###Bean的初始化
 在配置文档中通过指定init-method 属性来完成
@@ -301,55 +274,61 @@ Spring Beans
 </beans>
 ```
 	
-Spring注解
+##Spring注解
 
-	36. 什么是基于Java的Spring注解配置? 给一些注解的例子.
-	基于Java的配置，允许你在少量的Java注解的帮助下，进行你的大部分Spring配置而非通过XML文件。
-	以@Configuration 注解为例，它用来标记类可以当做一个bean的定义，被Spring IOC容器使用。另一个例子是@Bean注解，它表示此方法将要返回一个对象，作为一个bean注册进Spring应用上下文。
+###什么是基于Java的Spring注解配置? 给一些注解的例子.
+基于Java的配置，允许你在少量的Java注解的帮助下，进行你的大部分Spring配置而非通过XML文件。
 
-	37. 什么是基于注解的容器配置?
-	相对于XML文件，注解型的配置依赖于通过字节码元数据装配组件，而非尖括号的声明。
-	开发者通过在相应的类，方法或属性上使用注解的方式，直接组件类中进行配置，而不是使用xml表述bean的装配关系。
+- 以@Configuration 注解为例，它用来标记类可以当做一个bean的定义，被Spring IOC容器使用。
+- 另一个例子是@Bean注解，它表示此方法将要返回一个对象，作为一个bean注册进Spring应用上下文。
 
-	38. 怎样开启注解装配？
-	注解装配在默认情况下是不开启的，为了使用注解装配，我们必须在Spring配置文件中配置 <context:annotation-config/>元素。
+###什么是基于注解的容器配置?
+>相对于XML文件，注解型的配置依赖于通过字节码元数据装配组件，而非尖括号的声明。  
+开发者通过在相应的类，方法或属性上使用注解的方式，直接组件类中进行配置，而不是使用xml表述bean的装配关系。  
 
-	39. @Required  注解
-	这个注解表明bean的属性必须在配置的时候设置，通过一个bean定义的显式的属性值或通过自动装配，若@Required注解的bean属性未被设置，容器将抛出BeanInitializationException。
+###怎样开启注解装配？
+>注解装配在默认情况下是不开启的，为了使用注解装配，我们必须在Spring配置文件中配置 <context:annotation-config/>元素。
 
-	40. @Autowired 注解
-	@Autowired 注解提供了更细粒度的控制，包括在何处以及如何完成自动装配。它的用法和@Required一样，修饰setter方法、构造器、属性或者具有任意名称和/或多个参数的PN方法。
+###@Required  注解
+>这个注解表明bean的属性必须在配置的时候设置，通过一个bean定义的显式的属性值或通过自动装配，若@Required注解的bean属性未被设置，容器将抛出BeanInitializationException。
 
-	41. @Qualifier 注解
-	当有多个相同类型的bean却只有一个需要自动装配时，将@Qualifier 注解和@Autowire 注解结合使用以消除这种混淆，指定需要装配的确切的bean。
+###@Autowired 注解
+>@Autowired 注解提供了更细粒度的控制，包括在何处以及如何完成自动装配。它的用法和@Required一样，修饰setter方法、构造器、属性或者具有任意名称和/或多个参数的PN方法。
+>
+###@Qualifier 注解
+当有多个相同类型的bean却只有一个需要自动装配时，将@Qualifier注解和@Autowire注解结合使用以消除这种混淆，指定需要装配的确切的bean。
 
-Spring数据访问
+##Spring数据访问
 
-	42.在Spring框架中如何更有效地使用JDBC? 
-	使用SpringJDBC 框架，资源管理和错误处理的代价都会被减轻。所以开发者只需写statements 和 queries从数据存取数据，JDBC也可以在Spring框架提供的模板类的帮助下更有效地被使用，这个模板叫JdbcTemplate （例子见这里here）
+###在Spring框架中如何更有效地使用JDBC? 
+>使用SpringJDBC框架，资源管理和错误处理的代价都会被减轻。所以开发者只需写statements 和 queries从数据存取数据，JDBC也可以在Spring框架提供的模板类的帮助下更有效地被使用，这个模板叫JdbcTemplate （例子见这里here）
 
-	43. JdbcTemplate
-	JdbcTemplate 类提供了很多便利的方法解决诸如把数据库数据转变成基本数据类型或对象，执行写好的或可调用的数据库操作语句，提供自定义的数据错误处理。
+###JdbcTemplate
+>JdbcTemplate 类提供了很多便利的方法解决诸如把数据库数据转变成基本数据类型或对象，执行写好的或可调用的数据库操作语句，提供自定义的数据错误处理。
 
-	44. Spring对DAO的支持
-	Spring对数据访问对象（DAO）的支持旨在简化它和数据访问技术如JDBC，Hibernate or JDO 结合使用。这使我们可以方便切换持久层。编码时也不用担心会捕获每种技术特有的异常。
+###Spring对DAO的支持
+>Spring对数据访问对象（DAO）的支持旨在简化它和数据访问技术如JDBC，Hibernate or JDO 结合使用。
+这使我们可以方便切换持久层。编码时也不用担心会捕获每种技术特有的异常。
 
-	45. 使用Spring通过什么方式访问Hibernate? 
-	在Spring中有两种方式访问Hibernate：
-	控制反转  Hibernate Template和 Callback。
-	继承 HibernateDAOSupport提供一个AOP 拦截器。
+###使用Spring通过什么方式访问Hibernate? 
+在Spring中有两种方式访问Hibernate：
 
-	46. Spring支持的ORM
-	Spring支持以下ORM：
-	Hibernate
-	iBatis
-	JPA (Java Persistence API)
-	TopLink
-	JDO (Java Data Objects)
-	OJB
+- 控制反转  HibernateTemplate和 Callback。
+- 继承 HibernateDAOSupport提供一个AOP 拦截器。
+
+###Spring支持的ORM
+Spring支持以下ORM：
+
+- Hibernate
+- iBatis
+- JPA (Java Persistence API)
+- TopLink
+- JDO (Java Data Objects)
+- OJB
 
 ###Spring里面如何配置数据库驱动？DriverManagerDataSource
-	使用org.springframework.jdbc.datasource.DriverManagerDataSource”数据源来配置数据库驱动。示例如下：
+使用org.springframework.jdbc.datasource.DriverManagerDataSource”数据源来配置数据库驱动。示例如下：
+```
 	<bean id=”dataSource”>
 	<property name=”driverClassName”>
 	<value>org.hsqldb.jdbcDriver</value>
@@ -360,12 +339,14 @@ Spring数据访问
 	<property name=”username”><value>sa</value></property>
 	<property name=”password”><value></value></property>
 	</bean>
+```
 
 ###spring的jdbc与传统的jdbc有什么区别，其核心类有那些?
-	Spring的jdbc:节省代码，不管连接(Connection)，不管事务、不管异常、不管关闭(con.close() ps.close )
-	TransactionTemplate(transactionManager):进行事务处理
-	JdbcTemplate(dataSource):增、删、改、查 大量sql代码重复
-	47.如何通过HibernateDaoSupport将Spring和Hibernate结合起来？
+>Spring的jdbc:节省代码，不管连接(Connection)，不管事务、不管异常、不管关闭(con.close() ps.close )  
+TransactionTemplate(transactionManager):进行事务处理  
+JdbcTemplate(dataSource):增、删、改、查 大量sql代码重复  
+
+###如何通过HibernateDaoSupport将Spring和Hibernate结合起来？
 	用Spring的 SessionFactory 调用 LocalSessionFactory。集成过程分三步：
 	配置the Hibernate SessionFactory。
 	继承HibernateDaoSupport实现一个DAO。
