@@ -250,3 +250,14 @@ while (true) {
     }  
 }  
 ```
+
+#JNI
+##注册
+- 静态注册：第一次查找并且通过函数名关联，保存JNI层函数的函数指针。
+- 动态注册：JNINativeMethod
+
+##GC
+若有Native层的变量持有Java层变量的引用，则有可能产生Java层变量被GC而造成Native层持有野指针的问题，为了解决这个问题，JNI提供了三种引用：
+- Local Reference：本地引用。在JNI层函数中使用的非全局引用对象都是Local Reference。它包括函数调用时传入的jobject、在JNI层函数中创建的jobject。LocalReference最大的特点就是，一旦JNI层函数返回，这些jobject就可能被垃圾回收。
+- Global Reference：全局引用，这种对象如不主动释放，就永远不会被垃圾回收。
+- Weak Global Reference：弱全局引用，一种特殊的GlobalReference，在运行过程中可能会被垃圾回收。所以在程序中使用它之前，需要调用JNIEnv的IsSameObject判断它是不是被回收了。
