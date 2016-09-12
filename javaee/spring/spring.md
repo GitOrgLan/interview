@@ -102,14 +102,22 @@
 而IoC的方法是只在类A中定义好用于关联接口B的实现的方法，将类A，接口B和接口B的实现C放入IoC的 容器（Container）中，通过一定的配置由容器（Container）来实现类A与接口B的实现C的关联。
 
 ###ApplicationContext通常的实现是什么?
->FileSystemXmlApplicationContext ：此容器从一个XML文件中加载beans的定义，XML Bean 配置文件的全路径名必须提供给它的构造函数。
-ClassPathXmlApplicationContext：此容器也从一个XML文件中加载beans的定义，这里，你需要正确设置classpath因为这个容器将在classpath里找bean配置。
-WebXmlApplicationContext：此容器加载一个XML文件，此文件定义了一个WEB应用的所有bean。
+- FileSystemXmlApplicationContext ：此容器从一个XML文件中加载beans的定义，XML Bean 配置文件的全路径名必须提供给它的构造函数。
+- ClassPathXmlApplicationContext：此容器也从一个XML文件中加载beans的定义，这里，你需要正确设置  classpath因为这个容器将在classpath里找bean配置。
+- WebXmlApplicationContext：此容器加载一个XML文件，此文件定义了一个WEB应用的所有bean。
 
-###Bean 工厂和 Application contexts  有什么区别？
+###Bean工厂和Application contexts 有什么区别？
 >Application contexts提供一种方法处理文本消息，一个通常的做法是加载文件资源（比如镜像），它们可以向注册为监听器的bean发布事件。  
 >另外，在容器或容器内的对象上执行的那些不得不由bean工厂以程序化方式处理的操作，可以在Application contexts中以声明的方式处理。  
 >Application contexts实现了MessageSource接口，该接口的实现以可插拔的方式提供获取本地化消息的方法。
+
+###spring中的BeanFactory与ApplicationContext的作用？
+作用：
+- BeanFactory负责读取bean配置文档，管理bean的加载，实例化，维护bean之间的依赖关系，负责bean的声明周期。
+- ApplicationContext除了提供上述BeanFactory所能提供的功能之外，还提供了更完整的框架功能：
+	- 国际化支持
+	- 资源访问：Resource rs = ctx. getResource(”classpath:config.properties”), “file:c:/config.properties”
+	- 事件传递：通过实现ApplicationContextAware接口
 
 ###一个Spring的应用看起来象什么？
 >一个定义了一些功能的接口。  
@@ -357,157 +365,116 @@ JdbcTemplate(dataSource):增、删、改、查 大量sql代码重复
 >在context中定义DataSource，创建SessionFactoy，设置参数；DAO类继承HibernateDaoSupport，实现具体接口，从中获得HibernateTemplate进行具体操作。
 在使用中如果遇到OpenSessionInView的问题，可以添加OpenSessionInViewFilter或OpenSessionInViewInterceptor
 
-	48. Spring支持的事务管理类型
-	Spring支持两种类型的事务管理：
-	编程式事务管理：这意味你通过编程的方式管理事务，给你带来极大的灵活性，但是难维护。
-	声明式事务管理：这意味着你可以将业务代码和事务管理分离，你只需用注解和XML配置来管理事务。
+###Spring支持的事务管理类型
+Spring支持两种类型的事务管理：
 
-	49. Spring框架的事务管理有哪些优点？
-	它为不同的事务API  如 JTA，JDBC，Hibernate，JPA 和JDO，提供一个不变的编程模式。
-	它为编程式事务管理提供了一套简单的API而不是一些复杂的事务API如
-	它支持声明式事务管理。
-	它和Spring各种数据访问抽象层很好得集成。
+- 编程式事务管理：这意味你通过编程的方式管理事务，给你带来极大的灵活性，但是难维护。
+- 声明式事务管理：这意味着你可以将业务代码和事务管理分离，你只需用注解和XML配置来管理事务。
 
-	50. 你更倾向用那种事务管理类型？	大多数Spring框架的用户选择声明式事务管理，因为它对应用代码的影响最小，因此更符合一个无侵入的轻量级容器的思想。声明式事务管理要优于编程式事务管理，虽然比编程式事务管理（这种方式允许你通过代码控制事务）少了一点灵活性。
+###Spring框架的事务管理有哪些优点？
+>它为不同的事务API  如 JTA，JDBC，Hibernate，JPA 和JDO，提供一个不变的编程模式。  
+它为编程式事务管理提供了一套简单的API而不是一些复杂的事务API如  
+它支持声明式事务管理。  
+它和Spring各种数据访问抽象层很好得集成。  
+
+###你更倾向用那种事务管理类型？	
+>大多数Spring框架的用户选择声明式事务管理，因为它对应用代码的影响最小，因此更符合一个无侵入的轻量级容器的思想。声明式事务管理要优于编程式事务管理，虽然比编程式事务管理（这种方式允许你通过代码控制事务）少了一点灵活性。  
 	
-Spring面向切面编程（AOP）
+##Spring面向切面编程（AOP）
+[链接](http://www.blogjava.net/supercrsky/articles/174368.html)
 
-	51.  解释AOP
-	面向切面的编程，或AOP， 是一种编程技术，允许程序模块化横向切割关注点，或横切典型的责任划分，如日志和事务管理。
+###解释AOP
+>面向切面的编程，或AOP， 是一种编程技术，允许程序模块化横向切割关注点，或横切典型的责任划分，如日志和事务管理。
 
-	52. Aspect 切面	AOP核心就是切面，它将多个类的通用行为封装成可重用的模块，该模块含有一组API提供横切功能。比如，一个日志模块可以被称作日志的AOP切面。根据需求的不同，一个应用程序可以有若干切面。在Spring AOP中，切面通过带有@Aspect注解的类实现。
+###Aspect 切面	
+>AOP核心就是切面，它将多个类的通用行为封装成可重用的模块，该模块含有一组API提供横切功能。  
+比如，一个日志模块可以被称作日志的AOP切面。根据需求的不同，一个应用程序可以有若干切面。  
+在Spring AOP中，切面通过带有@Aspect注解的类实现。  
 
-	52. 在Spring AOP 中，关注点和横切关注的区别是什么？
-	关注点是应用中一个模块的行为，一个关注点可能会被定义成一个我们想实现的一个功能。	横切关注点是一个关注点，此关注点是整个应用都会使用的功能，并影响整个应用，比如日志，安全和数据传输，几乎应用的每个模块都需要的功能。因此这些都属于横切关注点。
+###在Spring AOP 中，关注点和横切关注的区别是什么？
+>关注点是应用中一个模块的行为，一个关注点可能会被定义成一个我们想实现的一个功能。	  
+横切关注点是一个关注点，此关注点是整个应用都会使用的功能，并影响整个应用，比如日志，安全和数据传输，几乎应用的每个模块都需要的功能。因此这些都属于横切关注点。
 
-	54. 连接点
-	连接点代表一个应用程序的某个位置，在这个位置我们可以插入一个AOP切面，它实际上是个应用程序执行Spring AOP的位置。
+###连接点
+>连接点代表一个应用程序的某个位置，在这个位置我们可以插入一个AOP切面，它实际上是个应用程序执行Spring AOP的位置。
 
-	55. 通知
-	通知是个在方法执行前或执行后要做的动作，实际上是程序执行时要通过SpringAOP框架触发的代码段。
-	Spring切面可以应用五种类型的通知：
-	before：前置通知，在一个方法执行前被调用。
-	after: 在方法执行之后调用的通知，无论方法执行是否成功。
-	after-returning: 仅当方法成功完成后执行的通知。
-	after-throwing: 在方法抛出异常退出时执行的通知。
-	around: 在方法执行之前和之后调用的通知。
+###通知
+通知是个在方法执行前或执行后要做的动作，实际上是程序执行时要通过SpringAOP框架触发的代码段。
+Spring切面可以应用五种类型的通知：
 
-	56. 切点
-	切入点是一个或一组连接点，通知将在这些位置执行。可以通过表达式或匹配的方式指明切入点。
+- before：前置通知，在一个方法执行前被调用。
+- after: 在方法执行之后调用的通知，无论方法执行是否成功。
+- after-returning: 仅当方法成功完成后执行的通知。
+- after-throwing: 在方法抛出异常退出时执行的通知。
+- around: 在方法执行之前和之后调用的通知。
 
-	57. 什么是引入? 
-	引入允许我们在已存在的类中增加新的方法和属性。
+###切点
+>切入点是一个或一组连接点，通知将在这些位置执行。可以通过表达式或匹配的方式指明切入点。
 
-	58. 什么是目标对象? 
-	被一个或者多个切面所通知的对象。它通常是一个代理对象。也指被通知（advised）对象。
+###什么是引入? 
+>引入允许我们在已存在的类中增加新的方法和属性。
 
-	59. 什么是代理?
-	代理是通知目标对象后创建的对象。从客户端的角度看，代理对象和目标对象是一样的。
+###什么是目标对象? 
+>被一个或者多个切面所通知的对象。它通常是一个代理对象。也指被通知（advised）对象。
 
-	60. 有几种不同类型的自动代理？
-	BeanNameAutoProxyCreator
-	DefaultAdvisorAutoProxyCreator
-	Metadata autoproxying
+###什么是代理?
+>代理是通知目标对象后创建的对象。从客户端的角度看，代理对象和目标对象是一样的。
 
-	61. 什么是织入。什么是织入应用的不同点？
-	织入是将切面和到其他应用类型或对象连接或创建一个被通知对象的过程。
-	织入可以在编译时，加载时，或运行时完成。
+###有几种不同类型的自动代理？
+BeanNameAutoProxyCreator  
+DefaultAdvisorAutoProxyCreator  
+Metadata autoproxying  
 
-	62. 解释基于XML Schema方式的切面实现。
-	在这种情况下，切面由常规类以及基于XML的配置实现。
+###什么是织入。什么是织入应用的不同点？
+>织入是将切面和到其他应用类型或对象连接或创建一个被通知对象的过程。  
+织入可以在编译时，加载时，或运行时完成。  
 
-	63. 解释基于注解的切面实现
-	在这种情况下(基于@AspectJ的实现)，涉及到的切面声明的风格与带有java5标注的普通java类一致。
 
-Spring 的MVC
+##Spring 的MVC
 
-	64. 什么是Spring的MVC框架？
-	Spring 配备构建Web 应用的全功能MVC框架。Spring可以很便捷地和其他MVC框架集成，如Struts，Spring 的MVC框架用控制反转把业务对象和控制逻辑清晰地隔离。它也允许以声明的方式把请求参数和业务对象绑定。
+###什么是Spring的MVC框架？
+>Spring 配备构建Web 应用的全功能MVC框架。Spring可以很便捷地和其他MVC框架集成，如Struts，Spring 的MVC框架用控制反转把业务对象和控制逻辑清晰地隔离。它也允许以声明的方式把请求参数和业务对象绑定。  
 
-	65. DispatcherServlet
-	Spring的MVC框架是围绕DispatcherServlet来设计的，它用来处理所有的HTTP请求和响应。
+###DispatcherServlet
+>Spring的MVC框架是围绕DispatcherServlet来设计的，它用来处理所有的HTTP请求和响应。
 
-	66. WebApplicationContext
-	WebApplicationContext 继承了ApplicationContext  并增加了一些WEB应用必备的特有功能，它不同于一般的ApplicationContext ，因为它能处理主题，并找到被关联的servlet。
+###WebApplicationContext
+>WebApplicationContext 继承了ApplicationContext  并增加了一些WEB应用必备的特有功能，它不同于一般的ApplicationContext ，因为它能处理主题，并找到被关联的servlet。
 
-	67. 什么是Spring MVC框架的控制器？	控制器提供一个访问应用程序的行为，此行为通常通过服务接口实现。控制器解析用户输入并将其转换为一个由视图呈现给用户的模型。Spring用一个非常抽象的方式实现了一个控制层，允许用户创建多种用途的控制器。
+###什么是Spring MVC框架的控制器？	
+>控制器提供一个访问应用程序的行为，此行为通常通过服务接口实现。  
+控制器解析用户输入并将其转换为一个由视图呈现给用户的模型。  
+Spring用一个非常抽象的方式实现了一个控制层，允许用户创建多种用途的控制器。  
 
-	68. @Controller 注解
-	该注解表明该类扮演控制器的角色，Spring不需要你继承任何其他控制器基类或引用Servlet API。
+###@Controller 注解
+>该注解表明该类扮演控制器的角色，Spring不需要你继承任何其他控制器基类或引用Servlet API。
 
-	69. @RequestMapping 注解
-	该注解是用来映射一个URL到一个类或一个特定的方处理法上。
+###@RequestMapping 注解
+>该注解是用来映射一个URL到一个类或一个特定的方处理法上。
 	
-其他
-
-	spring中的BeanFactory与ApplicationContext的作用和区别？
-	作用：
-	1. BeanFactory负责读取bean配置文档，管理bean的加载，实例化，维护bean之间的依赖关系，负责bean的声明周期。
-	2. ApplicationContext除了提供上述BeanFactory所能提供的功能之外，还提供了更完整的框架功能：
-		a. 国际化支持
-		b. 资源访问：Resource rs = ctx. getResource(”classpath:config.properties”), “file:c:/config.properties”
-		c. 事件传递：通过实现ApplicationContextAware接口
-
-
-###如何在Spring的applicationContext.xml里面使用JNDI而不是datasource? JndiObjectFactoryBean
-	可以使用”org.springframework.jndi.JndiObjectFactoryBean”来实现。   
-	示例如下：  
-	<bean id=”dataSource”>
- 	<property name=”jndiName”>
- 	<value>java:comp/env/jdbc/appfuse</value>
- 	</property>
- 	</bean>
-
-###Spring里面applicationContext.xml文件能不能改成其他文件名？可以配置
-	ContextLoaderListener是一个ServletContextListener, 它在你的web应用启动的时候初始化。缺省情况下， 它会在WEB-INF/applicationContext.xml文件找Spring的配置。 你可以通过定义一个<context-param>元素名字为”contextConfigLocation”来改变Spring配置文件的位置。示例如下：
-	<listener>
-	<listener-class>org.springframework.web.context.ContextLoaderListener
-	<context-param>
-	<param-name>contextConfigLocation</param-name>
-	<param-value>/WEB-INF/xyz.xml</param-value>
-	</context-param>
-	</listener-class>
-	</listener>
-
-
-
 ###Spring如何实现事件处理?
-	事件
-	Extends ApplicationEvent
-	监听器
-	Implements ApplicationListener
-	事件源
-	Implements ApplicationContextAware
-	在applicationContext.xml中配置事件源、监听器
-	先得到事件源，调用事件源的方法，通知监听器。
+- 事件
+Extends ApplicationEvent
+- 监听器
+Implements ApplicationListener
+- 事件源
+Implements ApplicationContextAware
 
-
-
-###spring中的BeanFactory与ApplicationContext的作用和区别？
-作用：
-- BeanFactory负责读取bean配置文档，管理bean的加载，实例化，维护bean之间的依赖关系，负责bean的声明周期。
-- ApplicationContext除了提供上述BeanFactory所能提供的功能之外，还提供了更完整的框架功能：
-	- 国际化支持
-	- 资源访问：Resource rs = ctx. getResource(”classpath:config.properties”), “file:c:/config.properties”
-	- 事件传递：通过实现ApplicationContextAware接口
-
-- 常用的获取ApplicationContext的方法：
-	FileSystemXmlApplicationContext：从文件系统或者url指定的xml配置文件创建，参数为配置文件名或文件名数组  
-	ClassPathXmlApplicationContext：从classpath的xml配置文件创建，可以从jar包中读取配置文件  
-	WebApplicationContextUtils：从web应用的根目录读取配置文件，需要先在web.xml中配置，可以配置监听器或者servlet来实现  
-	通过如下方法取出applicationContext实例:  
-	ApplicationContext ac=WebApplicationContextUtils.getWebApplicationContext(this.getServletContext); 
+>在applicationContext.xml中配置事件源、监听器
+先得到事件源，调用事件源的方法，通知监听器。
 
 ###如何在spring中实现国际化?
-	在applicationContext.xml加载一个bean
-	<bean id=”messageSource” class=”org.springframework.context.support.ResourceBundleMessageSource”>
-	<property name=”basename”>
-	<value>message</value>
-	</property>
-	</bean>
-	在src目录下建多个properties文件Ø
-	对于非英文的要用native2asciiØ -encoding gb2312 源  目转化文件相关内容
-	其命名格式是message_语言_国家。Ø
-	页面中的中显示提示信息，键名取键值。Ø
-	当给定国家，系统会自动加载对应的国家的properties信息。Ø
-	通过applictionContext.getMessage(“键名”,”参数”,”区域”)取出相关的信息。Ø
+在applicationContext.xml加载一个bean
+```
+<bean id=”messageSource” class=”org.springframework.context.support.ResourceBundleMessageSource”>
+<property name=”basename”>
+<value>message</value>
+</property>
+</bean>
+```
+>在src目录下建多个properties文件    
+对于非英文的要用native2ascii -encoding gb2312 源  目转化文件相关内容    
+其命名格式是message_语言_国家。    
+页面中的中显示提示信息，键名取键值。   
+当给定国家，系统会自动加载对应的国家的properties信息。  
+通过applictionContext.getMessage(“键名”,”参数”,”区域”)取出相关的信息。   
