@@ -1,9 +1,6 @@
-
-
-
 ###Spring和Struts的区别？
-	strusts：是一种基于MVC模式的一个web层的框架。
-	Spring:提供了通用的服务，ioc/di aop,关心的不仅仅web层，应当j2ee整体的一个服务，容器，可以很容易融合不同的技术和开发框架struts hibernate ibatis ejb remote springJDBC springMVC
+- strusts：是一种基于MVC模式的一个web层的框架。
+- Spring:提供了通用的服务，ioc/di aop,关心的不仅仅web层，应当j2ee整体的一个服务，容器，可以很容易融合不同的技术和开发框架struts hibernate ibatis ejb remote springJDBC springMVC
 
 ###struts+spring面试题
 1. struts
@@ -14,11 +11,8 @@
 	说说AOP和IOC的概念以及在spring中是如何应用的
 - Hibernate有哪几种查询数据的方式
 - load()和get()的区别
-
-	回答：
-
-- Struts1 Action是单例模式并且必须是线程安全的，因为仅有Action的一个实例来处理所有的请求。单例策略限制了Struts1 Action能作的事和性能，并且要在开发时特别小心。Action资源必须是线程安全的或同步的。
-	Struts2 Action对象为每一个请求产生一个实例，因此没有线程安全问题。（实际上，servlet容器给每个请求产生许多可丢弃的对象，并且不会导致性能和垃圾回收问题）
+- Struts1 Action是单例模式并且必须是线程安全的，因为仅有Action的一个实例来处理所有的请求。单例策略限制了Struts1 Action能作的事和性能，并且要在开发时特别小心。  
+Action资源必须是线程安全的或同步的。Struts2 Action对象为每一个请求产生一个实例，因此没有线程安全问题。（实际上，servlet容器给每个请求产生许多可丢弃的对象，并且不会导致性能和垃圾回收问题）  
 - struts是用一组类,servlet 和jsp规范实现mvc的
 - ActionFrom ActionServlet Action struts-config.xml
 - spring的核心就是IOC,通过指定对象的创建办法,描述对象与服务之间的关系,而不生成对象
@@ -75,4 +69,4 @@ Spring有三种方式整合Struts：
 
 
 ###Struts的validate框架是如何验证的？
-	 在struts配置文件中配置具体的错误提示，再在FormBean中的validate()方法具体调用。
+>在struts配置文件中配置具体的错误提示，再在FormBean中的validate()方法具体调用。
