@@ -1,7 +1,0 @@
-
-###ibatis 中的#与$的区别
->是否进行类型匹配  
-在Ibatis中我们使用SqlMap进行Sql查询时需要引用参数，在参数引用中遇到的符号#和$之间的区分为，#可以进行与编译，进行类型匹配，而$不进行数据类型匹配  	
-使用#传入参数，sql语句解析是会加上"",比如  select * from table where name = #{name} ,传入的name为小李，那么最后打印出来的就是select * from table where name = ‘小李’  
-如果你要做动态的排序，比如  order by   column，这个时候务必要用${},因为如果你使用了#{},那么打印出来的将会是select * from table order by  'name'  ,这样是没用  
-[链接](http://blog.csdn.net/jimmy609/article/details/43020143)
