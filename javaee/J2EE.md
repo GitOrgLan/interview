@@ -92,7 +92,13 @@ day1:J2EE
 - init()
 - destroy()
 
-
+###filter时序图,流程,servlet处理完之后filter还能否继续修改request和response的内容
+>Servlet过滤器能够在Servlet被调用之前检查Request对象，修改Request Header和Request内容。  
+Servlet被调用之后检查Response对象，修改Response Header和Response内容。Servlet过滤器负责过滤的Web组件可以是Servlet,JSP和HTML。  
+Servler过滤器实现了javax.Servlet.Filter的接口；  
+init(Filter Config)Servlet过滤器的初始化方法，Servlet过滤器实例后将调用这个方法，在这个方法中可以读取web.xml 文件中Servlet过滤器的初始化参数。  
+destory():Servlet容器在销毁过滤器的实例前调用该方法，在这个方法中可以释放Servlet过滤器占用的资源。  
+doFilter(ServletRequest ,ServletResponse,FilterChain):完成实际的过滤。  
 
 ###EJB与JAVA BEAN的区别？
 	EJB与JAVA BEAN是SUN的不同组件规范，EJB是在容器中运行的，分步式的，而JAVA BEAN主要是一种可利用的组件，主要在客户端UI表现上。
