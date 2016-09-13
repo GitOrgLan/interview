@@ -61,7 +61,8 @@ saveOrUpdate()方法可以实现update()的功能，但会多些步骤，具体�
 
 
 ###hibernate一级缓存是什么，二级缓存是什么，延迟加载是什么。
-[链接](http://www.open-open.com/lib/view/open1413527015465.html)
+[链接](http://www.open-open.com/lib/view/open1413527015465.html) 
+ 
 - 首先要明白缓存是干什么的，缓存就是要将一些经常使用的数据缓存到内存或者各种储存介质中，当再次使用时可以不用去数据库中查询，减少与数据库的交互，提高性能。
 
 	- 一级缓存是针对session级别的，当这个session关闭后这个缓存就不存在了。多次加载同一个持久化对象，只有第一次向数据库发送SQL语句加载，之后的加载都是基于缓存的
@@ -88,32 +89,31 @@ saveOrUpdate()方法可以实现update()的功能，但会多些步骤，具体�
 
 
 ###Spring对多种ORM框架提供了很好的支持，简单描述在Spring中使用Hibernate的方法，并结合事务管理。
-	在context中定义DataSource，
-	创建SessionFactoy，设置参数；
-	DAO类继承HibernateDaoSupport，实现具体接口，从中获得HibernateTemplate进行具体操作。
-	在使用中如果遇到OpenSessionInView的问题，可以添加OpenSessionInViewFilter或OpenSessionInViewInterceptor。（详见Spring framework 2.0 Reference的12.2节Hibernate）
-	声明式事务需声明事务管理器，
+>在context中定义DataSource，创建SessionFactoy，设置参数；  
+DAO类继承HibernateDaoSupport，实现具体接口，从中获得HibernateTemplate进行具体操作。  
+在使用中如果遇到OpenSessionInView的问题，可以添加OpenSessionInViewFilter或OpenSessionInViewInterceptor。（详见Spring framework 2.0 Reference的12.2节Hibernate）  
+声明式事务需声明事务管理器  
 
 
 ###spring+hibernate的配置文件中的主要类有那些?如何配置?
-	dataSource
-	sessionFactory:hibernate.cfg.xml
-	transactionManager
-	userDao (extends HibernateDaoSupport)
-	sessionFactory
-	facade
-	proxy
-	sessionFactory
-	transactionManager
-	facade
- 
-
+>dataSource  
+sessionFactory:hibernate.cfg.xml  
+transactionManager  
+userDao (extends HibernateDaoSupport)  
+sessionFactory  
+facade  
+proxy  
+sessionFactory  
+transactionManager  
+facade  
  
 ###Spring里面如何定义hibernate mapping？ applicationContext.xml  ”mappingResources”
-	添加hibernate mapping 文件到web/WEB-INF目录下的applicationContext.xml文件里面。示例如下：
-	<property name=”mappingResources”>
-	<list>
-	<value>org/appfuse/model/User.hbm.xml</value>
-	</list>
-	</property>
+添加hibernate mapping 文件到web/WEB-INF目录下的applicationContext.xml文件里面。示例如下：
+```
+<property name=”mappingResources”>
+<list>
+<value>org/appfuse/model/User.hbm.xml</value>
+</list>
+</property>
+```
 
