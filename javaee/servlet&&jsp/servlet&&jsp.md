@@ -46,6 +46,19 @@ Servlet的生命周期包含了下面4个阶段：
 	重定向行为是浏览器做了至少两次的访问请求的。 
 
 
+###jsp有哪些内置对象作用分别是什么
+JSP共有以下9种基本内置组件
+
+- request 用户端请求，此请求会包含来自GET/POST请求的参数 
+- response 网页传回用户端的回应 
+- pageContext 网页的属性是在这里管理 
+- session 与请求有关的会话期 
+- application servlet正在执行的内容 
+- out 用来传送回应的输出
+- config servlet的构架部件 
+- page JSP网页本身 
+- exception 针对错误网页，未捕捉的例外
+
 ###JSP中动态INCLUDE与静态INCLUDE的区别？
 >动态INCLUDE用jsp:include动作实现
 <jsp:include page=”included.jsp” flush=”true”/>
@@ -54,23 +67,23 @@ Servlet的生命周期包含了下面4个阶段：
 <%@ include file=”included.htm” %>
 
 ###四种会话跟踪技术？
-- page 
+- page   
 	是代表与一个页面相关的对象和属性。一个页面由一个编译好的Java servlet 类.这既包括servlet 又包括被编译成servlet 的JSP页面
-- request
+- request  
 	代表与Web客户机发出的一个请求相关的对象和属性。一个请求可能跨越多个页面，涉及多个Web组件。比如forward指令就可以使请求跨越多个页面。
-- session 
+- session  
 	是是代表与用于某个Web客户机的一个用户体验相关的对象和属性。一个 Web会话可以也经常会跨越多个客户机请求。一次会话（session）通常持续于用户打开浏览器后的一系列访问中。
-- application 
+- application   
 	是代表与整个Web应用程序相关的对象和属性。这实质上是跨越整个 Web应用程序，包括多个页面、请求和会话的一个全局作用域
 
 
 
 ###JSP和Servlet有哪些相同点和不同点，他们之间的联系是什么？
->Jsp和servlet相同的地方在于jsp和servlet本质上都是一个.java类。
-Jsp表面看起来不是一个java文件，但是在jsp的生命周期中它首先生成一个servlet源程序，进而再编译执行。
-Servlet和JSP最主要的不同点在于，Servlet的应用逻辑是在Java文件中，并且完全从表示层中的HTML里分离开来。而JSP的情况是Java和HTML可以组合成一个扩展名为.jsp的文件。
-JSP侧重于视图，Servlet主要用于控制逻辑
+>Jsp和servlet相同的地方在于jsp和servlet本质上都是一个.java类。  
+Jsp表面看起来不是一个java文件，但是在jsp的生命周期中它首先生成一个servlet源程序，进而再编译执行。  
+Servlet和JSP最主要的不同点在于，Servlet的应用逻辑是在Java文件中，并且完全从表示层中的HTML里分离开来。而JSP的情况是Java和HTML可以组合成一个扩展名为.jsp的文件。  
+JSP侧重于视图，Servlet主要用于控制逻辑  
 
 ###页面间对象传递的方法？
-	使用request,session,application,cookie可以实现页面间对象传递。
-	涉及到的方法：set/getAttribute设置获取属性方法。方法对于request，sesion，application都适用。对cookie来说request.getCookies()方法和response. addCookie(Cookie cookie);
+>使用request,session,application,cookie可以实现页面间对象传递。  
+涉及到的方法：set/getAttribute设置获取属性方法。方法对于request，sesion，application都适用。对cookie来说request.getCookies()方法和response. addCookie(Cookie cookie);  
