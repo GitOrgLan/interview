@@ -100,14 +100,25 @@ init(Filter Config)Servlet过滤器的初始化方法，Servlet过滤器实例�
 destory():Servlet容器在销毁过滤器的实例前调用该方法，在这个方法中可以释放Servlet过滤器占用的资源。  
 doFilter(ServletRequest ,ServletResponse,FilterChain):完成实际的过滤。  
 
+![flter流程图](https://github.com/GitOrgLan/interview/blob/master/img/j2ee/filter%E6%B5%81%E7%A8%8B%E5%9B%BE.gif)
+
+#filter,listener,servlet区别
+- Filter  
+	实现javax.servlet.Filter接口，在web.xml中配置与标签指定使用哪个Filter实现类过滤哪些URL链接。  
+	只在web启动时进行初始化操作。filter 流程是线性的， url传来之后，检查之后，可保持原来的流程继续向下执行，被下一个filter, servlet接收等，而servlet 处理之后，不会继续向下传递。  
+	filter功能可用来保持流程继续按照原来的方式进行下去，或者主导流程，而servlet的功能主要用来主导流程。  
+	特点：可以在响应之前修改Request和Response的头部，只能转发请求，不能直接发出响应。filter可用来进行字符编码的过滤，检测用户是否登陆的过滤，禁止页面缓存等  
+- Servlet  
+	servlet 流程是短的，url传来之后，就对其进行处理，之后返回或转向到某一自己指定的页面。它主要用来在业务处理之前进行控制。  
+- Listener  
+	servlet,filter都是针对url之类的，而listener是针对对象的操作的，如session的创建session.setAttribute的发生，在这样的事件发生时做一些事情。  
+
 ###EJB与JAVA BEAN的区别？
-	EJB与JAVA BEAN是SUN的不同组件规范，EJB是在容器中运行的，分步式的，而JAVA BEAN主要是一种可利用的组件，主要在客户端UI表现上。
-
-
-  
+>EJB与JAVA BEAN是SUN的不同组件规范，EJB是在容器中运行的，分步式的，而JAVA BEAN主要是一种可利用的组件，主要在客户端UI表现上。  
 
 ###JAVA解析XML的方式？
-	SAX、DOM、JDOM 、DOM4J 
+SAX、DOM、JDOM 、DOM4J 
+
 - DOM(Document Object Model):	  
 	DOM是以层次结构组织的节点或信息片断的集合。这个层次结构	允许开发人员在树中寻找特定信息。  分析该结构通常需要加载整个文档和构造层次结构，然后才能做任何工作。  
 	由于它是基于信息层次的，因而DOM被认为是基于树或基于对象的。  
