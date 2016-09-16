@@ -37,6 +37,12 @@ System_server
 - 加载一些JNI函数
 - 加入Binder(也会初始化一个Looper)
 
+##Instrumentation
+
+##ActivityManagerService
+负责四大组件的启动和生命周期的管理。如ActivityTask
+
+
 ##Binder
 ###为什么使用Binder
 - 传输性能 socket是通用接口，传输效率低，开销大，主要用在跨网络的进程间通信和本机上进程间的低速通信。消息队列和管道采用存储-转发方式，即数据先从发送方缓存区拷贝到内核开辟的缓存区中，然后再从内核缓存区拷贝到接收方缓存区，至少有两次拷贝过程。共享内存虽然无需拷贝，但控制复杂，难以使用
@@ -60,7 +66,7 @@ IPC 中最基本的问题在于进程间使用的虚拟地址空间是相互独�
 而Binder采用了新的策略，它把内核空间的地址和用户空间的虚拟地址映射到了同一段物理地址上，所以就只需要把数据从原始用户空间复制到内核空间，把目标进程用户空间和内核空间映射到同一段物理地址，这样第一次复制到内核空间，其实目标的用户空间上也有这段数据了。这就是 binder 比传统 IPC 高效的一个原因。
 
 ###使用以及上层原理
-直观来说，Binder是Android中的一个类，他实现了IBinder接口。从IPC角度来说，Binder是Android中的一种跨进程通信方式，Binder还可以理解为一种虚拟的物理设备，它的设备驱动是/dev/nomder。从Android Framework的角度来说，Binder是ServiceManager连接各种Manager和响应ManagerService的桥梁；从Android应用层来说，Binder是客户端和服务端进行通信的媒介，当bindService的时候，服务端会返回一个包含了服务端业务调用的Binder对象，通过这个对象，客户端就可以获取服务端提供的服务或数据，这里的服务包括普通服务和基于AIDL的服务。
+直观来说，Binder是Android中的一个类，他实现了IBinder接口。从IPC角度来说，Binder是Android中的一种跨进程通信方式，Binder还可以理解为一种虚拟的物理设备，它的设备驱动是/dev/binder。从Android Framework的角度来说，Binder是ServiceManager连接各种Manager和响应ManagerService的桥梁；从Android应用层来说，Binder是客户端和服务端进行通信的媒介，当bindService的时候，服务端会返回一个包含了服务端业务调用的Binder对象，通过这个对象，客户端就可以获取服务端提供的服务或数据，这里的服务包括普通服务和基于AIDL的服务。
 Android开发中，Binder主要用于Service，包括AIDL和Messenger，其中普通Service中的Binder不涉及进程间通信，所以较为简单，无法触及Binder的核心，而Messenger的底层其实是AIDL。
 
 ####IBinder/IInterface/Binder/BinderProxy/Stub
@@ -90,15 +96,15 @@ ActivityMangerService   ActiviyManagerProxy   ActivityMangerNative
 2. Instrumentation：用来辅助Activity完成启动Activity的过程
 3. ActivityThread（包含ApplicationThread + ApplicationThreadNative + IApplicationThread）：真正启动Activity的实现都在这里
 
-Activity#startActivity -> Activity#startActivityForResult
--> Instrumentation#execStartActivity
--> ActivityManagerNative.getDefault#startActivity(这里通过Binder调用了ActivityManagerService中的方法)
--> ActivityMangerService#startActivity -> ActivityManagerService#startActivityAsUser
--> ActivityStackSupervisor#startActivityMayWait -> startActivityLocked -> startActivityUncheckedLocked
--> ActivityStack#resumeTopActivityLocked -> resumeTopActivityInnerLocked
--> ActivityStackSupervisor#startSpecificActivityLocked -> (已有进程)realStartActivityLocked
--> ApplicationThread#scheduleLaunchActivity -> sendMessage(发送消息给H)
--> H#handleMessage -> handleLaunchActivity -> performLaunchActivity -> 回调OnCreate方法
+[Activity#]startActivity -> startActivityForResult
+-> [Instrumentation]#execStartActivity
+-> [ActivityManagerNative.getDefault]#startActivity(这里通过Binder调用了ActivityManagerService中的方法)
+-> [ActivityMangerService]#startActivity -> startActivityAsUser
+-> [ActivityStackSupervisor]#startActivityMayWait -> startActivityLocked -> startActivityUncheckedLocked
+-> [ActivityStack]#resumeTopActivityLocked -> resumeTopActivityInnerLocked
+-> [ActivityStackSupervisor]#startSpecificActivityLocked -> (已有进程)realStartActivityLocked
+-> [ApplicationThread]#scheduleLaunchActivity -> sendMessage(发送消息给H)
+-> [H]#handleMessage -> handleLaunchActivity -> performLaunchActivity -> 回调OnCreate方法
 
 在上述startSpecificActivityLocked中，若不存在进程，则调用`ActivityServiceManager.startProcessLocked()`，在其中调用`Process.start()`通过Zygote fork出一个新的进程，并执行`ActivityThread.main()`;接下来通过IPC调用AMS的`attachApplication()`，调用`realStartActivityLocked()`方法，接下来就一样了。
 
@@ -265,12 +271,91 @@ Handler机制相关的类有
               +--------------+
 ```
 
+#开源框架总结
+##okio
+- ByteString 代表一个Immutable字节序列，类似String的封装
+- Source&Sink 类似于InputStream和OutputStream，还提供了额外的功能，如超时机制，
+- Buffer，实现了BufferedSource和BufferedSink将读写都放到其中，统一了许多操作。
+
+###优点
+- 对数据进行了分块(Segment)处理，这样在大数据IO的时候可以以块为单位进行IO，这可以提高IO的吞吐率。
+- 对这些数据块使用链表进行管理，这可以仅通过移动“指针”就进行数据的管理，而不用真正去处理数据，而且对扩容来说也十分方便。
+- 闲置的块进行管理，通过一个块池（SegmentPool）的管理，避免系统GC和申请byte时的zero-fill。
+
+##OkHttp
+![流程图](http://blog.piasy.com/img/201607/okhttp_full_process.png)
+###一个同步请求
+```Java
+String run(String url) throws IOException {
+  Request request = new Request.Builder()
+      .url(url)
+      .build();
+
+  Response response = client.newCall(request).execute();
+  return response.body().string();
+}
+```
+1. 通过`client.newCall()`创建一个请求(具体实现RealCall)，并且执行该请求获得结果(一个Call只能执行一次)。
+2. `dispatcher.excute()`把请求加入一个同步请求队列(Deque)，便于取消操作等等。
+3. 调用`getResponseWithInterceptorChain()`进行真正的网络请求执行过程。
+4. `dispathcer.finish()`将Call移出队列
+
+`Interceptor`是OkHttp中最核心的类和思想。把实际的网络请求，缓存，压缩等功能统一了起来，每一个功能都是一个`Interceptor`，把他们连成一个`Interceptor.Chain`，一个Call从头开始走到链的结束就完成了一次请求。
+>它包含了一些命令对象和一系列的处理对象，每一个处理对象决定它能处理哪些命令对象，它也知道如何将它不能处理的命令对象传递给该链中的下一个处理对象。该模式还描述了往该处理链的末尾添加新的处理对象的方法。(责任链模式)
+
+关于`ConnectInterceptor`
+实际就是通过Okio创建了一个`HttpStream`对象和一个`RealConnection`对象，供之后的步骤`CallServerInterceptor`收发数据。
+收到的数据放到Response中，如果有body放到ResponseBody中，每个body只能被消费一次，多次消费会抛出异常。body必须被关闭，否则会造成资源泄漏。
+
+###一个异步请求
+```Java
+client.newCall(request).enqueue(new Callback() {
+    @Override
+    public void onFailure(Call call, IOException e) {
+    }
+
+    @Override
+    public void onResponse(Call call, Response response) throws IOException {
+        System.out.println(response.body().string());
+    }
+});
+```
+通过`equeue()`，将Call封装成`AsyncCall`加入队列，如果当前可以继续并发，则加入`runningAsyncCalls`队列，否则加入`readyAsyncTask`队列。Call的执行通过线程池，OkHttp默认的线程池是一个Cache线程池，没有coreThead，maxSize为Integer.MAX_VALUE，超时时间60s。执行也会调用`getResponseWithInterceptorChain()`。
+
+##Retrofit
+![滴滴滴](http://upload-images.jianshu.io/upload_images/625299-dbe4bd4a366c6bea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+###一个请求
+```Java
+Retrofit retrofit = new Retrofit.Builder()
+    .baseUrl("https://api.github.com/")
+    .addConverterFactory(GsonConverterFactory.create())
+    .build();
+
+GitHubService github = retrofit.create(GitHubService.class);
+Call<List<Repo>> call = github.listRepos("square");
+List<Repo> repos = call.execute().body();
+
+public interface GitHubService {
+  @GET("users/{user}/repos")
+  Call<List<Repo>> listRepos(@Path("user") String user);
+}
+```
+1. 通过create将给到的接口经过动态代理得到实例，把对接口的调用给到`InvocationHandler`
+2. 创建`ServiceMethod<T`>，把对接口的方法调用转换成一次Http调用，有缓存逻辑。重要的有`ServiceMethod<T>`的几个成员变量
+**callFactory**:负责创建HTTP请求(`okhttp3.Call`)
+**callAdapter**: 把 retrofit2.Call<T> 转为 T，这个过程会发送一个 HTTP 请求，拿到服务器返回的数据(通过 okhttp3.Call 实现)，并把数据转换为声明的 T 类型对象
+**responseConverter**:负责把服务器返回的数据(JSON、XML、二进制或者其他格式，由 ResponseBody 封装)转化为 T 类型的对象
+**parameterHandlers**:负责解析 API 定义时每个方法的参数，并在构造 HTTP 请求时设置参数
+`callAdapter`和`responseConverter`一样有对应的工厂类，通过遍历`Converter.Factory`列表，看看有没有工厂能够提供需要的`Converter`，如果没有就抛出异常。(工厂模式，解耦)
+3. `创建OkHttpCall`，使用`callAdapter`将其转换为`Retrofit.Call`返回。
+4. 获取call后，在`excute()`和`enqueue()`中执行请求。`excute()`就是将`ServiceMethod`的参数通过`parameterHandler`封装成`okhttp3`的`Request`，然后调用okhttp的`excute()`方法，并将response通过`responseConverter`转换。
+
+![总览](http://blog.piasy.com/img/201608/okio_okhttp_retrofit.png)
+
+
+
 #其他
 `Toast.makeText().show()`是将Toast加入显示队列
 
 Java中Byte,Short,Integer,Long,Character,Boolean实现了常量池技术，
 这5种包装类默认创建了数值[-128，127]的相应类型的缓存数据，但是超出此范围仍然会去创建新的对象。
-
-
-#开源框架总结
-##okio
