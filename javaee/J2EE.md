@@ -102,7 +102,7 @@ doFilter(ServletRequest ,ServletResponse,FilterChain):完成实际的过滤。
 
 ![flter流程图](https://github.com/GitOrgLan/interview/blob/master/img/j2ee/filter%E6%B5%81%E7%A8%8B%E5%9B%BE.gif)
 
-#filter,listener,servlet区别
+###filter,listener,servlet区别
 - Filter  
 	实现javax.servlet.Filter接口，在web.xml中配置与标签指定使用哪个Filter实现类过滤哪些URL链接。  
 	只在web启动时进行初始化操作。filter 流程是线性的， url传来之后，检查之后，可保持原来的流程继续向下执行，被下一个filter, servlet接收等，而servlet 处理之后，不会继续向下传递。  
