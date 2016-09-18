@@ -352,10 +352,57 @@ public interface GitHubService {
 
 ![总览](http://blog.piasy.com/img/201608/okio_okhttp_retrofit.png)
 
+##RxJava
+- Observer 观察者
 
+- Observable 被观察者
+
+- Observable.OnSubscribe 
+
+- Subscriber 被观察者的子类，有额外的回调方法
+
+- Subscription 可以被关闭的功能接口
+
+- lift(),operator 转换，map等操作符的基本
+
+##EventBus
+- `subscriptionsByEventType` key:事件类型 value:订阅该事件的所有订阅者
+- `typesBySubscriber` key:订阅者对象 value:这个订阅者订阅的事件集合
+
+###注册
+- 获得订阅者的class对象
+- 通过`subscriberMothedFinder`找到订阅者订阅的事件，返回`List<SubscriberMethod>`(`SubscriberMethod`里包含了这个方法的Method对象、响应订阅是在哪个线程的ThreadMode、订阅的事件类型eventType、订阅的优先级priority、是否接收粘性sticky事件)
+- `SubscriberMethodFinder`类就是用来查找和缓存订阅者相应函数相关信息的类。可以通过编译时注解器或是运行时反射机制获得相关信息。订阅方法必须是只有一个参数，是public，非static和非abstract的。
+- 获取`SubscriberMethod`之后，调用subscribe方法订阅
+![流程](http://skykai521.github.io/image/register-flow-chart.png)
+
+###分发事件
+会根据ThreadMode去执行分发：
+- PostThread：默认的 ThreadMode，表示在执行Post操作的线程直接调用订阅者的事件响应方法，不论该线程是否为主线程(UI 线程)。当该线程为主线程时，响应方法中不能有耗时操作，否则有卡主线程的风险。适用场景：对于是否在主线程执行无要求，但若 Post 线程为主线程，不能耗时的操作；
+- MainThread：在主线程中执行响应方法。如果发布线程就是主线程，则直接调用订阅者的事件响应方法，否则通过主线程的 Handler 发送消息在主线程中处理——调用订阅者的事件响应函数。显然，MainThread类的方法也不能有耗时操作，以避免卡主线程。适用场景：必须在主线程执行的操作；
+- BackgroundThread：在后台线程中执行响应方法。如果发布线程不是主线程，则直接调用订阅者的事件响应函数，否则启动唯一的后台线程去处理。由于后台线程是唯一的，当事件超过一个的时候，它们会被放在队列中依次执行，因此该类响应方法虽然没有PostThread类和MainThread类方法对性能敏感，但最好不要有重度耗时的操作或太频繁的轻度耗时操作，以造成其他操作等待。适用场景：操作轻微耗时且不会过于频繁，即一般的耗时操作都可以放在这里；
+- Async：不论发布线程是否为主线程，都使用一个空闲线程来处理。和BackgroundThread不同的是，Async类的所有线程是相互独立的，因此不会出现卡线程的问题。适用场景：长耗时操作，例如网络访问。
+![分发](http://skykai521.github.io/image/post-flow-chart.png)
+
+###解除注册
+从`typesBySubscriber`和`subscriptionsByEventType`中删除对应成员即可
+
+##ButterKnift
+
+##UIL
 
 #其他
 `Toast.makeText().show()`是将Toast加入显示队列
 
 Java中Byte,Short,Integer,Long,Character,Boolean实现了常量池技术，
 这5种包装类默认创建了数值[-128，127]的相应类型的缓存数据，但是超出此范围仍然会去创建新的对象。
+
+
+#一些性能优化
+检测层级 Hierarchy Viewer
+检测overdraw: profile GPU Rendering,show GPU overdraw,GPU view update
+检测掉帧 traceview
+
+减小传输大小：
+不使用无法压缩的PNG，使用JPEG。
+可以用Protocol Buffers,FlatBuffers等等序列化传输数据
