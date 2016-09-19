@@ -1052,6 +1052,7 @@ body .markdown-body
 <li><a href="#eden">对象优先在Eden分配</a></li>
 <li><a href="#_19">长期存活的对象进入老年代</a></li>
 <li><a href="#_20">空间分配担保</a></li>
+<li><a href="#gc_1">GC时机</a></li>
 </ul>
 </li>
 </ul>
@@ -1196,6 +1197,8 @@ body .markdown-body
 <p>如果对象在Eden出生并且经过第一次Minor GC后仍然存活，并且能被Survivor容纳的话，将被移动到Survivor空间中，并且对象年龄设置为一，对象在Survivor区每熬过一次Minor GC，年龄就加一岁，当它的年龄增加到一定程度(默认为15岁，可以通过-XX:MaxTenuringThreshold设置)，就会被晋升到老年代中。</p>
 <h3 id="_20"><a name="user-content-_20" href="#_20" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>空间分配担保</h3>
 <p>在发生Minor GC前，<strong><em>虚拟机会先检查老年代最大可用的连续空间是否大于新生代所有对象总空间，如果这个条件成立，则可以锁Minor GC是安全的，如果不成立，则虚拟机会查看HandlePromotionFailure设置值是否允许担保失败。如果允许，那么会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试进行一次Minor GC。如果小于，或者HandlePromotionFailure设置为不允许冒险，那这是要改为进行一次Full GC</em></strong> JDK6之后的规则变为，<strong><em>只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小就会进行Minor GC，否则将进行Full GC</em></strong>。</p>
+<h3 id="gc_1"><a name="user-content-gc_1" href="#gc_1" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>GC时机</h3>
+<p>eden区满了 进行minor GC，升到老年代的对象大于老年代剩余空间就会进行Full GC</p>
 <h1 id="jvm"><a name="user-content-jvm" href="#jvm" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>JVM类加载机制</h1>
 <p>虚拟机把描述类的数据从Class文件加载到内存，并对数据进行校验，转换解析和初始化，最终形成可以被虚拟机直接使用的Java类型，这就是JVM的加载机制。</p>
 <h2 id="_21"><a name="user-content-_21" href="#_21" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>类加载的时机</h2>
@@ -1305,7 +1308,7 @@ hello,guy
 如下定义</p>
 <p><pre><code>Human man = new Man()
 </code></pre><br />
-上面代码中的Human是静态类型(外观类型)，后面的Man是实际类型。静态类型和实际类型在程序中都可以发生一些变化，区别是静态类型的变化仅仅在使用时发生，变量本省的静态类型不会发生改变，并且最终的静态类型是在编译期克制的。而实际类型的变化结果是在运行期才可确定，编译期在编译程序的时候并不知道一个对象的设计类型是什么。</p>
+上面代码中的Human是静态类型(外观类型)，后面的Man是实际类型。静态类型和实际类型在程序中都可以发生一些变化，区别是静态类型的变化仅仅在使用时发生，变量本身的静态类型不会发生改变，并且最终的静态类型是在编译期可知的。而实际类型的变化结果是在运行期才可确定，编译期在编译程序的时候并不知道一个对象的设计类型是什么。</p>
 <p><pre><code>//实际类型变化
 Human man = new Man();
 man = new Woman();
@@ -1399,8 +1402,7 @@ LinkedTransferQueue使用一个内部类类型来定义队列的头队列（Head
 <p>Java定义了5种线程状态，在任意一个时间点，一个线程有且只有其中的一种状态，如下<br />
 - 新建<br />
 - 运行<br />
-- 无限期等待<br />
-- 限期等待<br />
+- 无限期等待|限期等待<br />
 - 阻塞<br />
 - 结束</p>
 <h1 id="_38"><a name="user-content-_38" href="#_38" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>线程安全</h1>
@@ -1408,7 +1410,7 @@ LinkedTransferQueue使用一个内部类类型来定义队列的头队列（Head
 <ul>
 <li>不可变(Immutable)</li>
 <li>绝对线程安全</li>
-<li>相对线程安全：通常意义上的线程安全，如Vector,HashTable,Collections的synchornizedCollection()方法包装的集合。</li>
+<li>相对线程安全：通常意义上的线程安全，如Vector,HashTable,Collections的synchronizedCollection()方法包装的集合。</li>
 <li>线程兼容：大部分类属于这种情况，如ArrayList,HashMap等</li>
 <li>线程对立：无论是否采用了同步，都无法在多线程环境中并发使用，如Thread的suspend()和resume()方法，System.setIn(),System.SetOut(),System.runFinalizerOnExit()等</li>
 </ul>
