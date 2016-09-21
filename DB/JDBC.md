@@ -10,9 +10,29 @@ Statement每次都要把SQL语句发送给数据库,这样做效率明显不高,
 当然如果数据库不支持预编译,PreparedStatement会象Statement一样工作,只是效率不高而不需要用户工手干预.
 另外PreparedStatement还支持接收参数.在预编译后只要传输不同的参数就可以执行,大大提高了性能.
 
-###说出数据连接池的工作机制是什么？
-	J2EE服务器启动时会建立一定数量的池连接，并一直维持不少于此数目的池连接。
-	客户端程序需要连接时，池驱动程序会返回一个未使用的池连接并将其表记为忙。
-	如果当前没有空闲连接，池驱动程序就新建一定数量的连接，新建连接的数量有配置参数决定。
-	(通过参数可以决定最大连接数是多少，服务器启动的时候建立多少连接，池中需要维持多少空闲连接等。)
-	当使用的连接调用完成后，就可以将连接close，这个时候池驱动程序将此连接放回连接池并且标记为空闲，其他调用就可以使用这个连接。
+###注册驱动的三种方式
+-  DriverManager.registerDriver(new com.mysql.jdbc.Driver())     
+	会造成DriverManager中产生两个一样的驱动，并会对具体的驱动类产生依赖。   
+	具体来说就是：   
+	- 加载的时候注册一次驱动（原因请看第三中注册方式），实例化的时候又注册一次。所以两次。 
+	- 由于实例化了com.mysql.jdbc.Driver.class，导致必须导入该类(就是要把这个类import进去)，从而具体驱动产生了依赖。不方便扩展代码。   
+
+- System.setProperty("jdbc.drivers","com.mysql.jdbc.Driver")  
+	通过系统的属性设置注册驱动  
+	如果要注册多个驱动，则System.setProperty  ("jdbc.drivers","com.mysql.jdbc.Driver:com.oracle.jdbc.Driver");   
+	虽然不会对具体的驱动类产生依赖；但注册不太方便，所以很少使用。 
+
+- Class.forName("com.mysql.jdbc.Driver")  
+	推荐这种方式，不会对具体的驱动类产生依赖（就是不用import package了）。   
+	其实这个只是把com.mysql.jdbc.Driver.class这个类装载进去，但是关键就在于，在 
+	这个类中，有个静态块，如下：   
+	```
+	static{ 
+	   try{ 
+			java.sql.DriverManager.registerDriver(new Driver()); 
+		}catch(SQLException e){ 
+	   		throw new RuntimeException("can't register driver!"); 
+		} 
+	} 
+	```
+	就是因为这个代码块，让类在加载的时候就把驱动注册进去了！ 
