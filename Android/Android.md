@@ -46,7 +46,7 @@ System_server
 ##Binder
 ###为什么使用Binder
 - 传输性能 socket是通用接口，传输效率低，开销大，主要用在跨网络的进程间通信和本机上进程间的低速通信。消息队列和管道采用存储-转发方式，即数据先从发送方缓存区拷贝到内核开辟的缓存区中，然后再从内核缓存区拷贝到接收方缓存区，至少有两次拷贝过程。共享内存虽然无需拷贝，但控制复杂，难以使用
-- 安全性 传统的LinuxIPC方式的接收方无法获得对方进程可靠的UID/PID（用户ID/进程ID），从而无法鉴别对方身份。Android为每个安装好的应用程序分配了自己的UID，故进程的UID是鉴别进程身份的重要标志。而Binder基于Client-Server通信模式，传输过程只需一次拷贝，为发送发添加UID/PID身份，既支持实名Binder也支持匿名Binder，安全性高
+- 安全性 传统的Linux IPC方式的接收方无法获得对方进程可靠的UID/PID（用户ID/进程ID），从而无法鉴别对方身份。Android为每个安装好的应用程序分配了自己的UID，故进程的UID是鉴别进程身份的重要标志。而Binder基于Client-Server通信模式，传输过程只需一次拷贝，为发送发添加UID/PID身份，既支持实名Binder也支持匿名Binder，安全性高
 
 ###Binder通信模型
 Binder在FrameWork的通信主要与以下几个模块有关
@@ -90,6 +90,13 @@ ActivityMangerService   ActiviyManagerProxy   ActivityMangerNative
 ```
 
 #Application Layer
+##Intent
+主要功能，启动Activity，Service，发送广播
+###类型
+- 显式Intent 直接通过类名启动一个新的组件
+- 隐式Intent 不会指定特定的组件，而是声明要执行的常规操作，从而允许其他应用中的组件来处理它
+使用隐式Intent时，系统将会通过Intent的内容与在设备上的其他应用的AndroidManifest文件中声明的Intent过滤器进行比较。从而找到要启动的应用组件。
+
 ##Activity
 ###启动流程
 1. Activity：startActivity方法的真正实现在Activity中
@@ -147,21 +154,13 @@ ActivityB------->onDestroy()
 ###Service保活
 [出处](http://blog.csdn.net/marswin89/article/details/50890708)
 1. 将Service设置为前台进程
-
 2. 在service的onstart方法里返回 STATR_STICK
-
 3. 添加Manifest文件属性值为android:persistent=“true”
-
-4. 覆写Service的onDestroy方法
-
+4. 覆写Service的onDestroy方法，在关闭之后重新连接
 5. 添加广播监听android.intent.action.USER_PRESENT事件以及其他一些可以允许的事件
-
 6. 服务互相绑定
-
 7. 设置闹钟，定时唤醒
-
 8. 账户同步，定时唤醒
-
 9. native层保活
 
 ##View
@@ -355,6 +354,8 @@ public interface GitHubService {
 ##RxJava
 - Observer 观察者
 
+- OnSubscribe 观察者的回调
+
 - Observable 被观察者
 
 - Observable.OnSubscribe 
@@ -364,6 +365,7 @@ public interface GitHubService {
 - Subscription 可以被关闭的功能接口
 
 - lift(),operator 转换，map等操作符的基本
+![RxJava](http://blog.piasy.com/img/201609/RxJava_call_stack_just_map_subscribeOn_observeOn.png)
 
 ##EventBus
 - `subscriptionsByEventType` key:事件类型 value:订阅该事件的所有订阅者
@@ -372,7 +374,7 @@ public interface GitHubService {
 ###注册
 - 获得订阅者的class对象
 - 通过`subscriberMothedFinder`找到订阅者订阅的事件，返回`List<SubscriberMethod>`(`SubscriberMethod`里包含了这个方法的Method对象、响应订阅是在哪个线程的ThreadMode、订阅的事件类型eventType、订阅的优先级priority、是否接收粘性sticky事件)
-- `SubscriberMethodFinder`类就是用来查找和缓存订阅者相应函数相关信息的类。可以通过编译时注解器或是运行时反射机制获得相关信息。订阅方法必须是只有一个参数，是public，非static和非abstract的。
+- `SubscriberMethodFinder`类就是用来查找和缓存订阅者相应函数相关信息的类。可以通过编译时注解器或是运行时反射机制获得相关信息。订阅方法必须只有一个参数，是public，非static和非abstract的。
 - 获取`SubscriberMethod`之后，调用subscribe方法订阅
 ![流程](http://skykai521.github.io/image/register-flow-chart.png)
 
