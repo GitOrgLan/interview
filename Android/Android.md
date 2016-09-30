@@ -61,7 +61,7 @@ Binder在FrameWork的通信主要与以下几个模块有关
 3. Client要与Service通信，首先询问ServiceManager，通过Service名获得Service地址，这样就可以和Service进行通信。
 
 ###跨进程原理
-IPC 中最基本的问题在于进程间使用的虚拟地址空间是相互独立的，不能直接访问，所以要相互访问，就要借助 kernel ，就是要让数据用用户空间进入到内核空间，然后再去到另一个进程的用户空间。
+IPC 中最基本的问题在于进程间使用的虚拟地址空间是相互独立的，不能直接访问，所以要相互访问，就要借助 kernel ，就是要让数据从用户空间进入到内核空间，然后再去到另一个进程的用户空间。
 一般的Linux IPC方式通常的做法是：发送方将准备好的数据存放在缓存区中，调用API通过系统调用进入内核中。内核服务程序在内核空间分配内存，将数据从发送方缓存区复制到内核缓存区中。接收方读数据时也要提供一块缓存区，内核将数据从内核缓存区拷贝到接收方提供的缓存区中并唤醒接收线程，完成一次数据发送。
 而Binder采用了新的策略，它把内核空间的地址和用户空间的虚拟地址映射到了同一段物理地址上，所以就只需要把数据从原始用户空间复制到内核空间，把目标进程用户空间和内核空间映射到同一段物理地址，这样第一次复制到内核空间，其实目标的用户空间上也有这段数据了。这就是 binder 比传统 IPC 高效的一个原因。
 
@@ -85,7 +85,7 @@ Android开发中，Binder主要用于Service，包括AIDL和Messenger，其中�
 
 ```
 ActivityMangerService   ActiviyManagerProxy   ActivityMangerNative
-        |                         |                     |
+        |                         |                     | 
       Binder                    Proxy                  Stub
 ```
 
@@ -392,6 +392,62 @@ public interface GitHubService {
 ##ButterKnift
 
 ##UIL
+
+##美团Robust
+对每段函数在编译打包阶段都插入一段代码
+```
+public long getIndex() {
+  return 100;
+}
+```
+被处理成如下的实现：
+
+```
+public static ChangeQuickRedirect changeQuickRedirect;
+public long getIndex() {
+  if(changeQuickRedirect != null) {
+    //PatchProxy中封装了获取当前className和methodName的逻辑，并在其内部最终调用了changeQuickRedirect的对应函数
+    if(PatchProxy.isSupport(new Object[0], this, changeQuickRedirect, false)) {
+      return ((Long)PatchProxy.accessDispatch(new Object[0], this, changeQuickRedirect, false)).longValue();
+    }
+  }
+  return 100L;
+}
+```
+增加了一个QuickRedirect类型的静态成员变量，在changeQuickRedirect不为空时，就可能会执行到accessDispatch逻辑进行修复。
+修复的patch主要有一下两个部分
+```
+public class PatchesInfoImpl implements PatchesInfo {
+    public List<PatchedClassInfo> getPatchedClassesInfo() {
+        List<PatchedClassInfo> patchedClassesInfos = new ArrayList<PatchedClassInfo>();
+        PatchedClassInfo patchedClass = new PatchedClassInfo("com.meituan.sample.d", StatePatch.class.getCanonicalName());
+        patchedClassesInfos.add(patchedClass);
+        return patchedClassesInfos;
+    }
+}
+
+public class StatePatch implements ChangeQuickRedirect {
+    @Override
+    public Object accessDispatch(String methodSignature, Object[] paramArrayOfObject) {
+        String[] signature = methodSignature.split(":");
+        if (TextUtils.equals(signature[1], "a")) {//long getIndex() -> a
+            return 106;
+        }
+        return null;
+    }
+    @Override
+    public boolean isSupport(String methodSignature, Object[] paramArrayOfObject) {
+        String[] signature = methodSignature.split(":");
+        if (TextUtils.equals(signature[1], "a")) {//long getIndex() -> a
+            return true;
+        }
+        return false;
+    }
+}
+```
+用DexClassLoader加载patch.dex，反射拿到PatchesInfoImpl.java这个class。拿到后，创建这个class的一个对象。然后通过这个对象的getPatchedClassesInfo函数，知道需要patch的class混淆后的绝对类名，再反射得到当前运行环境中的class，将其中的changeQuickRedirect字段赋值为用patch.dex中的StatePatch.java这个class new出来的对象。
+
+
 
 #其他
 `Toast.makeText().show()`是将Toast加入显示队列
