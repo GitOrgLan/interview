@@ -297,6 +297,7 @@ while (true) {
 - 组合模式
 - 代理模式
 - 适配器模式
+- 享元模式 (immutable)
 
 #Java1.8
 ##Lambda
