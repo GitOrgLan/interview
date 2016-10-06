@@ -82,7 +82,10 @@ Map
 ##TreeMap
 实现了SortMap接口，能够把它保存的记录根据键排序，默认是按键值的升序排序， 也可以指定Comparator，当用Iterator遍历TreeMap时，得到的记录是排过序的。
 
-#Set
+##LinkedHashMap
+其中的Entry继承了HashMap的Entry，增加了before，after属性，用以形成用于维护顺序的双向链表。在put新的节点进入时，除了放入hashmap的table中外，还会插入到这个双向链表中。若使用访问顺序排序，在get之后，又会把被访问的数据从双向链表中删除，并且插入到链表的尾部。
+若要实现LRU，可以override removeEldestEntry(Map.Entry eldest)方法，根据容量上限策略来实现删除算法。
+
 ##HashSet
 HashSet 内部用一个HashMap对象存储数据，更具体些，只用到了key，value全部为一dummy对象
 
