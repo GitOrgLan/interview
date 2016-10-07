@@ -325,6 +325,13 @@ client.newCall(request).enqueue(new Callback() {
 ```
 通过`equeue()`，将Call封装成`AsyncCall`加入队列，如果当前可以继续并发，则加入`runningAsyncCalls`队列，否则加入`readyAsyncTask`队列。Call的执行通过线程池，OkHttp默认的线程池是一个Cache线程池，没有coreThead，maxSize为Integer.MAX_VALUE，超时时间60s。执行也会调用`getResponseWithInterceptorChain()`。
 
+###连接池管理
+通过okhttp3.ConnectionPool来完成回收复用等操作。
+Deque&lt;RealConnection&gt;用于保存连接，Deque是一个可以头尾插入的队列，这里使用FILO的策略。默认保存最多5个连接，并且超时时间为5分钟。
+- put 在添加一个线程之前，会进行一次清理。
+- get 遍历缓存列表，如果某个连接计数小于上限，以及request的地址和缓存列表中这个connect的地址完全匹配，则复用这个连接。这里计数是使用`StreamAllocation`来完成，实际上是使用aquire()和release()来维护一个`List&lt;WeakReference&lt;StreamAllocation&gt;&gt;`，用于记录引用数。
+- 清理 有一个线程池在后台用于清理空闲连接，在每次put时会触发，没有连接时会结束。。通过上面的StreamAllocation的列表可以找到空闲的连接，根据空闲时间，关闭空闲时间最长的连接。
+
 ##Retrofit
 ![滴滴滴](http://upload-images.jianshu.io/upload_images/625299-dbe4bd4a366c6bea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 ###一个请求
@@ -459,6 +466,16 @@ public class StatePatch implements ChangeQuickRedirect {
 Java中Byte,Short,Integer,Long,Character,Boolean实现了常量池技术，
 这5种包装类默认创建了数值[-128，127]的相应类型的缓存数据，但是超出此范围仍然会去创建新的对象。
 
+##Dex和Jar的区别
+.dex格式是专为Dalvik设计的一种压缩格式。.dex文件格式可以减少整体文件尺寸，提高I/o操作的类查找速度。
+通过SDK提供的工具可以将.class文件转换为.dex文件，多个类文件可以包含到单个.dex文件中。重复的，可用于多个类文件的字符串和常量在转换时会被输出到保留空间中。.dex文件所占空间更小。odex是对dex文件进行的更进一步的优化，会使文件大小增大1-4倍。
+
+##SparseArray
+两个数组分别保存key和value，使用二分查找查找key和value
+
+##DexClassLoader, PathClassLoader
+DexClassLoader能够加载未安装的jar/apk/dex
+而PathClassLoader只能加载系统中以及安装过的apk 
 
 #一些性能优化
 检测层级 Hierarchy Viewer

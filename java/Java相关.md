@@ -151,6 +151,23 @@ public ThreadPoolExecutor(int corePoolSize,
 4. SingleThreadExecutor
 只有一个核心线程，确保所有任务都在一个线程中按顺序执行。意义在与统一所有的外界任务到一个线程之中而不需要处理线程同步的问题。
 
+###线程池实现
+```
+BlockingQueue<Runnable> workQueue;              //任务缓存队列
+ReentrantLock mainLock;                         //状态锁
+HashSet<Worker> workers;                        //工作集
+```
+调用execute，会判断当前线程数，如果小于corePoolSize，则调用addWorker()创建一个线程去执行任务，如果大于，则把当前任务放入任务队列workQueue.offer(worker)。
+addWorker中，会new Worker()，Worker实现了Runnable接口，在run()中调用了runWorker方法。
+runWorker中是一个循环，中止条件是task和getTask()方法同时为null，就是这里完成了线程的复用。
+getTask()中通过workQueue来实现阻塞
+```
+Runnable r = timed ?
+                workQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS) :
+                workQueue.take();
+```
+可以看到，需要超时时，会使用poll来实现，否则使用take一直阻塞下去。
+
 ###生产者消费者模型
 - 判断线程状态时要使用while而不是if，因为即使从wait中被唤醒，当前的状态也不一定是可以操作的。如两个删除线程和一个添加线程，并且用if来判断条件，两个删除线程在为空时阻塞，添加线程唤醒了他们，这时就有可能某个线程在执行删除操作的时候，集合已经为空。若是使用while，被唤醒后发现集合不为空，则再次进入等待状态。
 
