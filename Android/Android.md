@@ -168,6 +168,11 @@ ActivityB------->onDestroy()
 8. 账户同步，定时唤醒
 9. native层保活
 
+##Fragment
+主要涉及：Fragment，FragmentTransaction,FragmentManager
+可以通过FragmentManager获得FragmentTransaction，FragmentTransaction的一系列操作都是通过BackStackRecord来完成的，内部有一个双向链表，所有操作都是不同操作符的Op对象。
+
+
 ##View
 ###ViewRoot和DecorView
 ViewRoot对应`ViewRootImpl`类，是连接WindowManager和DecorView的纽带，View的三大流程均是通过ViewRoot来完成的。在ActivityThread中，当Activity对象被创建出来后，会将DecorView添加到Window中，同时会创建ViewRootImpl对象，并将ViewRootImpl对象和DecorView建立关联。

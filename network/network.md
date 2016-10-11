@@ -81,6 +81,13 @@ Secure Hypertext Transfer Protocol 安全超文本传输协议，是使用TLS/SS
 
 #Git原理
 git中，所有文件内容都保存在git仓库的objects目录中。
+
+有这几个重要的区域
+- 工作空间
+- 暂存区
+- 本地仓库 
+- 远程仓库
+
 每个文件都有一个sha-1来标识。git对象可分为四种类型
 
 1. blob对象，只用来存放文件内容，没有如名称路径之类的其他信息
