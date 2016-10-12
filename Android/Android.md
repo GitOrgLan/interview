@@ -155,6 +155,15 @@ ActivityB------->onStop()
 ActivityB------->onDestroy()  
 ```
 
+####横竖屏切换
+若没有禁止横竖屏切换，则会经历以下周期
+```
+onPause->onSaveInstanceState->onStop->onDestroy -> 
+onCreate->onStart->onRestoreInstanceState->onResume
+```
+禁止横竖屏切换，可以重新配置configChange参数:android:configChanges="orientation|screenSize"
+横竖屏切换后不再重建Activity，同时会调用以下方法onConfigurationChanged()
+
 ##Service
 ###Service保活
 [出处](http://blog.csdn.net/marswin89/article/details/50890708)
@@ -491,3 +500,26 @@ DexClassLoader能够加载未安装的jar/apk/dex
 减小传输大小：
 不使用无法压缩的PNG，使用JPEG。
 可以用Protocol Buffers,FlatBuffers等等序列化传输数据
+
+文字绘制
+在onMeasure中 
+textView会根据当前内容决定layout
+如果是Spannable的内容，就使用DynamicLayout
+如果是单行 BoringLayout
+否则StaticLayout
+
+DynamicLayout会新建一个数据结构储存每一行的起始位置，顶部，descent
+并且调用reflow
+reflow在span变化的时候会重新整理上面的数据结构。具体是通过StaticLayout计算计算行数，每行的开头结尾，并把结果保存起来，并更新到DynamicLayout中。
+最后通过layout的draw方法绘制，在DynamicLayout中获得每行的top start descent
+
+
+输入字符的三种方式
+1.硬键盘 ： 从Activity的dispatch方法开始，向下传递到TextView的doKeyDown方法中，传递给onKeyListener，给QwertyKeyListener，有成员变量SpannableStringBuilder(其实是TextView mText的引用)，调用他的replace方法，会将输入字符加入 
+2.软键盘 ： 通过EditableInputConnection的commitText来传递文本，sendKeyEvent来传递事件。之后同软键盘一样
+3.粘贴 ： 在onTextContextMenuItem中调用paste，之后同上面一样
+
+
+反射调用change
+运行阻塞，ANR
+原因？反射时间太长
