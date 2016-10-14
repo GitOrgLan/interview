@@ -49,7 +49,7 @@ Map
 扩容时请求双倍大小，线程安全的类。
 
 ##HashMap
-内部有成员变量，table，类型为`Node &lt;K,V&gt;[]`。Node的成员变量为hash，key，value，next。可以说HashMap是一个链表的数组的包装类。
+内部有成员变量，table，类型为`Node <K,V>[]`。Node的成员变量为hash，key，value，next。可以说HashMap是一个链表的数组的包装类。
 
 ###put
 计算has值后调用`putVal()`，如果table为null或者大小为0，调用`resize()`得到一个不为空的table，在其中要根据threshold来判断是否扩容，threshold＝容量*加载因子。如果旧容量的二倍小于最大容量并且旧容量大于默认容量，就将新的threshold设置为旧阈值的二倍。如果旧容量==0并且旧阈值==0，令新容量 = 默认容量，阈值 = 默认阈值。设置完毕之后创建新的table，并将旧table的内容移入其中后返回该table。
@@ -112,6 +112,7 @@ api层面的互斥锁，有一些额外的功能
 
 ##线程池
 优势
+
 - 重用线程池中的线程，避免因为线程的创建和销毁所带来的性能开销
 - 能有效控制线程池的最大并发数量，避免大量的线程之间因互相抢占系统资源而导致的阻塞现象
 - 能过对线程进行简单的管理，并提供定时执行以及制定建构循环执行等功能
@@ -125,6 +126,7 @@ public ThreadPoolExecutor(int corePoolSize,
 						BlockingQueue<Runnable> workQueue,
 						ThreadFactory threadFactory)
 ```
+
 - corePoolSize 线程池的核显线程数，默认情况下，核心线程会在线程中一直存活，及时他们处于闲置状态。如果将ThreadPoolExecutor的allowCoreThreadTimeOut属性设置为true,那么闲置的核心线程在等待新任务到来时会有超时策略，这个时间间隔由keepAliveTime所指定，当等待时间超过后，核心线程就会被中止
 - maximumPoolSize 线程池所能容纳最大线程数，当活动线程到达这个数值后，后续的新任务将会被阻塞。
 - keepAliveTime 非核心线程的超时时长，超过这个时长，非核心线程就会被回收。
@@ -133,6 +135,7 @@ public ThreadPoolExecutor(int corePoolSize,
 - threadFactory 线程工厂，为线程池提供创建新线程的功能。
 
 执行规则：
+
 1. 如果线程池中的线程数量未达到核心线程的数量，那么会直接启动一个核心线程来执行任务
 2. 如果线程池中的线程数量已经达到或者超过核心线程的数量，那么任务会被插入到任务队列中等待
 3. 如果任务队列已满，并且线程数量未达到线程池规定的最大值，那么会立即启动一个非核心线程来执行任务
