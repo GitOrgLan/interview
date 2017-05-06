@@ -1,6 +1,6 @@
 # 2016年秋招面试题总结，更新ing
 项目原地址:[langonggong/interview](https://github.com/langonggong/interview)   
-###面试题总结
+### 面试题总结
 
 1. [java](https://github.com/GitOrgLan/interview/blob/master/java/java.md) 
 * [算法](https://github.com/GitOrgLan/interview/blob/master/algorithm/%E7%AE%97%E6%B3%95.md)     
@@ -10,10 +10,10 @@
 * 操作系统  
 * 分布式
 
-###[工作日程安排](https://github.com/GitOrgLan/interview/blob/master/%E6%97%A5%E7%A8%8B.md)
+### [工作日程安排](https://github.com/GitOrgLan/interview/blob/master/%E6%97%A5%E7%A8%8B.md)
 
 ##
-###单身狗，求撩拨
+### 单身狗，求撩拨
 
 <div align="center">    
 <img src="https://github.com/GitOrgLan/interview/blob/master/img/qq.png" width = "256" height = "256" alt="QQ"/>
@@ -22,7 +22,7 @@
 
 
 ##
-###厚颜无耻之人
+### 厚颜无耻之人
 
 <div align="center">    
 <img src="https://github.com/GitOrgLan/interview/blob/master/img/aliPay.jpg" width = "286" height = "332" alt="支付宝转账"/>
