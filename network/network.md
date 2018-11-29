@@ -86,6 +86,14 @@ client发出的第一个连接请求报文段并没有丢失，而是在某个�
 - 得到ip和TTL，LDNS会缓存这个域名和IP的对应关系，缓存时间由TTL来控制
 - 解析结果返回给用户主机，根据TTL缓存，解析结束
 
+## URL、URI和URN
+
+URL和URN都是URI，但是URI不一定是URL或者URN
+
+- URI，是uniform resource identifier，统一资源标识符，用来唯一的标识一个资源
+- URL是uniform resource locator，统一资源定位器，它是一种具体的URI，即URL可以用来标识一个资源，而且还指明了如何locate这个资源
+- URN，uniform resource name，统一资源命名，是通过名字来标识资源，比如mailto:java-net@java.sun.com
+
 ## HTTP协议
 
 ### HTTP协议
@@ -104,16 +112,42 @@ client发出的第一个连接请求报文段并没有丢失，而是在某个�
 
 ### 报文结构
 Request格式：
-HTTP请求行 
-请求头 
-空行 
-可选的消息体 
+
+- 请求行：用来说明请求类型,要访问的资源以及所使用的HTTP版本
+- 请求头：请求头部，紧接着请求行（即第一行）之后的部分，用来说明服务器要使用的附加信息
+- 空行：请求头部后面的空行是必须的
+- 请求数据：请求数据也叫主体，可以添加任意的其他数据
+
+```
+POST / HTTP1.1
+Host:www.wrox.com
+User-Agent:Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)
+Content-Type:application/x-www-form-urlencoded
+Content-Length:40
+Connection: Keep-Alive
+
+name=Professional%20Ajax&publisher=Wiley
+```
 
 Response格式：
-HTTP状态行 
-应答头 
-空行 
-可选的消息体
+
+- 状态行：由HTTP协议版本号， 状态码， 状态消息 三部分组成
+- 消息报头：用来说明客户端要使用的一些附加信息
+- 空行：消息报头后面的空行是必须的
+- 响应正文：服务器返回给客户端的文本信息
+
+```
+HTTP/1.1 200 OK
+Date: Fri, 22 May 2009 06:07:21 GMT
+Content-Type: text/html; charset=UTF-8
+
+<html>
+      <head></head>
+      <body>
+            <!--body goes here-->
+      </body>
+</html>
+```
 
 ### get和post的区别
 get
@@ -128,6 +162,32 @@ post
 >请求不会被缓存
 请求不会保留在浏览器历史记录中
 请求不能被收藏做书签
+
+### HTTP状态码
+
+状态代码有三位数字组成，第一个数字定义了响应的类别，共分五种类别:
+
+- 1xx：指示信息--表示请求已接收，继续处理
+- 2xx：成功--表示请求已被成功接收、理解、接受
+- 3xx：重定向--要完成请求必须进行更进一步的操作
+- 4xx：客户端错误--请求有语法错误或请求无法实现
+- 5xx：服务器端错误--服务器未能实现合法的请求
+
+常见状态码：
+
+- 200 OK 客户端请求成功
+- 301 Moved Permanently 永久重定向 请求的资源已被永久的移动到新URI，返回信息会包括新的URI，浏览器会自动定向到新URI。今后任何新的请求都应使用新的URI代替
+- 302 Move temporarily 临时重定向 资源只是临时被移动，客户端应继续使用原有URI
+- 303 See Other 查看其它地址。与301类似，使用GET和POST请求查看
+- 400 Bad Request 客户端请求有语法错误，不能被服务器所理解
+- 401 Unauthorized 请求未经授权，这个状态代码必须和WWW-Authenticate报头域一起使用 
+- 403 Forbidden 服务器收到请求，但是拒绝提供服务
+- 404 Not Found 请求资源不存在，eg：输入了错误的URL
+- 500 Internal Server Error 服务器发生不可预期的错误
+- 503 Server Unavailable 服务器当前不能处理客户端的请求，一段时间后可能恢复正常
+
+- [HTTP状态码](http://www.runoob.com/http/http-status-codes.html)
+- [HTTP状态码](http://www.runoob.com/http/http-status-codes.html)
 
 ##HTTPS
 Secure Hypertext Transfer Protocol 安全超文本传输协议，是使用TLS/SSL加密的HTTP协议。HTTP采用明文传输，存在窃听，篡改的风险，而TLS/SSL协议具有身份验证，信息加密和完整性校验等功能，可以避免这些问题的发生。
