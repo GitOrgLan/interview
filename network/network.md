@@ -189,13 +189,13 @@ post
 - [HTTP状态码](http://www.runoob.com/http/http-status-codes.html)
 - [HTTP状态码](http://www.runoob.com/http/http-status-codes.html)
 
-##HTTPS
+## HTTPS
 Secure Hypertext Transfer Protocol 安全超文本传输协议，是使用TLS/SSL加密的HTTP协议。HTTP采用明文传输，存在窃听，篡改的风险，而TLS/SSL协议具有身份验证，信息加密和完整性校验等功能，可以避免这些问题的发生。
 
-###TLS/SSL原理
+### TLS/SSL原理
 实现主要依赖于三种算法，对称加密，非对称加密，HASH算法
 利用非对称加密实现身份验证和密钥协商，对称加密采用协商的密钥对数据进行加密，基于散列的算法验证数据的完整性。
-###握手过程
+### 握手过程
 ![握手过程](http://www.wxtlife.com/img/https/https_02.png)
 
 - client hello 客户端发起请求，用明文传输版本信息，可用加密套件列表，压缩算法候选列表，随机数(客户端)等等
@@ -219,7 +219,7 @@ Secure Hypertext Transfer Protocol 安全超文本传输协议，是使用TLS/SS
 - 利用受害主机提供的传输协议上的缺陷反复高速的发出特定的服务请求，使主机无法处理所有正常请求；
 - 严重时会造成系统死机。
 -
-#Git原理
+# Git原理
 git中，所有文件内容都保存在git仓库的objects目录中。
 
 有这几个重要的区域
