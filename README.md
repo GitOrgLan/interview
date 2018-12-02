@@ -9,6 +9,7 @@
 * [计算机网络](https://github.com/GitOrgLan/interview/blob/master/network/index.md)  
 * 操作系统  
 * [分布式](https://github.com/GitOrgLan/interview/blob/master/distributed/index.md)
+* 其他
 
 ### [工作日程安排](https://github.com/GitOrgLan/interview/blob/master/%E6%97%A5%E7%A8%8B.md)
 
