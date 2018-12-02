@@ -6,10 +6,9 @@
 * [算法](https://github.com/GitOrgLan/interview/blob/master/algorithm/%E7%AE%97%E6%B3%95.md)     
 * [javaee](https://github.com/GitOrgLan/interview/blob/master/javaee/index.md)   
 * [数据库](https://github.com/GitOrgLan/interview/blob/master/DB/%E6%95%B0%E6%8D%AE%E5%BA%93.md)  
-* [计算机网络](https://github.com/GitOrgLan/interview/blob/master/network/index.md)  
-* 操作系统  
+* [计算机网络](https://github.com/GitOrgLan/interview/blob/master/network/index.md)   
 * [分布式](https://github.com/GitOrgLan/interview/blob/master/distributed/index.md)
-* 其他
+* [操作系统](https://github.com/GitOrgLan/interview/blob/master/OS/OS.md)
 
 ### [工作日程安排](https://github.com/GitOrgLan/interview/blob/master/%E6%97%A5%E7%A8%8B.md)
 
