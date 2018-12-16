@@ -7,7 +7,7 @@
 	* 集群管理
 	* 分布式锁
 * Dubbo
-* redis
+* [redis](https://github.com/GitOrgLan/interview/blob/master/distributed/redis/index.md)
 ### 概念
 * Paxos
 * 分布式事物
